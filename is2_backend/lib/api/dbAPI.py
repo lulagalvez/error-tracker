@@ -128,7 +128,9 @@ def get_reports():
         report_data = {}
         report_data['id'] = report.id
         report_data['title'] = report.title
+        report_data['date'] = report.date
         report_data['description'] = report.description
+        report_data['user_id'] = report.user_id
         temp.append(report_data)
 
     return jsonify(temp)
@@ -136,9 +138,11 @@ def get_reports():
 @app.route('/reports', methods=['POST'])
 def create_report():
     title = request.json['title']
-    description = request.json['desctription']
-    date = request.json["date"]
-    new_report = Report(title=title, description=description, date = date)
+    description = request.json['description']
+#   date = request.json["date"]
+    user_id = request.json['user_id']
+    new_report = Report(title=title, description=description, user_id = user_id)
+#   new_report = Report(title=title, description=description, date = date, user_id = user_id)
     db.session.add(new_report)
     db.session.commit()
     return jsonify({'message': 'Reporte creado'})
@@ -161,6 +165,21 @@ def delete_report(id):
     db.session.delete(report)
     db.session.commit()
     return jsonify({'message': 'Reporte eliminado'})
+
+@app.route('/user_reports/<user_id>', methods=['GET'])
+def get_user_reports(user_id):
+    reports = Report.query.filter_by(user_id = user_id)
+    temp = []
+    for report in reports:
+        report_data = {}
+        report_data['id'] = report.id
+        report_data['title'] = report.title
+        report_data['date'] = report.date
+        report_data['description'] = report.description
+        report_data['user_id'] = report.user_id
+        temp.append(report_data)
+
+    return jsonify(temp)
 
 if __name__ == '__main__':
     with app.app_context():
