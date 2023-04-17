@@ -39,7 +39,7 @@ class Developer(db.Model):
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     role = db.Column (db.String(40), nullable=False)
-#    reports = db.relationship('Report', backref = 'Developer')
+    reports = db.relationship('Report', backref = 'developer')
     
 
 class Report (db.Model):
@@ -49,8 +49,7 @@ class Report (db.Model):
     description = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
-    
-#   dev_id = db.Column (db.Integer, db.ForeignKey('Developer.id'))
+    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
 
 #Developer:
 #   id (Primary Key)
