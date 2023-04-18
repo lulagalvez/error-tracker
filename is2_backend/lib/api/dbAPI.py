@@ -138,7 +138,6 @@ def create_report():
     title = request.json['title']
     description = request.json['description']
     date = request.json["date"]
-    #user_id = request.json['user_id']
     new_report = Report(title=title, description=description, date = date)
     db.session.add(new_report)
     db.session.commit()
@@ -166,4 +165,4 @@ def delete_report(id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run()
+    app.run(debug = True)
