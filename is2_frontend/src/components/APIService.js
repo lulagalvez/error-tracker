@@ -9,8 +9,15 @@ function joinURL(baseURL, url){
 
 
 export default class APIService{
+    static classInstance=null;
+    static getAPIServiceInstance(){
+        if(APIService.classInstance==null){
+            APIService.classInstance=new APIService();
+        }
+        return this.classInstance;
+    }
     constructor(){
-        this.domain= 'http://localhost:5000/'
+        this.domain= 'http://localhost:3000/'
     }
 
 

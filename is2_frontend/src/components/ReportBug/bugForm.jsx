@@ -9,28 +9,23 @@ import APIService from '../APIService';
 */
 
 export default (props) =>{
-    const [bugObject,setBugObject]=useState(new BugModel(props.bug))
-
+    const[bugProps,setBugProps] =useState({titulo:"", detalles:"",pasos:"",software:1})
 
     const reportBug= () =>{
-        APIService.post('reports',{title: bugObject?.titulo, description: bugObject?.descripcion,date:Date.now()})
+        APIService.getAPIServiceInstance().post('reports',{title: bugProps.titulo, description: bugProps.detalles ,date:Date.now()})
         .then((response) => props.insertedReport(response))
         .catch(error => console.log('error',error))
     }
 
     function inputChanged(e){
-        setBugObject({
-            ...bugObject,
-            [e.target.name]:e.target.value
+        setBugProps({
+            ...bugProps,
+            [e.target.name]:e.target_value
         })
     }
 
     const handleSubmit=(e)=>{
         e.preventDefault()
-        setBugObject({
-            ...bugObject,
-            [e.target.name]:e.target.value
-        });
         reportBug();
 
     }
@@ -41,23 +36,23 @@ export default (props) =>{
         <div className='crear-bug'>
             <h1 className='titulo'>{props.title}</h1>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} >
                 <label>Título: </label>
                 <input name='titulo' placeholder='Titulo del ticket' maxLength={30} required
-                 onChange={inputChanged} value={bugObject?.titulo} ></input> 
+                 onChange={inputChanged} value={bugProps.titulo} ></input> 
                 <label> Software: </label>
-                <select name='software' required onChange={inputChanged} value={bugObject?.software} > 
+                <select name='software' required onChange={inputChanged} value={bugProps.software} > 
                     <option value='1'>Software 1</option>
                     <option value='2'>Software 2</option>
                 </select>
                 <label> Descripción:</label>
                 <textarea name='detalles' placeholder='Descripción detallada del bug' required 
-                onChange={inputChanged} value={bugObject?.detalles} ></textarea>
+                onChange={inputChanged} value={bugProps.detalles} ></textarea>
                 <label> Pasos: </label>
                 <textarea name='pasos' placeholder='Pasos detallados para reproducir el bug' required
-                onChange={inputChanged} value={bugObject?.pasos}  ></textarea>
+                onChange={inputChanged} value={bugProps.pasos}  ></textarea>
                 <style>{` .red {color: red}     .green {color: green}`}</style>
-                <button type='submit'> <a>{props.title}</a></button>
+                <button type='submit' > <a>{props.title}</a></button>
             </form>
         </div>
     )
