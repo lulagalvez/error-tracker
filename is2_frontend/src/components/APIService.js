@@ -36,7 +36,7 @@ export default class APIService{
         const method = 'POST';
         return this.request(url,method,data)
         .then(response=> response.json())
-        .then(error =>console.log(error));
+        .catch(error =>console.log(error));
     }
     get(url,id){
         const method ="GET";
