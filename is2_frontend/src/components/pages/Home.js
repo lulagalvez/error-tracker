@@ -2,8 +2,8 @@ import React from 'react'
 
 function Home() {
   return (
-    <h1 classname='/'>
-      
+    <h1 className='/'>
+      hola
     </h1>
   )
 }

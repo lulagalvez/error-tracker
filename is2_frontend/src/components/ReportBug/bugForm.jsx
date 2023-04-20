@@ -9,19 +9,20 @@ import APIService from '../APIService';
 */
 
 export default (props) =>{
-    const[bugProps,setBugProps] =useState({titulo:"", detalles:"",pasos:"",software:1})
-
+    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1})
+    const apiservice=new APIService();
     const reportBug= () =>{
-        APIService.getAPIServiceInstance().post('reports',{title: bugProps.titulo, description: bugProps.detalles ,date:Date.now()})
-        .then((response) => props.insertedReport(response))
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id: 1,dev_id: 1})
+        .then(response =>console.log('response',response))
         .catch(error => console.log('error',error))
     }
 
-    function inputChanged(e){
-        setBugProps({
-            ...bugProps,
-            [e.target.name]:e.target_value
-        })
+    const handleOnChange = event =>{
+        const {name,value} =event.target;
+        setInputValues({
+            ...inputValues,
+            [name]:value
+        });
     }
 
     const handleSubmit=(e)=>{
@@ -38,19 +39,19 @@ export default (props) =>{
 
             <form onSubmit={handleSubmit} >
                 <label>Título: </label>
-                <input name='titulo' placeholder='Titulo del ticket' maxLength={30} required
-                 onChange={inputChanged} value={bugProps.titulo} ></input> 
+                <input name='title' placeholder='Titulo del ticket' maxLength={30} required
+                 onChange={handleOnChange} value={inputValues.title} ></input> 
                 <label> Software: </label>
-                <select name='software' required onChange={inputChanged} value={bugProps.software} > 
+                <select name='software' required onChange={handleOnChange} value={inputValues.software } > 
                     <option value='1'>Software 1</option>
                     <option value='2'>Software 2</option>
                 </select>
                 <label> Descripción:</label>
-                <textarea name='detalles' placeholder='Descripción detallada del bug' required 
-                onChange={inputChanged} value={bugProps.detalles} ></textarea>
+                <textarea name='description' placeholder='Descripción detallada del bug' required 
+                onChange={handleOnChange} value={inputValues.description } ></textarea>
                 <label> Pasos: </label>
                 <textarea name='pasos' placeholder='Pasos detallados para reproducir el bug' required
-                onChange={inputChanged} value={bugProps.pasos}  ></textarea>
+                onChange={handleOnChange} value={inputValues.pasos }  ></textarea>
                 <style>{` .red {color: red}     .green {color: green}`}</style>
                 <button type='submit' > <a>{props.title}</a></button>
             </form>

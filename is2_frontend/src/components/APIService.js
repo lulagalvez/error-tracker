@@ -1,41 +1,37 @@
 
 const headers= {
-    "Accept": "application/json",
-    "Content-type": "application/json",
+    "Accept" : "application/json",
+    "Content-Type": "application/json",
 }
+const mode = 'no-cors';
 function joinURL(baseURL, url){
     return `${baseURL}/${url}`;
 }
 
 
 export default class APIService{
-    static classInstance=null;
-    static getAPIServiceInstance(){
-        if(APIService.classInstance==null){
-            APIService.classInstance=new APIService();
-        }
-        return this.classInstance;
-    }
     constructor(){
-        this.domain= 'http://localhost:3000/'
+        this.domain= 'http://localhost:5000'
     }
 
 
     request(url,method='POST',data=null){
-        url= joinURL=(this.domain,url);
+        url= joinURL(this.domain,url);
         const options={
             headers,
-            method
+            method,
+            mode
         }
         if(data){
             options.body= JSON.stringify({...data})
+            console.log(options.body)
         }
         return fetch(url,options);
     }
     post(url,data){
         const method = 'POST';
         return this.request(url,method,data)
-        .then(response=> response.json())
+        .then(response=> response.text())
         .catch(error =>console.log(error));
     }
     get(url,id){
