@@ -1,11 +1,14 @@
 import sys
 import os
+from flask_cors import CORS
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
 from dbmaker import db, User, Developer, Report, app
 from flask import Flask, jsonify, request
 
+
+CORS(app)
 
 ######################################USER######################################
 @app.route('/users/<id>', methods=['GET'])
