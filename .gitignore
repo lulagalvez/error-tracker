@@ -1,4 +1,3 @@
 *.exe
 /node_modules/*
 is2_backend/venv/*
-is2_backend/lib/data_base/*
