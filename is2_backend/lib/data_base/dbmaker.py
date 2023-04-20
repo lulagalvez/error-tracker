@@ -2,11 +2,12 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import *
 from dataclasses import dataclass
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
-
+CORS(app)
 @dataclass
 class User (db.Model):
     __tablename__ = ('user')

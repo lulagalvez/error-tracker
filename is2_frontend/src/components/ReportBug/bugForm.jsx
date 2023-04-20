@@ -12,7 +12,7 @@ export default (props) =>{
     const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1})
     const apiservice=new APIService();
     const reportBug= () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id: 1,dev_id: 1})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description,priority:1, user_id: 1,dev_id: 1})
         .then(response =>console.log('response',response))
         .catch(error => console.log('error',error))
     }
