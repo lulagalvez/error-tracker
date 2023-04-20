@@ -7,14 +7,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
 
-#   Usuario (Postea Reports)
-#   ID: Clave Primaria
-#   Correo electronico
-#   Nombre   
-#   Fecha de creacion de usuario
-#   Reports
 @dataclass
-class User(db.Model):
+class User (db.Model):
     __tablename__ = ('user')
     id:int = db.Column(db.Integer, primary_key=True)
     name:str = db.Column(db.String(80), nullable=False)
@@ -25,37 +19,34 @@ class User(db.Model):
         self.name = name
         self.email = email
 
+software_dev = db.Table('software_dev',
+                    db.Column('software_id', db.Integer, db.ForeignKey('software.id')),
+                    db.Column('dev_id', db.Integer, db.ForeignKey('developer.id'))
+                    )
 
-# Reporte:
-#   ID: Clave Primaria
-#   Titulo
-#   Descripcion
-#   Fecha
-#   Depurador asociado: Clave foranea, db.ForeignKey('dev.id') 
-#   
-class Developer(db.Model):
+class Software (db.Model):
+    __tablename__ = ('software')
+    id = db.Column (db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    devs = db.relationship('Developer', secondary=software_dev, backref='softwares')
+
+class Developer (db.Model):
     __tablename__= ('developer')
     id = db.Column (db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     role = db.Column (db.String(40), nullable=False)
-    reports = db.relationship('Report', backref = 'developer')
+    reports = db.relationship('Report', cascade="all,delete", backref = 'developer')
     
-
 class Report (db.Model):
     __tablename__ = ('report')
     id = db.Column (db.Integer, primary_key=True)
     title = db.Column (db.String(80), nullable=False)
-    description = db.Column (db.Text, nullable = False)
+    description = db.Column (db.Text, nullable=False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
+    priority = db.Column(db.Integer, nullable=False)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
-
-#Developer:
-#   id (Primary Key)
-#   Nombre
-#   email
-#   rol 
 
 # ONE TO MANY:
 #class Person(db.Model):
