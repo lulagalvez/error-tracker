@@ -118,6 +118,7 @@ def get_report(id):
     report_data['id'] = report.id
     report_data['title'] = report.title
     report_data['description'] = report.description
+    report_data['priority'] = report.priority
     report_data['user_id'] = report.user_id
     report_data['dev_id'] = report.dev_id
     return jsonify({'report': report_data})
@@ -132,6 +133,7 @@ def get_reports():
         report_data['title'] = report.title
         report_data['date'] = report.date
         report_data['description'] = report.description
+        report_data['priority'] = report.priority
         report_data['user_id'] = report.user_id
         report_data['dev_id'] = report.dev_id
         temp.append(report_data)
@@ -142,11 +144,10 @@ def get_reports():
 def create_report():
     title = request.json['title']
     description = request.json['description']
-#   date = request.json["date"]
+    priority = request.json['priority']
     user_id = request.json['user_id']
     dev_id = request.json['dev_id']
-    new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id)
-#   new_report = Report(title=title, description=description, date = date, user_id = user_id)
+    new_report = Report(title=title, description=description, priority=priority, user_id=user_id, dev_id=dev_id)
     db.session.add(new_report)
     db.session.commit()
     return jsonify({'message': 'Reporte creado'})
@@ -201,6 +202,8 @@ def get_dev_reports(dev_id):
         temp.append(report_data)
 
     return jsonify(temp)
+
+####################################SOFTWARE###################################
 
 if __name__ == '__main__':
     with app.app_context():
