@@ -24,14 +24,13 @@ export default class APIService{
         }
         if(data){
             options.body= JSON.stringify({...data})
-            console.log(options.body)
         }
         return fetch(url,options);
     }
     post(url,data){
         const method = 'POST';
         return this.request(url,method,data)
-        .then(response=> response.text())
+        .then(response=> response.json())
         .catch(error =>console.log(error));
     }
     get(url,id){
