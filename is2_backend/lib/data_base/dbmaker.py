@@ -1,9 +1,12 @@
+
 from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import *
 from dataclasses import dataclass
 
+
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
 
@@ -50,7 +53,7 @@ class Report (db.Model):
     date = db.Column (db.DateTime, default=datetime.utcnow)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
-
+    
 #Developer:
 #   id (Primary Key)
 #   Nombre
@@ -70,5 +73,4 @@ class Report (db.Model):
 
 with app.app_context():
     db.create_all()
-
-
+    
