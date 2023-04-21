@@ -2,9 +2,8 @@
 const headers= {
     "Accept" : "application/json",
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin':'*'
 }
-const mode = 'cors';
+const mode = 'cors'
 function joinURL(baseURL, url){
     return `${baseURL}/${url}`;
 }

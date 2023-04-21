@@ -4,10 +4,12 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
 from dbmaker import db, User, Developer, Report, app
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 
-CORS(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 ######################################USER######################################
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
@@ -139,18 +141,34 @@ def get_reports():
 
     return jsonify(temp)
 
-@app.route('/reports', methods=['POST'])
+@app.route('/reports', methods=['POST', 'OPTIONS'])
 def create_report():
-    title = request.json['title']
-    description = request.json['description']
-#   date = request.json["date"]
-    user_id = request.json['user_id']
-    dev_id = request.json['dev_id']
-    new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id)
-#   new_report = Report(title=title, description=description, date = date, user_id = user_id)
-    db.session.add(new_report)
-    db.session.commit()
-    return jsonify({'message': 'Reporte creado'})
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method =="POST":
+        title = request.json['title']
+        description = request.json['description']
+        #date = request.json["date"]
+        user_id = request.json['user_id']
+        dev_id = request.json['dev_id']
+        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id)
+        #new_report = Report(title=title, description=description, date = date, user_id = user_id)
+        db.session.add(new_report)
+        db.session.commit()
+        return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
+    else:
+        raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 @app.route('/reports/<id>', methods=['PUT'])
 def update_report(id):
