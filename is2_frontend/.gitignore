@@ -1,3 +1,2 @@
 *.exe
 /node_modules/*
-is2_backend/venv/*
