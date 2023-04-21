@@ -148,11 +148,9 @@ def create_report():
     elif request.method =="POST":
         title = request.json['title']
         description = request.json['description']
-        #date = request.json["date"]
         user_id = request.json['user_id']
         dev_id = request.json['dev_id']
         new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id)
-        #new_report = Report(title=title, description=description, date = date, user_id = user_id)
         db.session.add(new_report)
         db.session.commit()
         return _corsify_actual_response(jsonify({'message':'Reporte creado'}))

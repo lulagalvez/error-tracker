@@ -10,12 +10,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
 
-#   Usuario (Postea Reports)
-#   ID: Clave Primaria
-#   Correo electronico
-#   Nombre   
-#   Fecha de creacion de usuario
-#   Reports
 @dataclass
 class User(db.Model):
     __tablename__ = ('user')
@@ -29,13 +23,17 @@ class User(db.Model):
         self.email = email
 
 
-# Reporte:
-#   ID: Clave Primaria
-#   Titulo
-#   Descripcion
-#   Fecha
-#   Depurador asociado: Clave foranea, db.ForeignKey('dev.id') 
-#   
+software_dev = db.Table('software_dev',
+                    db.Column('software_id', db.Integer, db.ForeignKey('software.id')),
+                    db.Column('dev_id', db.Integer, db.ForeignKey('developer.id'))
+                    )
+
+class Software (db.Model):
+    __tablename__ = ('software')
+    id = db.Column (db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    devs = db.relationship('Developer', secondary=software_dev, backref='softwares')
+
 class Developer(db.Model):
     __tablename__= ('developer')
     id = db.Column (db.Integer, primary_key=True)
@@ -53,23 +51,7 @@ class Report (db.Model):
     date = db.Column (db.DateTime, default=datetime.utcnow)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
-    
-#Developer:
-#   id (Primary Key)
-#   Nombre
-#   email
-#   rol 
 
-# ONE TO MANY:
-#class Person(db.Model):
-#    id = db.Column(db.Integer, primary_key=True)
-#    name = db.Column(db.String(50), nullable=False)
-#    addresses = db.relationship('Address', backref='person', lazy=True)
-
-#class Address(db.Model):
-#    id = db.Column(db.Integer, primary_key=True)
-#    email = db.Column(db.String(120), nullable=False)
-#    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
 
 with app.app_context():
     db.create_all()
