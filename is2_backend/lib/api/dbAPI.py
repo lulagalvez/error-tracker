@@ -113,6 +113,23 @@ def delete_dev(id):
     db.session.commit()
     return jsonify({'message': 'Developer eliminado'})
 
+
+@app.route('/user_reports/<user_id>', methods=['GET'])
+def get_user_reports(user_id):
+    reports = Report.query.filter_by(user_id = user_id)
+    temp = []
+    for report in reports:
+        report_data = {}
+        report_data['id'] = report.id
+        report_data['title'] = report.title
+        report_data['date'] = report.date
+        report_data['description'] = report.description
+        report_data['user_id'] = report.user_id
+        report_data['dev_id'] = report.dev_id
+        temp.append(report_data)
+
+    return jsonify(temp)
+
 #####################################REPORT#####################################
 @app.route('/reports/<id>', methods=['GET'])
 def get_report(id):
@@ -123,6 +140,9 @@ def get_report(id):
     report_data['description'] = report.description
     report_data['user_id'] = report.user_id
     report_data['dev_id'] = report.dev_id
+    report_data['software'] = report.software
+    report_data['urgency'] = report.urgency
+    report_data['state'] = report.state
     return jsonify({'report': report_data})
 
 @app.route('/reports', methods=['GET'])
@@ -137,6 +157,9 @@ def get_reports():
         report_data['description'] = report.description
         report_data['user_id'] = report.user_id
         report_data['dev_id'] = report.dev_id
+        report_data['software'] = report.software
+        report_data['urgency'] = report.urgency
+        report_data['state'] = report.state
         temp.append(report_data)
 
     return jsonify(temp)
@@ -150,7 +173,10 @@ def create_report():
         description = request.json['description']
         user_id = request.json['user_id']
         dev_id = request.json['dev_id']
-        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id)
+        software = request.json['software']
+        urgency = request.json['urgency'] 
+        state = request.json['state']
+        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, state = state)
         db.session.add(new_report)
         db.session.commit()
         return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
@@ -172,11 +198,20 @@ def _corsify_actual_response(response):
 def update_report(id):
     report = Report.query.get_or_404(id)
     title = request.json['title']
-    description = request.json['desctription']
-    date = request.json["date"]
+    description = request.json['description']
+    user_id = request.json['user_id']
+    dev_id = request.json['dev_id']
+    software = request.json['software']
+    urgency = request.json['urgency'] 
+    state = request.json['state']
     report.title =  title
     report.description = description
     report.date = date
+    report.user_id = user_id
+    report.dev_id = dev_id
+    report.software = software
+    report.urgency = urgency
+    report.state = state
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
 
@@ -186,22 +221,6 @@ def delete_report(id):
     db.session.delete(report)
     db.session.commit()
     return jsonify({'message': 'Reporte eliminado'})
-
-@app.route('/user_reports/<user_id>', methods=['GET'])
-def get_user_reports(user_id):
-    reports = Report.query.filter_by(user_id = user_id)
-    temp = []
-    for report in reports:
-        report_data = {}
-        report_data['id'] = report.id
-        report_data['title'] = report.title
-        report_data['date'] = report.date
-        report_data['description'] = report.description
-        report_data['user_id'] = report.user_id
-        report_data['dev_id'] = report.dev_id
-        temp.append(report_data)
-
-    return jsonify(temp)
 
 @app.route('/dev_reports/<dev_id>', methods=['GET'])
 def get_dev_reports(dev_id):
@@ -215,9 +234,45 @@ def get_dev_reports(dev_id):
         report_data['description'] = report.description
         report_data['user_id'] = report.user_id
         report_data['dev_id'] = report.dev_id
+        report_data['software'] = report.software
+        report_data['urgency'] = report.urgency
+        report_data['state'] = report.state
         temp.append(report_data)
 
     return jsonify(temp)
+
+#####################################SOFTWARE#####################################
+
+@app.route('/software/<int:id>', methods=['GET'])
+def get_software(id):
+    software = Sftware.query.filter_by(id=id).first()
+    if software:
+        return jsonify({'id': software.id, 'name': software.name})
+    else:
+        return jsonify({'message': 'Software not found'})
+    
+@app.route('/software/<int:id>', methods=['PUT'])
+def put_software(id):
+    software = Software.query.filter_by(id=id).first()
+    if software:
+        software.name = request.json['name']
+        db.session.commit()
+        return jsonify({'id': software.id, 'name': software.name})
+    else:
+        software = software(request.json['name'])
+        db.session.add(software)
+        db.session.commit()
+
+def get_software_reports(id):
+    reports = Report.query.filter_by(software_id=id).all()
+    if reports:
+        report_list = []
+        for report in reports:
+            report_list.append({'id': report.id, 'title': report.title, 'description': report.description, 'date': report.date.isoformat(), 'user_id': report.user_id, 'urgency': report.urgency, 'state':report.state})
+        return jsonify(report_list)
+    else:
+        return jsonify({'message': 'No reports found for software'})
+   
 
 if __name__ == '__main__':
     with app.app_context():
