@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
-from dbmaker import db, User, Developer, Report, app
+from dbmaker import db, User, Developer, Report, Software, app
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 
@@ -245,7 +245,7 @@ def get_dev_reports(dev_id):
 
 @app.route('/software/<int:id>', methods=['GET'])
 def get_software(id):
-    software = Sftware.query.filter_by(id=id).first()
+    software = Software.query.filter_by(id=id).first()
     if software:
         return jsonify({'id': software.id, 'name': software.name})
     else:
