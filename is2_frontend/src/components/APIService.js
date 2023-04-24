@@ -3,6 +3,7 @@ const headers= {
     "Accept" : "application/json",
     'Content-Type': 'application/json',
 }
+
 const mode = 'cors'
 function joinURL(baseURL, url){
     return `${baseURL}/${url}`;
@@ -52,5 +53,18 @@ export default class APIService{
         .then(response => response.json())
         .catch(error => console.log(error));
     }
-
+    put(url,id){
+        const method = 'PUT';
+        if(id){
+            `${url}/${id}`;
+        }
+        return this.request(url,method)
+        .then(response=> response.json())
+    }
+    get(url){
+        const method ="GET";
+        return this.request(url,method)
+        .then(response => response.json())
+        .catch(error => console.log(error));        
+    }
 }

@@ -176,9 +176,11 @@ def update_report(id):
     title = request.json['title']
     description = request.json['desctription']
     date = request.json["date"]
+    dev_id = request.json['dev_id']
     report.title =  title
     report.description = description
     report.date = date
+    report.dev_id=dev_id
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
 

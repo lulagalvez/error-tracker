@@ -52,7 +52,7 @@ class Report (db.Model):
     description = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
-    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
+    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable= True)
     
 #Developer:
 #   id (Primary Key)
