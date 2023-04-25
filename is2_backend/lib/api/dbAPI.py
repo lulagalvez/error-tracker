@@ -5,11 +5,18 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data
 
 from dbmaker import db, User, Developer, Report, Software, app
 from flask import Flask, jsonify, request, make_response
-from flask_cors import CORS
+from flask_cors import CORS,  cross_origin
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app,resources={
+    r"/users/*":{"origins":"http://localhost"},
+    r"/devs/*":{"origins":"http://localhost"},
+    r"/reports/*":{"origins":"http://localhost"},
+    r"/software/*":{"origins":"http://localhost"}
+    })
 
+# @cross_origin
 ######################################USER######################################
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
