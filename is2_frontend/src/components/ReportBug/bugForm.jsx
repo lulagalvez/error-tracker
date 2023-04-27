@@ -1,19 +1,22 @@
 import React, {useState} from 'react'
 import './bugForm.css'
-import BugModel from '../../models/bugModel';
 import APIService from '../APIService';
-//TODO: investigar acerca de los useState hooks y APIService para futura conexión con Flask API 
-//TODO: arreglar bugModel para que no quede undefined 
-/*
+import Alert from '../Alert';
 
-*/
 
 export default (props) =>{
     const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1})
     const apiservice=new APIService();
     const reportBug= () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id: 1,dev_id: 1})
-        .then(response =>console.log('response',response))
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null})
+        .then(response =>{
+            if(response.message=== 'Reporte creado'){
+                alert(response.message)
+            }
+            else{
+                alert('Error, reporte no enviado')
+            }
+        })
         .catch(error => console.log('error',error))
     }
 
@@ -28,15 +31,16 @@ export default (props) =>{
     const handleSubmit=(e)=>{
         e.preventDefault()
         reportBug();
-
     }
 
 
     
     return(
+        <>
         <div className='crear-bug'>
+        
             <h1 className='titulo'>{props.title}</h1>
-
+            
             <form onSubmit={handleSubmit} >
                 <label>Título: </label>
                 <input name='title' placeholder='Titulo del ticket' maxLength={30} required
@@ -56,6 +60,7 @@ export default (props) =>{
                 <button type='submit' > <a>{props.title}</a></button>
             </form>
         </div>
+        </>
     )
 
 }

@@ -49,7 +49,7 @@ class Report (db.Model):
     description = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
-    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
+    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable= True)
     software = db.Column (db.Integer, db.ForeignKey('software.id'))
     urgency = db.Column (db.String(80), nullable=False )
     state = db.Column (db.String(80))

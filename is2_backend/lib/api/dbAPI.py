@@ -205,6 +205,9 @@ def _corsify_actual_response(response):
 def update_report(id):
     report = Report.query.get_or_404(id)
     title = request.json['title']
+    description = request.json['desctription']
+    date = request.json["date"]
+    dev_id = request.json['dev_id']
     description = request.json['description']
     user_id = request.json['user_id']
     dev_id = request.json['dev_id']
@@ -214,6 +217,7 @@ def update_report(id):
     report.title =  title
     report.description = description
     report.date = date
+    report.dev_id=dev_id
     report.user_id = user_id
     report.dev_id = dev_id
     report.software = software
