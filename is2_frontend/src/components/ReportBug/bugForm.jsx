@@ -8,7 +8,7 @@ export default (props) =>{
     const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1})
     const apiservice=new APIService();
     const reportBug= () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, state:null,urgency:null})
         .then(response =>{
             if(response.message=== 'Reporte creado'){
                 alert(response.message)
