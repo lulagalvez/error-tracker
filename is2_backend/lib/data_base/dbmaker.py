@@ -22,17 +22,16 @@ class User(db.Model):
         self.name = name
         self.email = email
 
+software_dev = db.Table('software_dev',
+                    db.Column('software_id', db.Integer, db.ForeignKey('software.id')),
+                    db.Column('dev_id', db.Integer, db.ForeignKey('developer.id'))
+                    )
+
 class Software (db.Model):
     __tablename__ = ('software')
     id = db.Column (db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     devs = db.relationship('Developer', secondary = software_dev, backref='softwares')
-
-
-software_dev = db.Table('software_dev',
-                    db.Column('software_id', db.Integer, db.ForeignKey('software.id')),
-                    db.Column('dev_id', db.Integer, db.ForeignKey('developer.id'))
-                    )
 
 class Developer(db.Model):
     __tablename__= ('developer')
