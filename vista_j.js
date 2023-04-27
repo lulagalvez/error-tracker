@@ -118,6 +118,29 @@ var cuerpoActualD=cuerpoD
 /***************************************************/
 
 /*Asignar prioridad a bug*/
+var botonPr=document.getElementById("botonPrBug")
+var txtIdP=document.getElementById("prioridadIdBug")
+var txtPrP=document.getElementById("prioridadPrBug")
+botonPr.addEventListener("click",function(){
+    var idBug=txtIdP.value
+    var posBug=-1
+    for(i=0;i<bugs.length;i++){
+        if(bugs[i].id==idBug){
+            posBug=i
+            break
+        }
+    }
+    if(posBug==-1) return
+    var num=Number(txtPrP.value)
+    tablaB.removeChild(cuerpoActualB)
+    bugs[posBug].prioridad=num
+    cuerpoB=document.createElement("tbody")
+    bugs.forEach(b => {
+        crearTablaForB(b,cuerpoB)
+    })
+    tablaB.appendChild(cuerpoB)
+    cuerpoActualB=cuerpoB
+})
 /***************************************************/
 
 /*Asignar bug a depurador*/
@@ -164,5 +187,33 @@ botonDev.addEventListener("click",function(){
     })
     tablaD.appendChild(cuerpoD)
     cuerpoActualD=cuerpoD
+})
+/***************************************************/
+
+/*Cambiar estado resuelto:*/
+var botonEst=document.getElementById("botonEstBug")
+var txtEst=document.getElementById("estadoIdBug")
+botonEst.addEventListener("click",function(){
+    var idBug=txtEst.value
+    var posBug=-1
+    for(i=0;i<bugs.length;i++){
+        if(bugs[i].id==idBug){
+            posBug=i
+            break
+        }
+    }
+    if(posBug==-1) return
+    tablaB.removeChild(cuerpoActualB)
+    if(bugs[posBug].resuelto=="Si"){
+        bugs[posBug].resuelto="No"
+    }else{
+        bugs[posBug].resuelto="Si"
+    }
+    cuerpoB=document.createElement("tbody")
+    bugs.forEach(b => {
+        crearTablaForB(b,cuerpoB)
+    })
+    tablaB.appendChild(cuerpoB)
+    cuerpoActualB=cuerpoB
 })
 /***************************************************/
