@@ -49,20 +49,10 @@ class Report (db.Model):
     description = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
-<<<<<<< HEAD
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable= True)
-    
-#Developer:
-#   id (Primary Key)
-#   Nombre
-#   email
-#   rol 
-=======
-    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'))
     software = db.Column (db.Integer, db.ForeignKey('software.id'))
     urgency = db.Column (db.String(80), nullable=False )
     state = db.Column (db.String(80))
->>>>>>> f83352e53ce5881618fad6f86d29b75c91998472
 
 
 with app.app_context():
