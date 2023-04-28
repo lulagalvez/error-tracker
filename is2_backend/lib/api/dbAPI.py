@@ -7,16 +7,18 @@ from dbmaker import db, User, Developer, Report, Software, app
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS,  cross_origin
 
-cors = CORS(app)
+CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app,resources={
-    r"/users/*":{"origins":"http://localhost"},
-    r"/devs/*":{"origins":"http://localhost"},
-    r"/reports/*":{"origins":"http://localhost"},
-    r"/software/*":{"origins":"http://localhost"}
-    })
 
-# @cross_origin
+# CORS(app,resources={
+#     r"/users/*":{"origins":"http://localhost"},
+#     r"/devs/*":{"origins":"http://localhost"},
+#     r"/reports/*":{"origins":"http://localhost"},
+#     r"/software/*":{"origins":"http://localhost"},
+#     r"/dev_reports/*":{"origins":"http://localhost"},
+#     r"/user_reports/*":{"origins":"http://localhost"}
+#     })
+
 ######################################USER######################################
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
@@ -59,7 +61,7 @@ def update_user(id):
     db.session.commit()
     return jsonify({'message': 'Usuario actualizado'})
 
-@app.route('/users/<id>', methods=['DELETE'])
+@app.route('/users/<id>', methods=['DELETE' ])
 def delete_user(id):
     user = User.query.get_or_404(id)
     db.session.delete(user)
@@ -67,7 +69,7 @@ def delete_user(id):
     return jsonify({'message': 'Usuario eliminado'})
 
 ####################################DEVELOPER###################################
-@app.route('/devs/<id>', methods=['GET'])
+@app.route('/devs/<id>', methods=['GET' ])
 def get_dev(id):
     dev = Developer.query.get_or_404(id)
     dev_data = {}
@@ -77,7 +79,7 @@ def get_dev(id):
     dev_data['role'] = dev.role
     return jsonify({'dev': dev_data})
 
-@app.route('/devs', methods=['GET'])
+@app.route('/devs', methods=['GET' ])
 def get_devs():
     devs = Developer.query.all()
     temp = []
@@ -171,7 +173,7 @@ def get_reports():
 
     return jsonify(temp)
 
-@app.route('/reports', methods=['POST', 'OPTIONS'])
+@app.route('/reports', methods=['POST'])
 def create_report():
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
@@ -226,14 +228,14 @@ def update_report(id):
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
 
-@app.route('/reports/<id>', methods=['DELETE'])
+@app.route('/reports/<id>', methods=['DELETE', ])
 def delete_report(id):
     report = Report.query.get_or_404(id)
     db.session.delete(report)
     db.session.commit()
     return jsonify({'message': 'Reporte eliminado'})
 
-@app.route('/dev_reports/<dev_id>', methods=['GET'])
+@app.route('/dev_reports/<dev_id>', methods=['GET', ])
 def get_dev_reports(dev_id):
     reports = Report.query.filter_by(dev_id = dev_id)
     temp = []
@@ -254,6 +256,17 @@ def get_dev_reports(dev_id):
 
 #####################################SOFTWARE#####################################
 
+@app.route('/software', methods=['GET'])
+def get_softwares():
+    softwares = Software.query.all()
+    temp = []
+    for software in softwares:
+        software_data = {}
+        software_data['id'] = software.id
+        software_data['name'] = software.name
+        temp.append(software_data)
+    return jsonify(temp)
+
 @app.route('/software/<int:id>', methods=['GET'])
 def get_software(id):
     software = Software.query.filter_by(id=id).first()
@@ -273,6 +286,14 @@ def put_software(id):
         software = software(request.json['name'])
         db.session.add(software)
         db.session.commit()
+
+@app.route('/software', methods=['POST'])
+def create_software():
+    name = request.json['name']
+    new_soft = Software (name=name)
+    db.session.add(new_soft)
+    db.session.commit()
+    return jsonify({'message': 'Software creado'})
 
 def get_software_reports(id):
     reports = Report.query.filter_by(software_id=id).all()

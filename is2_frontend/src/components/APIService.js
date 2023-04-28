@@ -63,10 +63,5 @@ export default class APIService{
         .then(response=> response.json())
     }
     
-    get(url){
-        const method ="GET";
-        return this.request(url,method)
-        .then(response => response.json())
-        .catch(error => console.log(error));        
-    }
+
 }

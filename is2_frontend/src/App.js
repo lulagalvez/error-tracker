@@ -4,7 +4,9 @@ import React, {Component} from 'react';
 import Home from './components/pages/Home';
 import CrearBug from './components/ReportBug/bugForm';
 import Contact from './components/pages/Contact';
+import AdminView from './components/pages/AdminView';
 import Services from './components/pages/Services';
+import DevView from './components/pages/DevView';
 import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 
 class App extends Component {
@@ -20,7 +22,8 @@ class App extends Component {
           <Routes>
            <Route path='/' exact element={<Home/>}/>
            <Route path='/services' element={<Services/>} />
-           <Route path='/contact' element={<Contact/>}/> 
+           <Route path='/adminview' element={<AdminView/>}/> 
+           <Route path='/devview' element={<DevView/>}/> 
            <Route path='/report' element={<div className='page-container'><CrearBug title='Reportar Bug' /></div>}/>   
           </Routes>   
         </Router>
