@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import APIService from '../APIService';
-// import SelectDev from '//SelectDev'
-
+import {SelectDev} from './SelectDev'
 
 function AdminView() {
     const [reports,setReports] =React.useState([])
@@ -74,7 +73,7 @@ function AdminView() {
                         <td>{val.state}</td>
                         <td>{val.urgency}</td> {/* falta agregar saltos de linea para cada depurador */}
                         <td>{val.user_id}</td>
-                        {/* <SelectDev/> */}
+                        <SelectDev/>
                     </tr>
                 )
             })}
