@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // import './Supplier.css'
 import Select from 'react-select'
 import APIService from '../APIService';
@@ -20,7 +20,6 @@ const bd = [
 
 export const SelectDev = () => {
   const apiservice=new APIService();
-
   const [selectedDev, setSelectedDev] = useState()
 
   const handleSelectChange = ({ value }) => {   //e
@@ -36,12 +35,16 @@ export const SelectDev = () => {
     apiservice.get('devs')
     .then(response =>{
         console.log('devs',response);
-        // setDevs(response);
-        response.map(function (dato) {
-          list_devs.push({ label: dato.name, value: dato.name == 'N/A' ? 'queso' : dato.id })
+         setDevs(response);
+        //response.map(function (dato) {
+         // list_devs.push({ label: dato.name, value: dato.name == 'N/A' ? 'queso' : dato.id })
         })
-    })
-}
+    }
+  //   useEffect( ()=> {
+  //     showData()
+  // }, [])
+
+//}
 
   // let url = 'https://jsonplaceholder.typicode.com/users'
   // fetch(url)
@@ -61,7 +64,7 @@ export const SelectDev = () => {
       <Select
         // defaultValue={{}} //encontrar una forma de seleccionar el valor actual de cada uno
         // options={bd.map(item => ({ label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))}
-        options={list_devs}
+        options={devs.name}
         onChange={handleSelectChange}
       />
     </div>

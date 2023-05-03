@@ -1,13 +1,20 @@
 import React,{useEffect, useState} from 'react'
 import APIService from '../APIService';
-import {SelectDev} from './SelectDev'
+import Select from 'react-select'
+
+const devsFijo = [
+    {label: "uno", value: 1},
+    {label: "dos", value: 2}
+]
 
 function AdminView() {
     const [reports,setReports] =React.useState([])
     const [search, setSearch] = React.useState('');
     const [devs,setDevs] = React.useState([]);
     const apiservice=new APIService();
-    
+    const [selectedDev,setSelectedDev]= React.useState('')
+    let devsName=[]
+
     const showData = () =>{
         apiservice.get('reports')
         //.then(response => response.json())
@@ -15,19 +22,28 @@ function AdminView() {
             console.log('reports',response);
             setReports(response);
         })
-        apiservice.get('devs')
+         apiservice.get('devs')
         .then(response =>{
             console.log('devs',response);
             setDevs(response);
         })
+        // devsName=  devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))
+        // devsName = devs.map(function (item){
+        //     {label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }
+        // } )
+        console.log('devs name', devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id })))
     }
+    
 
     // funcion de busqueda
     const searcher = (e) => {
         setSearch(e.target.value)
         // console.log(e.target.value)
     }
-
+    const handleSelectChange = (e) => {   //e
+        console.log(e.target.value)  //e.value
+        setSelectedDev(e.target.value)
+    }
     // filtrado
     // const results = !search ? reports : reports.filter
     let results = []
@@ -42,6 +58,14 @@ function AdminView() {
     useEffect( ()=> {
         showData()
     }, [])
+
+    // async function handleDevSelect(event) {
+    //     const devId = event.target.value;
+    //     // setSelectedDev(devId);
+    //     const reportsResponse = await api_service.put('update_report', devId);
+    //     // setReports(reportsResponse);
+    // }
+
 
     //render
     return( 
@@ -73,7 +97,17 @@ function AdminView() {
                         <td>{val.state}</td>
                         <td>{val.urgency}</td> {/* falta agregar saltos de linea para cada depurador */}
                         <td>{val.user_id}</td>
-                        <SelectDev/>
+                        <div className='Devs-container' style={{ width: '300px' }}>
+                        <p>{selectedDev}</p>
+
+                        <Select
+                            defaultValue={{label: "Selecciona opcion", value: -1}} //encontrar una forma de seleccionar el valor actual de cada uno
+                            // options={bd.map(item => ({ label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))}
+                            // options={devsFijo}
+                            options = {devs.map(dev => ({ label: dev.name, value: dev.id}))}
+                            onChange={handleSelectChange}
+                        />
+                    </div>
                     </tr>
                 )
             })}
