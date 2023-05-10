@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import './bugForm.css'
-import APIService from '../APIService';
-import Alert from '../Alert';
+import '../css/bugForm.css'
+import APIService from './APIService';
+import Alert from './Alert';
 
 
 export default (props) =>{
@@ -56,7 +56,10 @@ export default (props) =>{
                 <label> Pasos: </label>
                 <textarea name='pasos' placeholder='Pasos detallados para reproducir el bug' required
                 onChange={handleOnChange} value={inputValues.pasos }  ></textarea>
-                <style>{` .red {color: red}     .green {color: green}`}</style>
+                <label>Adjuntar pruebas</label>
+                <input type="file" class="form-control-file" id="exampleFormControlFile1"></input>
+                {/* <style>{` .red {color: red}     .green {color: green}`}</style>  */}
+                
                 <button type='submit' > <a>{props.title}</a></button>
             </form>
         </div>

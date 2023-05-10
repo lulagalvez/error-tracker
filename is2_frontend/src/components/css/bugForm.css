@@ -1,4 +1,5 @@
 .crear-bug{
+    background: tomato;
     box-sizing: border-box;
     /* Auto layout */
 
@@ -6,15 +7,8 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 20px;
-    width: 60vw;
-
-    /* M3/sys/light/surface */
-
-    background: #FEF7FF;
-    /* M3/sys/light/outline-variant */
-
-    border: 1px solid #CAC4D0;
-    border-radius: 16px;
+    width: auto;
+    height: 100%;
 
     /* Inside auto layout */
 
@@ -46,7 +40,8 @@
 
 }
 .crear-bug textarea{
-    max-height: 120px;
+    height: 130px;
+    resize: none;
 }
 
 .crear-bug button{
