@@ -1,32 +1,58 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
 import "../css/SignUp.css"
 
-export default function (props) {
+export const SignUp = () => {
+    const [name,setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repassword, setRePassword] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(name, email, password, repassword);
+    } 
+
     return (
         <div className="Auth-form-container">
             <form className="Auth-form">
                 <div className="Auth-form-content">
                     <h3 className="Auth-form-title">Registrarse</h3>
                     <div className="form-group mt-3">
-                        <label>Correo Electrónico</label>
+                        <form onSubmit={handleSubmit}>Nombre</form>
+                        <input
+                            type="text"
+                            onChange={e => setName(e.target.value)}
+                            value={name}
+                            className="form-control mt-1"
+                            placeholder="John Doe"
+                        />
+                    </div>
+                    <div className="form-group mt-3">
+                        <form onSubmit={handleSubmit}>Correo Electrónico</form>
                         <input
                             type="email"
+                            onChange={e => setEmail(e.target.value)}
+                            value = {email}
                             className="form-control mt-1"
                             placeholder="nombre@ejemplo.com"
                         />
                     </div>
                     <div className="form-group mt-3">
-                        <label>Contraseña</label>
+                        <form onSubmit={handleSubmit}>Contraseña</form>
                         <input
                             type="password"
+                            onChange={ e => setPassword(e.target.value)}
+                            value = {password}
                             className="form-control mt-1"
                             placeholder="Introduzca su contraseña"
                         />
                     </div>
                     <div className="form-group mt-3">
-                        <label>Repita Contraseña</label>
+                        <form onSubmit={e => handleSubmit}>Repita Contraseña</form>
                         <input type= "password"
+                               onChange={e => setRePassword(e.target.value)}
+                               value={repassword}
                                className="form-control mt1"
                                placeholder="Repita su contraseña"
                         />
@@ -41,3 +67,5 @@ export default function (props) {
         </div>
     )
 }
+
+export default SignUp

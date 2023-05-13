@@ -1,15 +1,19 @@
 import sys
 import os
-
+from dotenv import load_dotenv
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
 from dbmaker import db, User, Developer, Report, Software, app
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, abort, session
 from flask_cors import CORS,  cross_origin
-
+from flask_bcrypt import Bcrypt 
+from config import ApplicationConfig
+from flask_migrate import Migrate
+migrate = Migrate(app,db)
+bcrypt = Bcrypt(app)
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-
+app.secret_key = "FLASKQLOSIONOLOKO@"
 # CORS(app,resources={
 #     r"/users/*":{"origins":"http://localhost"},
 #     r"/devs/*":{"origins":"http://localhost"},
@@ -19,7 +23,58 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 #     r"/user_reports/*":{"origins":"http://localhost"}
 #     })
 
+######################################SESSION ROUTES######################################
+@app.route("/@me")
+def get_current_user():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error":"No estas autenticado"}), 401
+    
+    user = User.query.filter_by(id = user_id).first()
+
+    return jsonify({ 
+        "name":user.name,
+        "id":user.id,
+        "email":user.email
+    })
+
 ######################################USER######################################
+@app.route ('/register', methods=['POST'])
+def register_user():
+    name = request.json["name"]
+    email = request.json["email"]
+    password = request.json["password"]
+
+    user_exists = User.query.filter_by(email=email).first() is not None
+    if user_exists:
+        abort(409)
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_user = User(name=name, email = email, password = hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify ({
+        "name":new_user.name,
+        "id":new_user.id,
+        "email":new_user.email,
+    })
+@app.route ('/login', methods = ['POST'])
+def login():
+    email = request.json["email"]
+    password = request.json["password"]
+    user = User.query.filter_by(email = email).first()
+    if user is None:
+        return jsonify({"error":"no existe usuario"}), 401
+    if not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"error":"password incorrecto"}), 401
+    
+    session['user_id'] = user.id
+
+    return jsonify({ 
+        "name":user.name,
+        "id":user.id,
+        "email":user.email
+    })
+
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
@@ -46,7 +101,8 @@ def get_users():
 def create_user():
     name = request.json['name']
     email = request.json['email']
-    new_user = User(name=name, email=email)
+    password = request.json['password']
+    new_user = User(name=name, email=email, password = password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Usuario creado'})
@@ -304,6 +360,7 @@ def get_software_reports(id):
     else:
         return jsonify({'message': 'No reports found for software'})
    
+
 
 if __name__ == '__main__':
     with app.app_context():
