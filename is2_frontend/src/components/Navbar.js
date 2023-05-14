@@ -58,7 +58,11 @@ function Navbar() {
                         UserView
                     </Link>
                 </li>
-                
+                <li className='nav-item'>
+                    <Link to='/my_reports' className='nav-links' onClick={closeMobileMenu}>
+                        UserView
+                    </Link>
+                </li>
                 <li className='nav-item'>
                     <Link to='/sign-up' className='nav-links-mobile' onClick={closeMobileMenu}>
                         Sign Up
