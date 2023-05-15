@@ -1,3 +1,73 @@
 .bg-gray {
-    background-color: #f8f9fa; /* Replace with the desired shade of gray */
-  }
+    background-color: #f3f3f3; /* Replace with the desired shade of gray */
+}
+
+.bg-card-gray {
+  background-color: #f8f8f8; /* Replace with the desired shade of gray */
+}
+
+.bg-title-card{
+  background-color: #FFFFFF; /* Replace with the desired shade of gray */
+}
+
+.card-deck-wrapper {
+  overflow: hidden;
+}
+
+.card-deck-wrapper .card-deck {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+}
+
+.card-deck-wrapper .card-deck::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+
+/* BugReportList.css */
+
+/* Hide the scrollbar */
+.card-deck.overflow-hidden::-webkit-scrollbar {
+  width: 0.5em;
+  background-color: #f5f5f5;
+}
+
+/* Hide scrollbar track */
+.card-deck.overflow-hidden::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Style scrollbar thumb */
+.card-deck.overflow-hidden::-webkit-scrollbar-thumb {
+  background-color: #888;
+  outline: 1px solid slategrey;
+}
+
+.custom-shadow {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); /* Customize the box-shadow intensity */
+}
+
+.selected {
+  opacity: 0.5; /* Adjust the opacity value as desired */
+}
+
+.selected-bg {
+  background-color: #333; /* Replace with your desired darker background color */
+}
+
+.status-pending {
+  border: 2px solid orange;
+}
+
+.status-to-do{
+  border: 2px solid cyan;
+}
+
+.status-testing {
+  border: 2px solid yellow;
+}
+
+.status-closed {
+  border: 2px solid green;
+}
