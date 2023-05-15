@@ -69,7 +69,7 @@ function AdminView() {
 
     //render
     return( 
-        <div>
+        <div className='container-md-4'>
         <h1>Vista de lista de bugs</h1>
         <hr />
         {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}

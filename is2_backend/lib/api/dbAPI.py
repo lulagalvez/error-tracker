@@ -264,7 +264,6 @@ def update_report(id):
     report = Report.query.get_or_404(id)
     title = request.json['title']
     description = request.json['description']
-    # date = request.json["date"]
     dev_id = request.json['dev_id']
     user_id = request.json['user_id']
     software = request.json['software']
@@ -272,7 +271,6 @@ def update_report(id):
     state = request.json['state']
     report.title =  title
     report.description = description
-    # report.date = date
     report.dev_id=dev_id
     report.user_id = user_id
     report.software = software
@@ -280,8 +278,6 @@ def update_report(id):
     report.state = state
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
-
-
 
 @app.route('/reports/<id>', methods=['DELETE', ])
 def delete_report(id):
@@ -359,8 +355,6 @@ def get_software_reports(id):
         return jsonify(report_list)
     else:
         return jsonify({'message': 'No reports found for software'})
-   
-
 
 if __name__ == '__main__':
     with app.app_context():

@@ -1,7 +1,6 @@
-.crear-bug{
+ .crear-bug{
     background: tomato;
     box-sizing: border-box;
-    /* Auto layout */
 
     display: flex;
     flex-direction: column;
@@ -10,19 +9,19 @@
     width: auto;
     height: 100%;
 
-    /* Inside auto layout */
-
     flex: none;
     order: 0;
-    flex-grow: 1;
+    flex-grow: 1; 
 }
- .crear-bug h1{
+
+
+.crear-bug h1{
     min-width: 100%;
     text-align: center;
     font-size: 2.5rem;
     border-bottom: 1px groove black;
- }
-
+}
+ 
 .crear-bug form{
     min-width:80%;
     display:grid;
@@ -33,7 +32,7 @@
 .crear-bug label{
     text-align: right;
     font-size: 1.5rem;
-}
+} 
 
 .crear-bug input,textarea,select{
     border-radius: 5px;
@@ -42,21 +41,20 @@
 .crear-bug textarea{
     height: 130px;
     resize: none;
-}
-
+} 
 .crear-bug button{
     grid-column:2;
     background: #6750A4;
     border-radius: 100px;
-}
+} 
 .crear-bug button:hover {
-    /* M3/sys/light/primary */
+
 
     background: #8167c9;
-    /* M3/Elevation Light/1 */
+
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
     border-radius: 100px;
-  }
+}
 .crear-bug button a{
-    color:white;
+    color:white; 
 }

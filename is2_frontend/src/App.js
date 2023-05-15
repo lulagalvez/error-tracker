@@ -8,6 +8,7 @@ import AdminView from './components/pages/AdminView';
 import Services from './components/pages/Services';
 import DevView from './components/pages/DevView';
 import SignUp from './components/pages/SignUp';
+import SideBar from './components/pages/Sidebar/Sidebar';
 import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
     return (
         <>
         <Router>
+        <SideBar />
         <Navbar />
           <Routes>
            <Route path='/' exact element={<Home/>}/>
