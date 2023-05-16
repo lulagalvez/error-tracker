@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import '../css/bugForm.css'
-import APIService from './APIService'
+import APIService from '../APIService'
 export default (props) =>{
     const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1});
     const[showErrorAlert,setShowErrorAlert]=useState(false);

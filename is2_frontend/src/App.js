@@ -2,7 +2,7 @@ import Navbar from './components/pages/Navbar';
 import './components/css/App.css';
 import React, {Component} from 'react';
 import Home from './components/pages/Home';
-import CrearBug from './components/pages/bugForm';
+import CrearBug from './components/pages/BugForm/bugForm';
 import Contact from './components/pages/Contact';
 import AdminView from './components/pages/AdminView';
 import Services from './components/pages/Services';
