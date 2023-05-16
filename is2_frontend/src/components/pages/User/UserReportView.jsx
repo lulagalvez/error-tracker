@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import BugReportList from './BugReportList';
-import CommentColumn from './CommentColumn';
-import SideBar from '../../props/Navigation/SideBar';
-import { generateBugReports } from '../../utils/generateBugReports';
-import './UserReportView.css';
-
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import BugReportList from "./BugReportList";
+import CommentColumn from "./CommentColumn";
+import SideBar from "../../props/Navigation/SideBar";
+import { generateBugReports } from "../../utils/generateBugReports";
+import "./UserReportView.css";
 
 //Aqui tienen que estar los hooks de los bugreports, hasta el momento solo son generados en una funcion en utils, es un diccionario
 //dentro del codigo se usa status en vez de state, cambiar referencia en el json
@@ -22,10 +21,9 @@ const UserReportView = () => {
   const columnPadding = "p-5";
   return (
     <div className="container-fluid pt-4">
-      
       <div className="row">
         <div className="col-1 ">
-          
+          {/*SIDEBAR CON UNA COLUMNA ASIGNADA*/}
           <div className="sidebar-wrapper">
             <SideBar />
           </div>
@@ -33,9 +31,10 @@ const UserReportView = () => {
         <div className="col">
           <div className="row">
             <div className="col">
-              <div className="p-5"></div>
+              <div className="p-4"></div>
             </div>
           </div>
+          {/*BUG REPORT CON EL RESTO DE LAS COLUMNAS */}
           <BugReportList
             bugReports={bugReports}
             onClick={handleBugReportClick}
@@ -49,8 +48,17 @@ const UserReportView = () => {
               <div className="p-5"></div>
             </div>
           </div>
-          <div className=' CommentColumn px-5'>{selectedBugId &&  <CommentColumn  bugReport={bugReports.find(bugReport => bugReport.id === selectedBugId)} />}</div>
-          
+          {/*COLUMNA DE COMENTARIOS CON 5 COLUMNAS ASIGNADAS*/}
+          <div className=" CommentColumn px-5">
+            {selectedBugId && (
+              <CommentColumn
+                bugReport={bugReports.find(
+                  (bugReport) => bugReport.id === selectedBugId
+                )}
+              />
+            )}
+          </div>
+
           {/* Add other columns or components */}
         </div>
       </div>

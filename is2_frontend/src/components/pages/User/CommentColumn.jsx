@@ -3,32 +3,34 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { FaUser } from 'react-icons/fa';
 import moment from 'moment';
 
+/*INIT PIDE EL REPORTE SELECCIONADO EN LA LISTA*/
 const CommentColumn = ({ bugReport }) => {
   return (
-    <div className="overflow-auto  col-lg-6">
-      <div className="mb-4">
-        <div className="body">
-          <h5 className="title">Bug Report Details</h5>
-          <h6 className="subtitle mb-2 text-muted">Title: {bugReport.title}</h6>
-          <p className="text">Description: {bugReport.description}</p>
+    <div className="col-lg-6">
+      {/*DETALLES DEL BUG REPORT*/}
+      <div className="card mb-4 border-0 shadow-sm">
+        <div className="card-body">
+          <h5 className="card-title">Bug Report Details</h5>
+          {/*TITULO Y DESCRIPCION*/}
+          <h6 className="card-subtitle mb-2 text-muted">Title: {bugReport.title}</h6>
+          <p className="card-text">Description: {bugReport.description}</p>
         </div>
       </div>
 
-      <div className="">
-        <div className="body">
-          <h5 className="title">Comments</h5>
+      {/*CARTA PARA LOS COMENTARIOS*/}
+      <div className="card border-0 shadow-sm">
+        <div className="card-body">
+          <h5 className="card-title">Comments</h5>
+          {/*MAPEO DE LOS COMENTARIOS */}
           {bugReport.comments.map((comment) => (
-            <div key={comment.id} className="card-text d-flex align-items-start">
-              
-              <div className="comment-details">
-              
-                <div className="d-flex align-items-center justify-content-between mb-2">
-                <FaUser className="mr-2 mt-1" size={24} />
-                  <div className="d-flex p-2">
-                    <p className="m-0 comment-publisher">{comment.publisher}</p>
-                    <span className=" ml-2 text-muted">{moment(comment.timestamp).fromNow()}</span>
-                  </div>
-                  
+            <div key={comment.id} className="d-flex align-items-start mb-3">
+              {/*ICONO DE USUARIO*/}
+              <FaUser className="me-3 mt-1" size={24} />
+              <div>
+                {/*PUBLISHER, TIMESTAMP Y COMENTARIO*/}
+                <div className="d-flex align-items-center">
+                  <p className="m-0 me-2 comment-publisher">{comment.publisher}</p>
+                  <small className="text-muted">{moment(comment.timestamp).fromNow()}</small>
                 </div>
                 <p className="m-0 comment-text">{comment.text}</p>
               </div>
