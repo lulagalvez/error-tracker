@@ -69,13 +69,14 @@ function AdminView() {
 
     //render
     return( 
-        <div>
+        
+        <div class="container mt-4">
         <h1>Vista de lista de bugs</h1>
         <hr />
         {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}
-        <input className="search-bar" type="text" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" />
+        <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
-        <table id="Bugs" border="1">
+        <table class="table table-striped">
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
