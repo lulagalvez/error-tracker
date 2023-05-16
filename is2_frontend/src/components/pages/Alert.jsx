@@ -1,4 +1,4 @@
-/*
+
 import style from "./style.module.css"; //modificar estilos de alertas custom
 import css from "classnames";
 import React,{useState} from "react";
@@ -25,4 +25,3 @@ export default function Alert({children, type, message}) {
       );
     }
 
-*/
