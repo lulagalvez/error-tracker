@@ -12,7 +12,7 @@ export default (props) =>{
         setShow(true);
     };
     const apiservice=new APIService();
-    const reportBug= () =>{
+    const reportBug = () =>{
         apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, state:null,urgency:null})
         .then(response =>{
             if(response.message=== 'Reporte creado'){
@@ -37,8 +37,6 @@ export default (props) =>{
         e.preventDefault()
         reportBug();
     }
-
-
     
     return(
         <>

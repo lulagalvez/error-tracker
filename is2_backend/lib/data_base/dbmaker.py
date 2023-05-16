@@ -2,7 +2,7 @@ import os
 import sys
 from datetime import datetime
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import *
+from flask_sqlalchemy import SQLAlchemy
 from dataclasses import dataclass
 from config import ApplicationConfig
 from uuid import uuid4
@@ -20,9 +20,9 @@ db = SQLAlchemy(app)
 class User(db.Model):
     __tablename__ = ('user')
     id = db.Column(db.String(32), primary_key=True, default = get_uuid())
-    name:str = db.Column(db.String(80), nullable=False)
-    email:str = db.Column(db.String(345), unique=True, nullable=False)
-    password:str = db.Column(db.Text, nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(345), unique=True, nullable=False)
+    password = db.Column(db.Text, nullable=False)
     reports = db.relationship('Report', backref = 'user')
     type_of_user = db.Column ('type',db.String(20))
     __mapper_args__ = {
@@ -46,14 +46,24 @@ class Software (db.Model):
     name = db.Column(db.String(80), nullable=False)
     devs = db.relationship('Developer', secondary = software_dev, backref='softwares')
 
-class Developer(db.Model):
+class Developer(User):
     __tablename__= ('developer')
-    id = db.Column (db.Integer, primary_key=True)
+    id = db.Column (db.String(32), db.ForeignKey('user.id'),primary_key=True, default=get_uuid())
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     role = db.Column (db.String(40), nullable=False)
     reports = db.relationship('Report', backref = 'developer')
+    __mapper_args__ = { 
+        'polymorphic_identity': 'developer'
+    }
     
+class Admin(User):
+    __tablename__ = ('admin')
+    id = db.Column(db.String(32), db.ForeignKey('user.id'), primary_key=True, default=get_uuid())
+    
+    __mapper_args__ = { 
+        'polymorphic_identity': 'admin'
+    }
 
 class Report (db.Model):
     __tablename__ = ('report')

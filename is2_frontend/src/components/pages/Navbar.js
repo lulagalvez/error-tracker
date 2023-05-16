@@ -69,9 +69,7 @@ function Navbar() {
             {button && <Button class='btn btn-dark'>Sign up</Button>}
             {button && <Button class='btn btn-dark'>Log in</Button>}
         </div>
-
     </nav>
-
    </>
   )
 }
