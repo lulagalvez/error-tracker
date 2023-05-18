@@ -19,7 +19,7 @@ db = SQLAlchemy(app)
 @dataclass
 class User(db.Model):
     __tablename__ = ('user')
-    id = db.Column(db.String(32), primary_key=True, default = get_uuid())
+    id = db.Column(db.String(32), primary_key=True, default = get_uuid)
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(345), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
@@ -48,7 +48,7 @@ class Software (db.Model):
 
 class Developer(User):
     __tablename__= ('developer')
-    id = db.Column (db.String(32), db.ForeignKey('user.id'),primary_key=True, default=get_uuid())
+    id = db.Column (db.String(32), db.ForeignKey('user.id'),primary_key=True, default=get_uuid)
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     role = db.Column (db.String(40), nullable=False)
@@ -59,7 +59,7 @@ class Developer(User):
     
 class Admin(User):
     __tablename__ = ('admin')
-    id = db.Column(db.String(32), db.ForeignKey('user.id'), primary_key=True, default=get_uuid())
+    id = db.Column(db.String(32), db.ForeignKey('user.id'), primary_key=True, default=get_uuid)
     
     __mapper_args__ = { 
         'polymorphic_identity': 'admin'

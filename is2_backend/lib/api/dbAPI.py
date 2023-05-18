@@ -57,16 +57,17 @@ def register_user():
         "id":new_user.id,
         "email":new_user.email,
     })
+
 @app.route ('/login', methods = ['POST'])
 def login():
     email = request.json["email"]
     password = request.json["password"]
     user = User.query.filter_by(email = email).first()
     if user is None:
-        return jsonify({"error":"no existe usuario"}), 401
+        return jsonify({"error":"Correo o contraseña incorrectas"}), 401
     if not bcrypt.check_password_hash(user.password, password):
         return jsonify({"error":"password incorrecto"}), 401
-    
+       
     session['user_id'] = user.id
 
     return jsonify({ 

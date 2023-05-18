@@ -5,7 +5,6 @@ import Home from './components/pages/Home';
 import CrearBug from './components/pages/BugForm/bugForm';
 import Contact from './components/pages/Contact';
 import AdminView from './components/pages/AdminView';
-import Services from './components/pages/Services';
 import DevView from './components/pages/DevView';
 import SignUp from './components/pages/SignUp';
 import SideBar from './components/pages/Sidebar/Sidebar';
@@ -24,7 +23,6 @@ class App extends Component {
         <Navbar />
           <Routes>
            <Route path='/' exact element={<Home/>}/>
-           <Route path='/services' element={<Services/>} />
            <Route path='/adminview' element={<AdminView/>}/> 
            <Route path='/devview' element={<DevView/>}/> 
            <Route path='/signup' element={<SignUp />} /> 

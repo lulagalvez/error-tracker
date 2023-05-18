@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import '../css/bugForm.css'
+import './bugForm.css'
 import APIService from '../APIService'
 export default (props) =>{
     const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1});
@@ -11,11 +11,10 @@ export default (props) =>{
     const reportBug = () =>{
         apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, state:null,urgency:null})
         .then(response =>{
-            if(response?.message=== 'Reporte creado'){
+            if(response?.message === 'Reporte creado'){
                 setShowSuccessAlert(true);
                 
             }
-            
             else{
                 setShowErrorAlert(true);
             }
