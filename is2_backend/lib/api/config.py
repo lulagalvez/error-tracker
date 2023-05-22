@@ -6,5 +6,3 @@ load_dotenv()
 class ApplicationConfig:
     SQLALCHEMY_TACK_MODIFICATIONS=False
     SQLALCHEMY_ECHO = True
-    SESSION_PERMANENT = False
-    SESSION_USE_SIGNER = True

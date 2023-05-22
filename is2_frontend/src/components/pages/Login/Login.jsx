@@ -19,7 +19,8 @@ export default (props) => {
         setPassword(e.target.value);
     };
     const Login = async () => {
-        await apiservice.post('/login', { email: email, password: password });
+        await apiservice.post('login', { email: email, password: password });
+        
     }   
     const handleLogin = async (e) => {
         e.preventDefault();
