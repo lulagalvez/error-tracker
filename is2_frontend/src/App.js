@@ -1,12 +1,11 @@
-import Navbar from './components/pages/Navbar';
+import Navbar from './components/Navbar';
 import './components/css/App.css';
 import React, {Component} from 'react';
-import Home from './components/pages/Home';
+import Home from './components/pages/Home/Home';
 import CrearBug from './components/pages/BugForm/bugForm';
-import Contact from './components/pages/Contact';
-import AdminView from './components/pages/AdminView';
-import DevView from './components/pages/DevView';
-import SignUp from './components/pages/SignUp';
+import AdminView from './components/pages/AdminView/AdminView';
+import DevView from './components/pages/DevView/DevView';
+import SignUp from './components/pages/SignUp/SignUp';
 import SideBar from './components/pages/Sidebar/Sidebar';
 import LogIn from './components/pages/Login/Login';
 import {  BrowserRouter as Router,  Routes,  Route} from "react-router-dom";

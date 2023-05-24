@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "./Login.css";
-import APIService from '../APIService';
+import "../../css/Login.css";
+import APIService from '../../services/APIService';
 
 export default (props) => {
     const [email, setEmail] = useState('');

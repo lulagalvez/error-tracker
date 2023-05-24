@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import APIService from './APIService';
+import APIService from '../../services/APIService';
 import "bootstrap/dist/css/bootstrap.min.css"
-import "../css/SignUp.css"
+import "../../css/SignUp.css"
 
 export default (props) => {
     const [name, setName] = useState('');

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import APIService from './APIService';
+import APIService from '../../services/APIService';
 
 function DevView_test() {
   const [devs, setDevs] = useState([]);

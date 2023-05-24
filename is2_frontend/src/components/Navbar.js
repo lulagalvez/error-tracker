@@ -1,8 +1,8 @@
 import { click } from '@testing-library/user-event/dist/click'
 import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
-import '../css/Navbar.css'
-import { Button } from './Button';
+import './css/Navbar.css'
+
 
 
 function Navbar() {
@@ -66,8 +66,9 @@ function Navbar() {
                 </li>   
                        
             </ul>
-            {button && <Button class='btn btn-dark'>Sign up</Button>}
-            {button && <Button class='btn btn-dark'>Log in</Button>}
+            <Link to='/signup' className='btn-mobile'> <button class='btn btn-dark'>Sign up</button></Link>
+            
+            <Link to='/login' className='btn-mobile'> <button class='btn btn-dark'>Login</button></Link>
         </div>
     </nav>
    </>

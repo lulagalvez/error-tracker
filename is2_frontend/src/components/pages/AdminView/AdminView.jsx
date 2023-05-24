@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
-import APIService from './APIService';
-import Select from 'react-select'
+import APIService from '../../services/APIService';
+
 
 const devsFijo = [
     {label: "uno", value: 1},
@@ -40,9 +40,9 @@ function AdminView() {
         setSearch(e.target.value)
         // console.log(e.target.value)
     }
-    const handleSelectChange = (e) => {   //e
-        console.log(e.target.value)  //e.value
-        setSelectedDev(e.target.value)
+    async function handleDevSelect(event) {
+        const devId = event.target.value;
+        setSelectedDev(devId);
     }
     // filtrado
     // const results = !search ? reports : reports.filter
@@ -101,13 +101,14 @@ function AdminView() {
                         <div className='Devs-container' style={{ width: '300px' }}>
                         <p>{selectedDev}</p>
 
-                        <Select
-                            defaultValue={{label: "Selecciona opcion", value: -1}} //encontrar una forma de seleccionar el valor actual de cada uno
-                            // options={bd.map(item => ({ label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))}
-                            // options={devsFijo}
-                            options = {devs.map(dev => ({ label: dev.name, value: dev.id}))}
-                            onChange={handleSelectChange}
-                        />
+                        <select id="devs" onChange={handleDevSelect}>
+                            <option value="">--Please choose an option--</option>
+                            {devs.map(dev => (
+                            <option key={dev.id} value={dev.id}>
+                                {dev.name}
+                            </option>
+                            ))}
+                        </select>
                     </div>
                     </tr>
                 )
