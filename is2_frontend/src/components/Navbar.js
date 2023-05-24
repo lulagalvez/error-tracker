@@ -1,8 +1,8 @@
 import { click } from '@testing-library/user-event/dist/click'
 import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
-import './Navbar.css'
-import { Button } from './Button';
+import './css/Navbar.css'
+
 
 
 function Navbar() {
@@ -31,7 +31,7 @@ function Navbar() {
     <nav className='navbar'>
         <div className='navbar-container'>
             <Link to='/' className="navbar-logo" onClick={closeMobileMenu}> 
-                Ticket <i className= 'fab.fa-typo3'/>
+                DebuGGer <i className= 'fab.fa-typo3'/>
             </Link>
             <div className='menu-icon' onClick={handleClick}>
                 <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -64,17 +64,17 @@ function Navbar() {
                     </Link>
                 </li>
                 <li className='nav-item'>
-                    <Link to='/sign-up' className='nav-links-mobile' onClick={closeMobileMenu}>
+                    <Link to='/signup' className='nav-links-mobile' onClick={closeMobileMenu}>
                         Sign Up
                     </Link>
                 </li>   
                        
             </ul>
-            {button && <Button buttonStyle='btn--outline'>Sign up</Button>}
+            <Link to='/signup' className='btn-mobile'> <button class='btn btn-dark'>Sign up</button></Link>
+            
+            <Link to='/login' className='btn-mobile'> <button class='btn btn-dark'>Login</button></Link>
         </div>
-
     </nav>
-
    </>
   )
 }

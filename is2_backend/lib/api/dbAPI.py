@@ -1,15 +1,32 @@
 import sys
 import os
-
+from datetime import timedelta
+from dotenv import load_dotenv
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
 from dbmaker import db, User, Developer, Report, Software, app
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, abort, session
 from flask_cors import CORS,  cross_origin
-
-CORS(app)
+from flask_bcrypt import Bcrypt 
+from config import ApplicationConfig
+from flask_migrate import Migrate
+migrate = Migrate(app,db)
+bcrypt = Bcrypt(app)
+CORS(app, supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.secret_key = "FLASKQLOSIONOLOKO@"
 
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 # CORS(app,resources={
 #     r"/users/*":{"origins":"http://localhost"},
 #     r"/devs/*":{"origins":"http://localhost"},
@@ -19,7 +36,58 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 #     r"/user_reports/*":{"origins":"http://localhost"}
 #     })
 
+######################################SESSION ROUTES######################################
+@app.route ('/register', methods=['POST'])
+def register_user():
+    name = request.json["name"]
+    email = request.json["email"]
+    password = request.json["password"]
+
+    user_exists = User.query.filter_by(email=email).first() is not None
+    if user_exists:
+        abort(409)
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_user = User(name=name, email = email, password = hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify ({
+        "name":new_user.name,
+        "id":new_user.id,
+        "email":new_user.email,
+    })
+
+@app.route ('/login', methods = ['POST'])
+def login():
+    email = request.json["email"]
+    password = request.json["password"]
+    user = User.query.filter_by(email = email).first()
+    if user is None:
+        response = make_response  (jsonify({"error":"Correo o contraseña incorrectas"}), 401)
+    if not bcrypt.check_password_hash(user.password, password):
+        response = make_response(jsonify({"error": "Contraseña incorrecta"}), 401)
+    
+    response = make_response(jsonify({
+        "name": user.name,
+        "id": user.id,
+        "email": user.email
+    }))
+    response.set_cookie('user_id', str(user.id))
+    response.set_cookie('email', user.email)
+    response.set_cookie('authenticated', 'true')
+
+    return response
+@app.route("/@me", methods=['GET'])
+def get_current_user():
+
+    if request.cookies:
+        # Hay cookies presentes
+        return jsonify({'message': 'Hay cookies presentes.'})
+    else:
+        # No hay cookies presentes
+        return jsonify({'message': 'No hay cookies presentes.'}), 401
+
 ######################################USER######################################
+
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
@@ -46,7 +114,8 @@ def get_users():
 def create_user():
     name = request.json['name']
     email = request.json['email']
-    new_user = User(name=name, email=email)
+    password = request.json['password']
+    new_user = User(name=name, email=email, password = password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Usuario creado'})
@@ -192,23 +261,12 @@ def create_report():
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
-def _build_cors_preflight_response():
-    response = make_response()
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add('Access-Control-Allow-Headers', "*")
-    response.headers.add('Access-Control-Allow-Methods', "*")
-    return response
-
-def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
 
 @app.route('/reports/<id>', methods=['PUT'])
 def update_report(id):
     report = Report.query.get_or_404(id)
     title = request.json['title']
     description = request.json['description']
-    # date = request.json["date"]
     dev_id = request.json['dev_id']
     user_id = request.json['user_id']
     software = request.json['software']
@@ -216,7 +274,6 @@ def update_report(id):
     status = request.json['status']
     report.title =  title
     report.description = description
-    # report.date = date
     report.dev_id=dev_id
     report.user_id = user_id
     report.software = software
@@ -224,8 +281,6 @@ def update_report(id):
     report.status = status
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
-
-
 
 @app.route('/reports/<id>', methods=['DELETE', ])
 def delete_report(id):
@@ -303,7 +358,10 @@ def get_software_reports(id):
         return jsonify(report_list)
     else:
         return jsonify({'message': 'No reports found for software'})
-   
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 if __name__ == '__main__':
     with app.app_context():
