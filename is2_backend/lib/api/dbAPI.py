@@ -151,7 +151,7 @@ def get_report(id):
     report_data['dev_id'] = report.dev_id
     report_data['software'] = report.software
     report_data['urgency'] = report.urgency
-    report_data['state'] = report.state
+    report_data['status'] = report.status
     return jsonify({'report': report_data})
 
 @app.route('/reports', methods=['GET'])
@@ -168,7 +168,7 @@ def get_reports():
         report_data['dev_id'] = report.dev_id
         report_data['software'] = report.software
         report_data['urgency'] = report.urgency
-        report_data['state'] = report.state
+        report_data['status'] = report.status
         temp.append(report_data)
 
     return jsonify(temp)
@@ -184,8 +184,8 @@ def create_report():
         dev_id = request.json['dev_id']
         software = request.json['software']
         urgency = request.json['urgency'] 
-        state = request.json['state']
-        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, state = state)
+        status = request.json['status']
+        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, status = status)
         db.session.add(new_report)
         db.session.commit()
         return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
@@ -213,7 +213,7 @@ def update_report(id):
     user_id = request.json['user_id']
     software = request.json['software']
     urgency = request.json['urgency'] 
-    state = request.json['state']
+    status = request.json['status']
     report.title =  title
     report.description = description
     # report.date = date
@@ -221,7 +221,7 @@ def update_report(id):
     report.user_id = user_id
     report.software = software
     report.urgency = urgency
-    report.state = state
+    report.status = status
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
 
@@ -248,7 +248,7 @@ def get_dev_reports(dev_id):
         report_data['dev_id'] = report.dev_id
         report_data['software'] = report.software
         report_data['urgency'] = report.urgency
-        report_data['state'] = report.state
+        report_data['status'] = report.status
         temp.append(report_data)
 
     return jsonify(temp)
@@ -299,7 +299,7 @@ def get_software_reports(id):
     if reports:
         report_list = []
         for report in reports:
-            report_list.append({'id': report.id, 'title': report.title, 'description': report.description, 'date': report.date.isoformat(), 'user_id': report.user_id, 'urgency': report.urgency, 'state':report.state})
+            report_list.append({'id': report.id, 'title': report.title, 'description': report.description, 'date': report.date.isoformat(), 'user_id': report.user_id, 'urgency': report.urgency, 'status':report.status})
         return jsonify(report_list)
     else:
         return jsonify({'message': 'No reports found for software'})

@@ -51,7 +51,7 @@ class Report (db.Model):
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable=True)
     software = db.Column (db.Integer, db.ForeignKey('software.id'))
     urgency = db.Column (db.String(80), nullable=True )
-    state = db.Column (db.String(80),nullable=True)
+    status = db.Column (db.String(80),nullable=True)
 
 
 with app.app_context():
