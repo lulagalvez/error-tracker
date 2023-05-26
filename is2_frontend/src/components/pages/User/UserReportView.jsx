@@ -1,33 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import BugReportList from "./BugReportList";
 import CommentColumn from "./CommentColumn";
 import SideBar from "../../props/Navigation/SideBar";
 import { generateBugReports } from "../../utils/generateBugReports";
 import "./UserReportView.css";
-import APIService from '../../APIService';
 
 //Aqui tienen que estar los hooks de los bugreports, hasta el momento solo son generados en una funcion en utils, es un diccionario
 //dentro del codigo se usa status en vez de state, cambiar referencia en el json
-
-//const bugReports = generateBugReports(9);
+const bugReports = generateBugReports(10);
 
 const UserReportView = () => {
   const [selectedBugId, setSelectedBugId] = useState(null);
-  const [bugReports, setReports] = useState([]);
-
-  const api_service = new APIService();
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await api_service.get('reports');
-      setReports(response);
-    }
-    fetchData();
-  }, []); 
-
-  //console.log(reports);
-  console.log(bugReports);
 
   const handleBugReportClick = (bugReport) => {
     setSelectedBugId(bugReport.id);
