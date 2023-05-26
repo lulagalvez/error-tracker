@@ -19,7 +19,7 @@ class App extends Component {
         <>
         <Router>
         <SideBar />
-        <Navbar />
+        {/*  <Navbar />  */}
           <Routes>
            <Route path='/' exact element={<Home/>}/>
            <Route path='/adminview' element={<AdminView/>}/> 

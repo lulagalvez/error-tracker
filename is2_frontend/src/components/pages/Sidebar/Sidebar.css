@@ -1,6 +1,6 @@
 .sidebar {
     height: 100%;
-    width: 150px;
+    width: 10%;
     position: fixed;
     z-index: auto;
     background-color: #F5F5F5;
@@ -10,8 +10,12 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    z-index: 1;
 }
 
+.logo-container{
+    margin-top: -50px;
+}
 .sidebar a {
     text-decoration: none;
     font-size: 50px;
@@ -29,11 +33,14 @@
     align-items: center;
     justify-content: center;
     white-space: nowrap;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     position: relative;
     z-index: 1;
 }
 
+.new-report{
+    margin-top:220px;
+}
 .icon-container h1 {
     font-size: 18px;
 }
@@ -59,4 +66,9 @@
     margin-left: 10px;
     font-size: 40px;
     color: black;
+}
+
+.icon-container.my-account {
+    margin-top: 100px;
+    /* Cambio para mover el icono de log out hacia abajo */
 }

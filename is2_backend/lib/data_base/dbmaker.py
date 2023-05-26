@@ -24,7 +24,7 @@ class User(db.Model):
     email = db.Column(db.String(345), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
     reports = db.relationship('Report', backref = 'user')
-    type_of_user = db.Column ('type',db.String(20))
+    type_of_user = db.Column ('type',db.String(20), default=lambda: User.__table__.name)
     __mapper_args__ = {
         'polymorphic_on':type_of_user,
         'polymorphic_identity': 'user'
@@ -49,13 +49,12 @@ class Software (db.Model):
 class Developer(User):
     __tablename__= ('developer')
     id = db.Column (db.String(32), db.ForeignKey('user.id'),primary_key=True, default=get_uuid)
-    name = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    role = db.Column (db.String(40), nullable=False)
     reports = db.relationship('Report', backref = 'developer')
     __mapper_args__ = { 
         'polymorphic_identity': 'developer'
     }
+    def __init__ (self, name, email, password):
+        super().__init__(name=name,email=email,password=password)
     
 class Admin(User):
     __tablename__ = ('admin')
@@ -64,6 +63,8 @@ class Admin(User):
     __mapper_args__ = { 
         'polymorphic_identity': 'admin'
     }
+    def __init__ (self, name, email, password):
+        super().__init__(name=name,email=email,password=password)
 
 class Report (db.Model):
     __tablename__ = ('report')

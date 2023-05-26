@@ -4,7 +4,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
-from dbmaker import db, User, Developer, Report, Software, app
+from dbmaker import db, User, Developer, Report, Software, app, Admin
 from flask import Flask, jsonify, request, make_response, abort, session
 from flask_cors import CORS,  cross_origin
 from flask_bcrypt import Bcrypt 
@@ -61,6 +61,8 @@ def login():
     email = request.json["email"]
     password = request.json["password"]
     user = User.query.filter_by(email = email).first()
+    print("*********INICIA LOGIN*********\n")
+    print(user.email)
     if user is None:
         response = make_response  (jsonify({"error":"Correo o contraseña incorrectas"}), 401)
     if not bcrypt.check_password_hash(user.password, password):
@@ -71,9 +73,10 @@ def login():
         "id": user.id,
         "email": user.email
     }))
-    response.set_cookie('user_id', str(user.id))
+    response.set_cookie('name',user.name)
     response.set_cookie('email', user.email)
     response.set_cookie('authenticated', 'true')
+    response.set_cookie('type_of_user',user.type_of_user)
 
     return response
 @app.route("/@me", methods=['GET'])
@@ -106,6 +109,7 @@ def get_users():
         user_data['id'] = user.id
         user_data['name'] = user.name
         user_data['email'] = user.email
+        user_data['type_of_user'] = user.type_of_user
         temp.append(user_data)
 
     return jsonify(temp)
@@ -157,7 +161,6 @@ def get_devs():
         dev_data['id'] = dev.id
         dev_data['name'] = dev.name
         dev_data['email'] = dev.email
-        dev_data['role'] = dev.role
         temp.append(dev_data)
 
     return jsonify(temp)
@@ -166,11 +169,25 @@ def get_devs():
 def create_dev():
     name = request.json['name']
     email = request.json['email']
-    role = request.json["role"]
-    new_dev = Developer(name=name, email=email, role = role)
+    password = request.json['password']
+    new_dev = Developer(name=name, email=email,password=password)
     db.session.add(new_dev)
     db.session.commit()
     return jsonify({'message': 'Developer creado'})
+
+@app.route('/devs/promote/<email>', methods=['PUT'])
+def promote_to_dev(email):
+    user_to_promote = User.query.filter_by(email=email).first()
+    old_name=user_to_promote.name
+    old_email=user_to_promote.email
+    old_password=user_to_promote.password
+    db.session.delete (user_to_promote)
+    db.session.commit()
+    new_dev = Developer(name=old_name,email=old_email,
+                        password=old_password)
+    db.session.add(new_dev)
+    db.session.commit()
+    return jsonify({'message': 'Usuario ascendido a developer'})
 
 @app.route('/devs/<id>', methods=['PUT'])
 def update_dev(id):
@@ -207,7 +224,43 @@ def get_user_reports(user_id):
         temp.append(report_data)
 
     return jsonify(temp)
+######################################ADMIN######################################
+@app.route('/admins', methods=['GET' ])
+def get_admins():
+    admins = Admin.query.all()
+    temp = []
+    for admin in admins:
+        admin_data = {}
+        admin_data['id'] = admin.id
+        admin_data['name'] = admin.name
+        admin_data['email'] = admin.email
+        temp.append(admin_data)
 
+    return jsonify(temp)
+
+@app.route('/admins', methods=['POST'])
+def create_admin():
+    name = request.json['name']
+    email = request.json['email']
+    password = request.json['password']
+    new_admin = Developer(name=name, email=email,password=password)
+    db.session.add(new_admin)
+    db.session.commit()
+    return jsonify({'message': 'admin creado'})
+
+@app.route('/admins/promote/<email>', methods=['PUT'])
+def promote_to_admin(email):
+    user_to_promote = User.query.filter_by(email=email).first()
+    old_name=user_to_promote.name
+    old_email=user_to_promote.email
+    old_password=user_to_promote.password
+    db.session.delete (user_to_promote)
+    db.session.commit()
+    new_admin = Admin(name=old_name,email=old_email,
+                        password=old_password)
+    db.session.add(new_admin)
+    db.session.commit()
+    return jsonify({'message': 'Usuario ascendido a admin'})
 #####################################REPORT#####################################
 @app.route('/reports/<id>', methods=['GET'])
 def get_report(id):
