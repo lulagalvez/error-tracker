@@ -1,15 +1,32 @@
 import sys
 import os
-
+from datetime import timedelta
+from dotenv import load_dotenv
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 
-from dbmaker import db, User, Developer, Report, Software, app
-from flask import Flask, jsonify, request, make_response
+from dbmaker import db, User, Developer, Report, Software, app, Admin
+from flask import Flask, jsonify, request, make_response, abort, session
 from flask_cors import CORS,  cross_origin
-
-CORS(app)
+from flask_bcrypt import Bcrypt 
+from config import ApplicationConfig
+from flask_migrate import Migrate
+migrate = Migrate(app,db)
+bcrypt = Bcrypt(app)
+CORS(app, supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.secret_key = "FLASKQLOSIONOLOKO@"
 
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 # CORS(app,resources={
 #     r"/users/*":{"origins":"http://localhost"},
 #     r"/devs/*":{"origins":"http://localhost"},
@@ -19,7 +36,61 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 #     r"/user_reports/*":{"origins":"http://localhost"}
 #     })
 
+######################################SESSION ROUTES######################################
+@app.route ('/register', methods=['POST'])
+def register_user():
+    name = request.json["name"]
+    email = request.json["email"]
+    password = request.json["password"]
+
+    user_exists = User.query.filter_by(email=email).first() is not None
+    if user_exists:
+        abort(409)
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_user = User(name=name, email = email, password = hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify ({
+        "name":new_user.name,
+        "id":new_user.id,
+        "email":new_user.email,
+    })
+
+@app.route ('/login', methods = ['POST'])
+def login():
+    email = request.json["email"]
+    password = request.json["password"]
+    user = User.query.filter_by(email = email).first()
+    print("*********INICIA LOGIN*********\n")
+    print(user.email)
+    if user is None:
+        response = make_response  (jsonify({"error":"Correo o contraseña incorrectas"}), 401)
+    if not bcrypt.check_password_hash(user.password, password):
+        response = make_response(jsonify({"error": "Contraseña incorrecta"}), 401)
+    
+    response = make_response(jsonify({
+        "name": user.name,
+        "id": user.id,
+        "email": user.email
+    }))
+    response.set_cookie('name',user.name)
+    response.set_cookie('email', user.email)
+    response.set_cookie('authenticated', 'true')
+    response.set_cookie('type_of_user',user.type_of_user)
+
+    return response
+@app.route("/@me", methods=['GET'])
+def get_current_user():
+
+    if request.cookies:
+        # Hay cookies presentes
+        return jsonify({'message': 'Hay cookies presentes.'})
+    else:
+        # No hay cookies presentes
+        return jsonify({'message': 'No hay cookies presentes.'}), 401
+
 ######################################USER######################################
+
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
@@ -38,6 +109,7 @@ def get_users():
         user_data['id'] = user.id
         user_data['name'] = user.name
         user_data['email'] = user.email
+        user_data['type_of_user'] = user.type_of_user
         temp.append(user_data)
 
     return jsonify(temp)
@@ -46,7 +118,8 @@ def get_users():
 def create_user():
     name = request.json['name']
     email = request.json['email']
-    new_user = User(name=name, email=email)
+    password = request.json['password']
+    new_user = User(name=name, email=email, password = password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Usuario creado'})
@@ -88,7 +161,6 @@ def get_devs():
         dev_data['id'] = dev.id
         dev_data['name'] = dev.name
         dev_data['email'] = dev.email
-        dev_data['role'] = dev.role
         temp.append(dev_data)
 
     return jsonify(temp)
@@ -97,11 +169,25 @@ def get_devs():
 def create_dev():
     name = request.json['name']
     email = request.json['email']
-    role = request.json["role"]
-    new_dev = Developer(name=name, email=email, role = role)
+    password = request.json['password']
+    new_dev = Developer(name=name, email=email,password=password)
     db.session.add(new_dev)
     db.session.commit()
     return jsonify({'message': 'Developer creado'})
+
+@app.route('/devs/promote/<email>', methods=['PUT'])
+def promote_to_dev(email):
+    user_to_promote = User.query.filter_by(email=email).first()
+    old_name=user_to_promote.name
+    old_email=user_to_promote.email
+    old_password=user_to_promote.password
+    db.session.delete (user_to_promote)
+    db.session.commit()
+    new_dev = Developer(name=old_name,email=old_email,
+                        password=old_password)
+    db.session.add(new_dev)
+    db.session.commit()
+    return jsonify({'message': 'Usuario ascendido a developer'})
 
 @app.route('/devs/<id>', methods=['PUT'])
 def update_dev(id):
@@ -138,7 +224,43 @@ def get_user_reports(user_id):
         temp.append(report_data)
 
     return jsonify(temp)
+######################################ADMIN######################################
+@app.route('/admins', methods=['GET' ])
+def get_admins():
+    admins = Admin.query.all()
+    temp = []
+    for admin in admins:
+        admin_data = {}
+        admin_data['id'] = admin.id
+        admin_data['name'] = admin.name
+        admin_data['email'] = admin.email
+        temp.append(admin_data)
 
+    return jsonify(temp)
+
+@app.route('/admins', methods=['POST'])
+def create_admin():
+    name = request.json['name']
+    email = request.json['email']
+    password = request.json['password']
+    new_admin = Developer(name=name, email=email,password=password)
+    db.session.add(new_admin)
+    db.session.commit()
+    return jsonify({'message': 'admin creado'})
+
+@app.route('/admins/promote/<email>', methods=['PUT'])
+def promote_to_admin(email):
+    user_to_promote = User.query.filter_by(email=email).first()
+    old_name=user_to_promote.name
+    old_email=user_to_promote.email
+    old_password=user_to_promote.password
+    db.session.delete (user_to_promote)
+    db.session.commit()
+    new_admin = Admin(name=old_name,email=old_email,
+                        password=old_password)
+    db.session.add(new_admin)
+    db.session.commit()
+    return jsonify({'message': 'Usuario ascendido a admin'})
 #####################################REPORT#####################################
 @app.route('/reports/<id>', methods=['GET'])
 def get_report(id):
@@ -151,7 +273,7 @@ def get_report(id):
     report_data['dev_id'] = report.dev_id
     report_data['software'] = report.software
     report_data['urgency'] = report.urgency
-    report_data['status'] = report.status
+    report_data['state'] = report.state
     return jsonify({'report': report_data})
 
 @app.route('/reports', methods=['GET'])
@@ -168,7 +290,7 @@ def get_reports():
         report_data['dev_id'] = report.dev_id
         report_data['software'] = report.software
         report_data['urgency'] = report.urgency
-        report_data['status'] = report.status
+        report_data['state'] = report.state
         temp.append(report_data)
 
     return jsonify(temp)
@@ -184,48 +306,34 @@ def create_report():
         dev_id = request.json['dev_id']
         software = request.json['software']
         urgency = request.json['urgency'] 
-        status = request.json['status']
-        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, status = status)
+        state = request.json['state']
+        new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, state = state)
         db.session.add(new_report)
         db.session.commit()
         return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
-def _build_cors_preflight_response():
-    response = make_response()
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add('Access-Control-Allow-Headers', "*")
-    response.headers.add('Access-Control-Allow-Methods', "*")
-    return response
-
-def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
 
 @app.route('/reports/<id>', methods=['PUT'])
 def update_report(id):
     report = Report.query.get_or_404(id)
     title = request.json['title']
     description = request.json['description']
-    # date = request.json["date"]
     dev_id = request.json['dev_id']
     user_id = request.json['user_id']
     software = request.json['software']
     urgency = request.json['urgency'] 
-    status = request.json['status']
+    state = request.json['state']
     report.title =  title
     report.description = description
-    # report.date = date
     report.dev_id=dev_id
     report.user_id = user_id
     report.software = software
     report.urgency = urgency
-    report.status = status
+    report.state = state
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
-
-
 
 @app.route('/reports/<id>', methods=['DELETE', ])
 def delete_report(id):
@@ -248,7 +356,7 @@ def get_dev_reports(dev_id):
         report_data['dev_id'] = report.dev_id
         report_data['software'] = report.software
         report_data['urgency'] = report.urgency
-        report_data['status'] = report.status
+        report_data['state'] = report.state
         temp.append(report_data)
 
     return jsonify(temp)
@@ -299,11 +407,14 @@ def get_software_reports(id):
     if reports:
         report_list = []
         for report in reports:
-            report_list.append({'id': report.id, 'title': report.title, 'description': report.description, 'date': report.date.isoformat(), 'user_id': report.user_id, 'urgency': report.urgency, 'status':report.status})
+            report_list.append({'id': report.id, 'title': report.title, 'description': report.description, 'date': report.date.isoformat(), 'user_id': report.user_id, 'urgency': report.urgency, 'state':report.state})
         return jsonify(report_list)
     else:
         return jsonify({'message': 'No reports found for software'})
-   
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 if __name__ == '__main__':
     with app.app_context():
