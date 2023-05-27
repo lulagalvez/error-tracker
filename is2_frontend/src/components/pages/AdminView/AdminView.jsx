@@ -1,11 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import APIService from '../../services/APIService';
-
-
-const devsFijo = [
-    {label: "uno", value: 1},
-    {label: "dos", value: 2}
-]
+import {BotonBorrar} from './BotonBorrar'
+import {BotonEditar} from './BotonEditar'
 
 function AdminView() {
     const [reports,setReports] =React.useState([])
@@ -77,27 +73,35 @@ function AdminView() {
         <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
         <table class="table table-striped">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Descripcion</th>
-                <th>Depuradores asignados</th>
-                <th>Software</th>
-                <th>Estado</th>
-                <th>Urgencia</th>
-                <th>ID Usuario</th>
-            </tr>
+        <thead>
+                        <tr>
+                            <th scope="col">Tracking ID</th>
+                            <th scope="col">Titulo</th>
+                            <th scope="col">Usuario</th>
+                            <th scope="col">Software</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Prioridad</th>
+                            <th scope="col">Depurador</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Accion</th>
+                        </tr>
+                    </thead>
             {results.map((val, key) => {
                 return (
                     <tr key={key}>
                         <td>{val.id}</td>
                         <td>{val.title}</td>
-                        <td>{val.description}</td>
-                        <td>{val.dev_id}</td>
                         <td>{val.software}</td>
-                        <td>{val.state}</td>
-                        <td>{val.urgency}</td> {/* falta agregar saltos de linea para cada depurador */}
                         <td>{val.user_id}</td>
+                        {/* <td>fecha</td> */}
+                        {/* <td>{val.description}</td> */}
+                        <td>{val.urgency}</td>
+                        <td><BotonEditar/>{val.dev_id}</td>
+                        <td>{val.state}</td>
+                        <td><BotonBorrar/></td>
+                       
+                         {/* falta agregar saltos de linea para cada depurador */}
+                       
                         <div className='Devs-container' style={{ width: '300px' }}>
                         <p>{selectedDev}</p>
 

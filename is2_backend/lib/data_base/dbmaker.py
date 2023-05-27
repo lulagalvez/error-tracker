@@ -21,7 +21,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
 
 
-
 @dataclass
 class User(db.Model):
     __tablename__ = ('user')

@@ -37,7 +37,7 @@ const UserReportView = () => {
         <div className="col-2 ">
           {/*SIDEBAR CON UNA COLUMNA ASIGNADA*/}
           <div className="sidebar-wrapper">
-            <SideBar />
+            {/* <SideBar /> */}
           </div>
         </div>
         <div className="col-5">
