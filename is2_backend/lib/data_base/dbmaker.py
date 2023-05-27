@@ -1,13 +1,26 @@
+import os
+import sys
 from datetime import datetime
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import *
+from flask_sqlalchemy import SQLAlchemy
 from dataclasses import dataclass
+from config import ApplicationConfig
+from uuid import uuid4
 
+
+def get_uuid():
+    return uuid4().hex
+
+
+sys.path.append(os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../api')))
 
 app = Flask(__name__)
-
+app.config.from_object(ApplicationConfig)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
+
+
 
 @dataclass
 class User(db.Model):

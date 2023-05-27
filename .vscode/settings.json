@@ -1,2 +1,5 @@
 {
+    "python.analysis.extraPaths": [
+        "./is2_backend/lib/data_base"
+    ]
 }
