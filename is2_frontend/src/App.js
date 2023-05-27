@@ -42,7 +42,6 @@ class App extends Component {
         <SideBar />
           <Navbar />  
           <Routes>
-<<<<<<< HEAD
               <Route path='/signup' element={<SignUp />} /> 
               <Route path='/login' element={<LogIn />} />
               <Route path='/' exact element={<LogIn/>}/>
@@ -74,13 +73,6 @@ class App extends Component {
               <UserReportView />
             </ProtectedRoute>} /> 
          
-=======
-           <Route path='/' exact element={<Home/>}/>
-           <Route path='/adminview' element={<AdminView/>}/> 
-           <Route path='/adminviewmain' element={<AdminViewMain/>}/> 
-           <Route path='/devview' element={<DevView_test/>}/> 
-           <Route path='/my_reports' element={<UserReportView/>}/> 
->>>>>>> 1ec4c00e5c42947d8154aeb3342e0dc7699673db
           </Routes>   
         </Router>
 
