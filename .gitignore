@@ -1,3 +1,41 @@
 *.exe
 /node_modules/*
-is2_backend/venv/*
+/is2_backend/venv/*
+/is2_backend/venv/
+/venv/
+/instances/
+
+# Python virtual environment
+venv/
+
+# Flask related files
+__pycache__/
+*.pyc
+
+# React build files
+build/
+node_modules/
+
+# Compiled Python files
+*.pyc
+
+# Logs and databases
+*.log
+*.db
+
+# Dependency directories
+lib/
+lib64/
+include/
+bin/
+
+# Other generated files and directories
+.idea/
+.vscode/
+*.env
+.env.local
+.DS_Store
+
+# Ignore editor-specific files
+*~
+*.swp

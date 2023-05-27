@@ -1,0 +1,17 @@
+.comment-container {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.comment-list::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.comment-list::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.comment-list::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 0.25em;
+}
