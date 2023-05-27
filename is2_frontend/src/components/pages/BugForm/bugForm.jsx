@@ -9,7 +9,7 @@ export default (props) =>{
 
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, state:null,urgency:null})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, status:"to-do",urgency:null})
         .then(response =>{
             if(response?.message === 'Reporte creado'){
                 setShowSuccessAlert(true);
