@@ -1,8 +1,8 @@
 .sidebar {
     height: 100%;
     width: 10%;
-    position: fixed;
-    z-index: auto;
+    position: fixed; 
+    z-index: 1;
     background-color: #F5F5F5;
     overflow-x: hidden;
     display: flex;
@@ -10,7 +10,6 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    z-index: 1;
 }
 
 .logo-container{
@@ -38,9 +37,6 @@
     z-index: 1;
 }
 
-.new-report{
-    margin-top:220px;
-}
 .icon-container h1 {
     font-size: 18px;
 }
@@ -58,6 +54,9 @@
     transition: background-color 0.3s ease;
 }
 
+.new-report{
+    margin-top:220px;
+}
 .sidebar a:hover .oval {
     background-color: rgba(0, 0, 0, 0.24);
 }
@@ -70,5 +69,5 @@
 
 .icon-container.my-account {
     margin-top: 100px;
-    /* Cambio para mover el icono de log out hacia abajo */
-}
+   
+} 
