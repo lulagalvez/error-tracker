@@ -4,6 +4,7 @@ import './components/css/App.css';
 import Home from './components/pages/Home/Home';
 import CrearBug from './components/pages/BugForm/bugForm';
 import AdminView from './components/pages/AdminView/AdminView';
+import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain';
 import DevView from './components/pages/DevView/DevView';
 import DevView_test from './components/pages/DevView/DevView_test';
 import UserReportView from  './components/pages/User/UserReportView'; 
@@ -24,6 +25,7 @@ class App extends Component {
           <Routes>
            <Route path='/' exact element={<Home/>}/>
            <Route path='/adminview' element={<AdminView/>}/> 
+           <Route path='/adminviewmain' element={<AdminViewMain/>}/> 
            <Route path='/devview' element={<DevView_test/>}/> 
            <Route path='/my_reports' element={<UserReportView/>}/> 
           <Route path='/report' element={<div className='page-container'><CrearBug title='Reportar Bug' /></div>}/>   
