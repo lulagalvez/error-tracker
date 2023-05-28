@@ -166,7 +166,7 @@ const DevBugReportListContent = ({
                         Urgency: {bugReport.urgency}
                       </h6>
                       {/* DELETE BUTTON */}
-
+                        {/* Modificar posteriormente para que sirva para la reasignacion  */}
                       {accessLevel > 1 && (
                         <button
                           className="btn delete-btn "
