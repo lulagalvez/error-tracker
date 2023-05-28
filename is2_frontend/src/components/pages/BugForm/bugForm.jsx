@@ -7,9 +7,30 @@ export default (props) =>{
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
 
 
+
+    /*
+    ESTADOS POSIBLES
+    ToDo
+    Pending
+    Testing
+    Closed
+
+    PRIORIDADES POSIBLES
+    1
+    2
+    3
+    4
+    5
+
+    SOFTWARES POSIBLES 
+    Software1
+    Software2
+    Software3
+    */
+   
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, status:"to-do",urgency:null})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, status:"ToDo",urgency:1})
         .then(response =>{
             if(response?.message === 'Reporte creado'){
                 setShowSuccessAlert(true);

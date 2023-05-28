@@ -26,7 +26,7 @@ class App extends Component {
            <Route path='/' exact element={<Home/>}/>
            <Route path='/adminview' element={<AdminView/>}/> 
            <Route path='/adminviewmain' element={<AdminViewMain/>}/> 
-           <Route path='/devview' element={<DevView_test/>}/> 
+           <Route path='/devview' element={<DevView/>}/> 
            <Route path='/my_reports' element={<UserReportView/>}/> 
           <Route path='/report' element={<div className='page-container'><CrearBug title='Reportar Bug' /></div>}/>   
           </Routes>   
