@@ -1,9 +1,10 @@
 import React from 'react'
+import './BotonBorrar.css'
 
 export const BotonBorrar = () => {
   return (
-    <button type="button" className="btn btn-danger">
-        <i class="bi bi-trash3"></i>
+    <button type="button" className="btn bg-transparent">
+        <i class="bi bi-trash3 color-trash"></i>
     </button>
   )
 }
