@@ -8,10 +8,11 @@ import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain';
 import DevView from './components/pages/DevView/DevView';
 import DevView_test from './components/pages/DevView/DevView_test';
 import UserReportView from  './components/pages/User/UserReportView'; 
-import SideBar from './components/pages/Sidebar/Sidebar';
+// import SideBar from './components/pages/Sidebar/Sidebar';
 import SignUp from './components/pages/SignUp/SignUp';
 import SideBar from './components/pages/Sidebar/Sidebar';
 import LogIn from './components/pages/Login/Login';
+import DevStats from './components/pages/DevStats/DevStats'
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
 
@@ -42,6 +43,7 @@ class App extends Component {
         <SideBar />
           <Navbar />  
           <Routes>
+              <Route path='/devstats' element={<DevStats />} /> 
               <Route path='/signup' element={<SignUp />} /> 
               <Route path='/login' element={<LogIn />} />
               <Route path='/' exact element={<LogIn/>}/>

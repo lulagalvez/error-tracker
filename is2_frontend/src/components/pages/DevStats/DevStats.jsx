@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 // import { JobStatusData } from "./Data";
-import DoughnutChart from "./Components/DoughnutChart";
+import DoughnutChart from "./DoughnutChart";
 import { Chart as ChartJS } from "chart.js/auto";
-import './DevStats.css'
+// import './DevStats.css'
 import SoftwareCompletition from './SoftwareCompletition';
-import OverdueWork from './OverdueWork.jsx';
-function DevStats() {
+import OverdueWork from './OverdueWork';
+import Dona from './Dona';
 
-    const datosPalCirculo = {
-        // labels: JobStatusData.map((sw) => sw.name),
+function DevStats() {
+    const [datosDona, setDatosDona] = useState({
         labels: ["closed", "testing", "pending", "to-do"],
         datasets: [
             {
@@ -27,21 +27,20 @@ function DevStats() {
                 data: [12, 13, 15, 61]
             },
         ],
-    }
-    return (
+    })
+
+    return <>
         <div class="container" style={{ "padding-left": "150px" }}>
             <div class="row">
                 <div class="col border border-1 position-relative">
                     <div style={{ padding: "24px" }}>
                         <h4 class="position-absolute top-0 start-0" >Job Status Report</h4>
-                        <DoughnutChart charData={datosPalCirculo} />
+                        {/* <DoughnutChart charData={datosDona} /> */}
+                        <Dona charData={datosDona} />
                     </div>
                 </div>
-                <div class="col border border-1 position-relative">
-                    <div style={{ padding: "24px" }}>
-                        <h4 class="position-absolute top-0 start-0" >Software Completion</h4>
-                        <SoftwareCompletition />
-                    </div>
+                <div class="col  border border-1 position-relative">
+                    <SoftwareCompletition />
                 </div>
 
                 <div class="col border border-1 position-relative">
@@ -52,7 +51,9 @@ function DevStats() {
                 </div>
             </div>
         </div>
-    )
+
+
+    </>
 }
 
 export default DevStats
