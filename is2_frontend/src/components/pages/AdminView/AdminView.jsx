@@ -62,7 +62,58 @@ function AdminView() {
     //     // setReports(reportsResponse);
     // }
 
-
+    const [num,setNum]=useState(0);
+    const [idP,setIdP]=useState("");
+    const [idE,setIdE]=useState("");
+    const [estado,setEstado]=useState("");
+    const [bugs,setBugs]=useState(results);
+    const cambiarNum=(nuevo)=>{
+      setNum(nuevo);
+    }
+    const cambiarIdP=(nuevo)=>{
+      setIdP(nuevo);
+    }
+    const cambiarIdE=(nuevo)=>{
+      setIdE(nuevo);
+    }
+    const cambiarEstado=(nuevo)=>{
+      setEstado(nuevo);
+    }
+    const copiaArray=()=>{
+        var newArray=[];
+        bugs.map((bug)=>{
+            if(bug!==undefined) newArray.push(bug);
+        })
+        return newArray;
+    }
+    const getPos=(bug_id,array)=>{
+        for(var i=0;i<array.length;i++){
+            if(bug_id.startsWith(array[i].id)) return i;
+        }
+        return -1;
+    }
+    const setPrioridad=(bug_id,nuevaPr)=>{
+        var newArray=copiaArray();
+        const pos=getPos(bug_id,newArray);
+        if(pos==-1) return;
+        newArray[pos].urgency=nuevaPr;
+        newArray.sort((a,b)=>{
+            return a.urgency-b.urgency;
+        });
+        setBugs(newArray);
+    }
+    const setStatus=(bug_id,nuevoSt)=>{
+        if(nuevoSt=="") return;
+        var newArray=copiaArray();
+        const pos=getPos(bug_id,newArray);
+        if(pos==-1) return;
+        newArray[pos].state=nuevoSt;
+        setBugs(newArray);
+    }
+    const deleteBug=(bug_id)=>{
+        const newArray=bugs.filter((bug) => bug.id!==bug_id);
+        setBugs(newArray);
+    }
     //render
     return( 
         
@@ -72,6 +123,27 @@ function AdminView() {
         {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}
         <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
+        <div>
+        <div className="ms-3">
+            <p>
+            Cambiar prioridad: -
+            <input type="text" onChange={e => cambiarIdP(e.target.value)} placeholder="ID"/>
+            <input type="number" onChange={e => cambiarNum(e.target.valueAsNumber)} placeholder="Prioridad"/>
+            <button onClick={e => setPrioridad(idP,num)}>Cambiar</button>
+            </p>
+            <p>
+            Cambiar estado: -
+            <input type="text" onChange={e => cambiarIdE(e.target.value)} placeholder='ID'/>
+            <select onChange={e => cambiarEstado(e.target.value)}>
+                <option value="">--Seleccione una opcion--</option>
+                <option value="Cerrado">Cerrado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Solicita Reasignar">Solicita Reasignar</option>
+                <option value="Testing">Testing</option>
+            </select>
+            <button onClick={e => setStatus(idE,estado)}>Cambiar</button>
+            </p>
+        </div>
         <table class="table table-striped">
         <thead>
                         <tr>
@@ -86,7 +158,7 @@ function AdminView() {
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-            {results.map((val, key) => {
+            {bugs.map((val, key) => {
                 return (
                     <tr key={key}>
                         <td>{val.id}</td>
@@ -98,7 +170,7 @@ function AdminView() {
                         <td>{val.urgency}</td>
                         <td><BotonEditar/>{val.dev_id}</td>
                         <td>{val.state}</td>
-                        <td><BotonBorrar/></td>
+                        <td><BotonBorrar deleteFunction={e => deleteBug(val.id)}/></td>
                        
                          {/* falta agregar saltos de linea para cada depurador */}
                        
