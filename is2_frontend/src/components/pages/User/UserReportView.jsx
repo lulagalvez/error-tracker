@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import BugReportList from "./BugReportList";
-import CommentColumn from "./CommentColumn";
-import SideBar from "../Sidebars/SidebarUser";
+import CommentColumn from "../../props/CommentColumn";
+import SideBarUser from "../Sidebars/SidebarUser";
 import { generateBugReports } from "../../utils/generateBugReports";
 import "./UserReportView.css";
 import APIService from '../../services/APIService';
