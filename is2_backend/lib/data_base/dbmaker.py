@@ -7,26 +7,25 @@ from dataclasses import dataclass
 from config import ApplicationConfig
 from uuid import uuid4
 
-
 def get_uuid():
     return uuid4().hex
 
-
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../api')))
+
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
 
-
 @dataclass
 class User(db.Model):
     __tablename__ = ('user')
-    id:int = db.Column(db.Integer, primary_key=True)
-    name:str = db.Column(db.String(80), nullable=False)
-    email:str = db.Column(db.String(120), unique=True, nullable=False)
+    id = db.Column(db.String(32), primary_key=True, default= get_uuid)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.Text, nullable=False)
     reports = db.relationship('Report', backref = 'user')
     type_of_user = db.Column ('type',db.String(20), default=lambda: User.__table__.name)
     __mapper_args__ = {
@@ -34,9 +33,10 @@ class User(db.Model):
         'polymorphic_identity': 'user'
     } 
 
-    def __init__ (self, name, email):
+    def __init__ (self, name, email, password):
         self.name = name
         self.email = email
+        self.password = password
 
 software_dev = db.Table('software_dev',
                     db.Column('software_id', db.Integer, db.ForeignKey('software.id')),

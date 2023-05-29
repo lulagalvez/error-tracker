@@ -8,9 +8,10 @@ import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain';
 import DevView from './components/pages/DevView/DevView';
 import DevView_test from './components/pages/DevView/DevView_test';
 import UserReportView from  './components/pages/User/UserReportView'; 
-import SideBar from './components/pages/Sidebar/Sidebar';
+import SideBarUser  from './components/pages/Sidebars/SidebarUser';
+import SideBarAdmin from './components/pages/Sidebars/SidebarAdmin';
+import SideBarDeveloper from './components/pages/Sidebars/SidebarDeveloper';
 import SignUp from './components/pages/SignUp/SignUp';
-import SideBar from './components/pages/Sidebar/Sidebar';
 import LogIn from './components/pages/Login/Login';
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
@@ -39,18 +40,23 @@ class App extends Component {
     return (
         <>
         <Router>
-        <SideBar />
-          <Navbar />  
+        {/* <SideBarUser /> */}
+{/*           <Navbar />   */}
           <Routes>
-              <Route path='/signup' element={<SignUp />} /> 
+              <Route path='/signup' element={<SignUp />} />
+              <Route path='/sidebaruser' element={<SideBarUser />} />  
+              <Route path='/sidebaradmin' element={<SideBarAdmin />} />  
+              <Route path='/sidebardeveloper' element={<SideBarDeveloper />} />  
               <Route path='/login' element={<LogIn />} />
               <Route path='/' exact element={<LogIn/>}/>
               <Route path="*" element={<p>No hay nada aqui: 404</p>} />
+
               {/* RUTAS PROTEGIDAS */} 
               <Route 
                 path='/adminviewmain'
                 element={<ProtectedRoute redirectPath="/login" 
                 isAllowed={logged && type_of_user === 'admin'}>
+                  <SideBarAdmin/>
                   <AdminViewMain/>  
                 </ProtectedRoute>}
               />
@@ -72,7 +78,6 @@ class App extends Component {
               isAllowed={logged && type_of_user === 'user'}>
               <UserReportView />
             </ProtectedRoute>} /> 
-         
           </Routes>   
         </Router>
 

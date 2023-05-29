@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../css/Login.css";
 import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default (props) => {
     const [email, setEmail] = useState('');
@@ -27,22 +27,24 @@ export default (props) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            await doLogin();
-            const loggedIn = Cookies.get('authenticated');
-            const type = Cookies.get('type_of_user');
-            console.log(loggedIn);
-            console.log(type);
-            if (loggedIn && type === 'admin') {
-                navigate("/adminview");
-            } else if (loggedIn && type === 'developer') {
-                navigate("/devview");
-            }
-        } catch (error) {
+        await doLogin();
+        const loggedIn = Cookies.get('authenticated');
+        const type = Cookies.get('type_of_user');
+        console.log(loggedIn);
+        console.log(type);
+        if (loggedIn && type === 'admin') {
+            navigate("/adminviewmain");
+        } else if (loggedIn && type === 'developer') {
+            navigate("/devview");
+        } else if(loggedIn && type === 'user'){
+            navigate("/userreportview");
+        }
+        else{
             setShowAlert(true);
             console.log("no te logueaste machine");
             navigate('/login');
         }
+    
         setEmail('');
         setPassword('');
     };
@@ -50,15 +52,17 @@ export default (props) => {
     return (
         <div className="Auth-form-container">
             <div className="row justify-content-center">
-                <div className="col-md-8">
+                <div className="text-center mx-auto">
                     {showAlert && (
-                        <div className="alert alert-danger mt-3" role="alert">
+                        <div className="alert alert-danger text-center mx-auto" role="alert">
                             Credenciales inválidas. Por favor, verifique su correo electrónico y contraseña.
                         </div>
                     )}
                     <form className="Auth-form" onSubmit={handleLogin}>
                         <div className="Auth-form-content">
-                            <h3 className="Auth-form-title">Autenticarse</h3>
+                            <h3 className="Auth-form-title">Autenticarse en Debugger</h3>
+                            <div className="Auth-form-text">No tienes cuenta?</div>
+                            <Link to="/signup">Registrarse</Link>
                             <div className="form-group mt-3">
                                 <label htmlFor="email">Correo Electrónico</label>
                                 <input type="email" id="email" className="form-control mt-1" placeholder="nombre@ejemplo.com" value={email} onChange={handleOnChangeEmail} />

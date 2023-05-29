@@ -64,7 +64,6 @@ def login():
     password = request.json["password"]
     user = User.query.filter_by(email = email).first()
     print("*********INICIA LOGIN*********\n")
-    print(user.email)
     if user is None:
         response = make_response  (jsonify({"error":"Correo o contraseña incorrectas"}), 401)
     if not bcrypt.check_password_hash(user.password, password):

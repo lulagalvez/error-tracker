@@ -40,7 +40,7 @@ export default (props) => {
         <div className="Auth-form-container">
             <form className="Auth-form" onSubmit={handleSubmit}>
                 <div className="Auth-form-content">
-                    <h3 className="Auth-form-title">Registrarse</h3>
+                    <h3 className="Auth-form-title">Registrarse en Debugger</h3>
                     {showAlert && (
                         <div className="alert alert-success" role="alert">
                             Usuario registrado correctamente.
