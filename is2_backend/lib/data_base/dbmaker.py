@@ -75,11 +75,20 @@ class Report (db.Model):
     title = db.Column (db.String(80), nullable=False)
     description = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
-    user_id = db.Column (db.String(30), db.ForeignKey('user.id'))
-    dev_id = db.Column (db.String(30), db.ForeignKey('developer.id'), nullable=True)
-    software = db.Column (db.String(80), db.ForeignKey('software.name'))
-    urgency = db.Column (db.String(10), nullable=True )
+    user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
+    dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable=True)
+    software = db.Column (db.Integer, db.ForeignKey('software.id'))
+    urgency = db.Column (db.String(80), nullable=True )
     status = db.Column (db.String(80),nullable=True)
+
+class Comment (db.Model):
+    __tablename__ = ('comment')
+    id = db.Column (db.Integer, primary_key=True)
+    content = db.Column (db.Text, nullable = False)
+    date = db.Column (db.DateTime, default=datetime.utcnow)
+    report_id = db.Column (db.Integer, db.ForeignKey('report.id'), nullable=False)
+    commenter_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable=False)
+
 
 
 with app.app_context():

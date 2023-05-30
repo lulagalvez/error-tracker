@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from config import ApplicationConfig
 from flask_cors import CORS,  cross_origin
 from flask import Flask, jsonify, request, make_response, abort, session
-from dbmaker import db, User, Developer, Report, Software, app, Admin
+from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin
 
 
 migrate = Migrate(app, db)
@@ -24,7 +24,7 @@ app.secret_key = "FLASKQLOSIONOLOKO@"
 
 def _build_cors_preflight_response():
     response = make_response()
-    response.headers.add("Access-Control-Allow-Origin", 'http://localhost:3000')
+    response.headers.add("Access-Control-Allow-Origin", "*")
     response.headers.add('Access-Control-Allow-Headers', "*")
     response.headers.add('Access-Control-Allow-Methods', "*")
     response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -78,7 +78,6 @@ def login():
     response.set_cookie('email', user.email)
     response.set_cookie('authenticated', 'true')
     response.set_cookie('type_of_user',user.type_of_user)
-    response.set_cookie('id',user.id)
 
     return response
 @app.route("/@me", methods=['GET'])
@@ -299,7 +298,7 @@ def get_reports():
 
 @app.route('/reports', methods=['POST'])
 def create_report():
-    if request.method == "OPTIONS" : # CORS preflight
+    if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
     elif request.method =="POST":
         title = request.json['title']
@@ -312,7 +311,7 @@ def create_report():
         new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, status = status)
         db.session.add(new_report)
         db.session.commit()
-        return jsonify({'message':'Reporte creado'})
+        return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
@@ -362,6 +361,47 @@ def get_dev_reports(dev_id):
         temp.append(report_data)
 
     return jsonify(temp)
+
+#####################################COMMENTS#####################################
+
+@app.route('/comments', methods=['GET'])
+def get_comments():
+    comments = Comment.query.all()
+    temp = []
+    for comment in comments:
+        comment_data = {}
+        comment_data['id'] = comment.id
+        comment_data['content'] = comment.content
+        comment_data['date'] = comment.date
+        comment_data['report_id'] = comment.report_id
+        comment_data['commenter_id'] = comment.commenter_id
+        temp.append(comment_data)
+    return jsonify(temp)
+
+@app.route('/comments/<int:id>', methods=['GET'])
+def get_comment(id):
+    comment = Comment.query.filter_by(id=id).first()
+    if comment:
+        return jsonify({'id': comment.id, 'name': comment.name})
+    else:
+        return jsonify({'message': 'Comment not found'})
+    
+@app.route('/comments', methods=['POST'])
+def create_comment():
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method =="POST":
+        content = request.json['content']
+        report_id = request.json['report_id']
+        commenter_id = request.json['commenter_id']
+        new_comment = Comment(content=content, commenter_id=commenter_id, report_id=report_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        return _corsify_actual_response(jsonify({'message':'Comentario creado'}))
+    else:
+        raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+    
+
 
 #####################################SOFTWARE#####################################
 
@@ -415,7 +455,9 @@ def get_software_reports(id):
         return jsonify({'message': 'No reports found for software'})
 
 def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Origin", "*")
+
+
     return response
 
 if __name__ == '__main__':
