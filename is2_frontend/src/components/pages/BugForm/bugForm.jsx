@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import './bugForm.css'
-import APIService from '../../services/APIService'
+import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
 export default (props) =>{
     const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:[]});

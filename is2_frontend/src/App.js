@@ -48,7 +48,8 @@ class App extends Component {
               <Route path='/sidebaruser' element={<SideBarUser />} />  
               <Route path='/sidebaradmin' element={<SideBarAdmin />} />  
               <Route path='/sidebardeveloper' element={<SideBarDeveloper />} /> 
-              <Route path='/userreportview' element={<UserReportView />} />   
+              <Route path='/userreportview' element={<UserReportView />} />
+              <Route path='/devstats' element={<DevStats />} />    
               <Route path='/login' element={<LogIn />} />
               <Route path='/' exact element={<LogIn/>}/>
               <Route path="*" element={<p>No hay nada aqui: 404</p>} />

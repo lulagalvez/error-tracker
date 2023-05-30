@@ -1,13 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DoughnutChart from "./DoughnutChart";
 import { Chart as ChartJS } from "chart.js/auto";
 // import './DevStats.css'
 import SoftwareCompletition from './SoftwareCompletition';
 import OverdueWork from './OverdueWork';
 import Dona from './Dona';
-import APIService from '../../services/APIService'
+import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
 function DevStats() {
+    const devId = Cookies.get('id');
+    const [datosDevReport,setDatosDevReport] = useState([]);
+    const api_service = new APIService();
+
+    useEffect(() => {
+        async function fetchData() {
+          const response = await api_service.get('dev_reports/${devId}');
+          setDatosDevReport(response);
+        }
+        fetchData();
+      }, []); 
+    
     const [datosDona, setDatosDona] = useState({
         labels: ["closed", "testing", "pending", "to-do"],
         datasets: [
