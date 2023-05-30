@@ -28,14 +28,14 @@ function DevStats() {
             },
         ],
     })
-
+    
     return <>
         <div class="container" style={{ "padding-left": "150px" }}>
             <div class="row">
                 <div class="col border border-1 position-relative">
                     <div style={{ padding: "24px" }}>
                         <h4 class="position-absolute top-0 start-0" >Job Status Report</h4>
-                        {/* <DoughnutChart charData={datosDona} /> */}
+                        <DoughnutChart charData={datosDona} /> 
                         <Dona charData={datosDona} />
                     </div>
                 </div>
@@ -44,9 +44,9 @@ function DevStats() {
                 </div>
 
                 <div class="col border border-1 position-relative">
-                    <div style={{ padding: "24px" }}>
-                        <h4 class="position-absolute top-0 start-0" > Overdue work</h4>
-                        <OverdueWork />
+                    <div  style={{ padding: "24px" }}>
+                        <h4 class="position-relative top-0 start-0" > Overdue work</h4>
+                        <OverdueWork percentageProgress='32' />
                     </div>
                 </div>
             </div>
