@@ -4,8 +4,10 @@ import { Chart as ChartJS } from 'chart.js'
 
 function Dona({ charData }) {
     return (
-        // <Doughnut data={charData} />
+        <>
+        <Doughnut data={charData} />
         <p>Dona</p>
+        </>
     )
 }
 

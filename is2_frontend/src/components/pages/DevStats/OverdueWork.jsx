@@ -1,24 +1,24 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect} from 'react'
 import './OverdueWork.css'
-function OverdueWork() {
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+function OverdueWork(props) {
+    const percentageProgress= props.percentageProgress;  //valor porcentual para trabajos sin finalizar
 
     return <>
-        <div class='progress'>
-            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" ></div>
-        </div>
-
-        <div className='overduework'>
-            <div class="progress yellow">
-                <span class="progress-left">
-                    <span class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" ></span>
-                </span>
-                <span class="progress-right">
-                    <span class="progress-bar"></span>
-                </span>
-                <div class="progress-value">75%</div>
+    <div class='container '>
+        <div class='row'>
+            <div class='col-4'>
+            <CircularProgressbar value={percentageProgress} text={`${percentageProgress}%`} styles={{path: {stroke: `rgba(255, 0, 0, ${percentageProgress / 100})`} , text:{fill:'black'}}} />
             </div>
-        </div >
+            <div class='col-6'>
+                <p><small>This is some smaller text.</small></p>
+            </div>
+        </div>
+        <div class='row'>
 
+        </div>
+    </div>
     </>
 }
 
