@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-// import { JobStatusData } from "./Data";
 import DoughnutChart from "./DoughnutChart";
 import { Chart as ChartJS } from "chart.js/auto";
 // import './DevStats.css'
 import SoftwareCompletition from './SoftwareCompletition';
 import OverdueWork from './OverdueWork';
 import Dona from './Dona';
-
+import APIService from '../../services/APIService'
+import Cookies from 'js-cookie';
 function DevStats() {
     const [datosDona, setDatosDona] = useState({
         labels: ["closed", "testing", "pending", "to-do"],
@@ -44,9 +44,9 @@ function DevStats() {
                 </div>
 
                 <div class="col border border-1 position-relative">
-                    <div style={{ padding: "24px" }}>
-                        <h4 class="position-absolute top-0 start-0" > Overdue work</h4>
-                        <OverdueWork />
+                    <div  style={{ padding: "24px" }}>
+                        <h4 class="position-relative top-0 start-0" > Overdue work</h4>
+                        <OverdueWork percentageProgress='32' />
                     </div>
                 </div>
             </div>
