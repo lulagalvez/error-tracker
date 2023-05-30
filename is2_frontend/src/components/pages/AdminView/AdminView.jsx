@@ -123,7 +123,6 @@ function AdminView() {
         {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}
         <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
-        <div>
         <div className="ms-3">
             <p>
             Cambiar prioridad: -

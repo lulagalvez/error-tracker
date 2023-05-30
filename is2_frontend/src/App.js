@@ -72,7 +72,7 @@ class App extends Component {
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
               <SideBarUser />
-              <CrearBug />
+              <CrearBug title='Reportar bug'/>
             </ProtectedRoute>} />
             
             <Route path='/my_reports' element={
