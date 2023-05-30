@@ -46,18 +46,19 @@ class App extends Component {
               <Route path='/signup' element={<SignUp />} />
               <Route path='/sidebaruser' element={<SideBarUser />} />  
               <Route path='/sidebaradmin' element={<SideBarAdmin />} />  
-              <Route path='/sidebardeveloper' element={<SideBarDeveloper />} />  
+              <Route path='/sidebardeveloper' element={<SideBarDeveloper />} /> 
+              <Route path='/userreportview' element={<UserReportView />} />   
               <Route path='/login' element={<LogIn />} />
               <Route path='/' exact element={<LogIn/>}/>
               <Route path="*" element={<p>No hay nada aqui: 404</p>} />
 
               {/* RUTAS PROTEGIDAS */} 
               <Route 
-                path='/adminviewmain'
+                path='/adminview'
                 element={<ProtectedRoute redirectPath="/login" 
                 isAllowed={logged && type_of_user === 'admin'}>
                   <SideBarAdmin/>
-                  <AdminViewMain/>  
+                  <AdminView/>  
                 </ProtectedRoute>}
               />
             <Route path='/devview' element={
@@ -70,12 +71,14 @@ class App extends Component {
             <Route path='/report' element={
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
+              <SideBarUser />
               <CrearBug />
             </ProtectedRoute>} />
             
             <Route path='/my_reports' element={
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
+              <SideBarUser/>
               <UserReportView />
             </ProtectedRoute>} /> 
           </Routes>   

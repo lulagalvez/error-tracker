@@ -16,13 +16,13 @@ export const SideBarAdmin = () => {
     return (
         <div className="sidebar">
 
-            <Link to="/adminviewmain">
+            <Link to="/adminview">
                 <div className="logo-container-admin">
-                    <img src={logo} alt="Logo" height="120" width="120" className="logo-img" />
+                    <span>DebuGGer</span>
                 </div>
             </Link>
 
-            <Link to="/adminviewmain">
+            <Link to="/adminview">
                 <div className="icon-container assign-bug">
                     <i className="bi bi-file-person-fill"></i>
                     <h1>Asignar Bug</h1>

@@ -37,7 +37,7 @@ export default (props) => {
         } else if (loggedIn && type === 'developer') {
             navigate("/devview");
         } else if(loggedIn && type === 'user'){
-            navigate("/userreportview");
+            navigate("/my_reports");
         }
         else{
             setShowAlert(true);

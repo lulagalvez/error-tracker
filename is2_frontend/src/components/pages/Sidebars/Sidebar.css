@@ -3,7 +3,7 @@
     width: 12%;
     position: fixed; 
     z-index: 1;
-    background-color: #F5F5F5;  
+    background-color: #FFFF;  
     overflow-x: hidden;
     overflow-y: hidden;
     display: flex;
@@ -15,10 +15,12 @@
 
 .logo-container-user{
     margin-top: -150px;
+    font-size: 35px;
 }
 
 .logo-container-admin{
-    margin-top: -120px;
+    margin-top:-120px;
+    font-size: 35px;
 }
 .sidebar a {
     text-decoration: none;

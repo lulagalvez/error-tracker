@@ -17,7 +17,7 @@ export const SideBarDeveloper = () => {
         <div className="sidebar">
             <Link to="/my_reports">
                 <div className="logo-container-user">
-                    <img src={logo} alt="Logo" height="120" width="120" className="logo-img" />
+                    <span>DebuGGer</span>
                 </div>
             </Link>
 

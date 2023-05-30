@@ -191,7 +191,8 @@ function AdminView() {
             })}
         </table>
     </div>
+    </div>
     )
 }
 
-export default AdminView
+export default AdminView;

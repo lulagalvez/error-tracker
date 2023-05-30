@@ -78,6 +78,7 @@ def login():
     response.set_cookie('email', user.email)
     response.set_cookie('authenticated', 'true')
     response.set_cookie('type_of_user',user.type_of_user)
+    response.set_cookie('id',user.id)
 
     return response
 @app.route("/@me", methods=['GET'])
