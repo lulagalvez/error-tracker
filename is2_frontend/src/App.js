@@ -13,6 +13,7 @@ import SideBarAdmin from './components/pages/Sidebars/SidebarAdmin';
 import SideBarDeveloper from './components/pages/Sidebars/SidebarDeveloper';
 import SignUp from './components/pages/SignUp/SignUp';
 import LogIn from './components/pages/Login/Login';
+import DevStats from './components/pages/DevStats/DevStats'
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
 
