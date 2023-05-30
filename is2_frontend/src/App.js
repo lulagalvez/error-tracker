@@ -64,6 +64,7 @@ class App extends Component {
             <Route path='/devview' element={
               <ProtectedRoute redirectPath="/login"
                 isAllowed={logged && type_of_user === 'developer'}>
+                <SideBarDeveloper/>
                 <DevView />
               </ProtectedRoute>} 
             /> 

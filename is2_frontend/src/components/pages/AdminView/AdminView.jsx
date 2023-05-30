@@ -190,7 +190,6 @@ function AdminView() {
             })}
         </table>
     </div>
-    </div>
     )
 }
 

@@ -15,7 +15,6 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   };
 
   /*ESTADOS POSIBLES DE UN TICKET PARA ASIGNARLES EL COLOR EN EL .CSS*/
-
   const statusColors = {
     Pending: "status-pending",
     ToDo: "status-to-do",
@@ -40,7 +39,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   const filteredBugReports = bugReports.filter((bugReport) => {
     const title = bugReport.title.toString().toLowerCase();
     const status = bugReport.status.toString().toLowerCase();
-    const software = bugReport.software.toString().toLowerCase();
+    const software = bugReport.software.toString();
     const isMatchingTitle = title.includes(searchTerm.toLowerCase());
     const isMatchingStatus = selectedStatus
       ? status === selectedStatus.toLowerCase()

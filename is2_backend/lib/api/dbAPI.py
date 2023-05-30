@@ -24,7 +24,7 @@ app.secret_key = "FLASKQLOSIONOLOKO@"
 
 def _build_cors_preflight_response():
     response = make_response()
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Origin", 'http://localhost:3000')
     response.headers.add('Access-Control-Allow-Headers', "*")
     response.headers.add('Access-Control-Allow-Methods', "*")
     response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -299,7 +299,7 @@ def get_reports():
 
 @app.route('/reports', methods=['POST'])
 def create_report():
-    if request.method == "OPTIONS": # CORS preflight
+    if request.method == "OPTIONS" : # CORS preflight
         return _build_cors_preflight_response()
     elif request.method =="POST":
         title = request.json['title']
@@ -312,7 +312,7 @@ def create_report():
         new_report = Report(title=title, description=description, user_id=user_id, dev_id=dev_id,software = software, urgency = urgency, status = status)
         db.session.add(new_report)
         db.session.commit()
-        return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
+        return jsonify({'message':'Reporte creado'})
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
@@ -415,7 +415,7 @@ def get_software_reports(id):
         return jsonify({'message': 'No reports found for software'})
 
 def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
     return response
 
 if __name__ == '__main__':
