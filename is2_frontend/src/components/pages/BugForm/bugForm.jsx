@@ -3,7 +3,7 @@ import './bugForm.css'
 import APIService from '../../services/APIService'
 import Cookies from 'js-cookie';
 export default (props) =>{
-    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:''});
+    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:[]});
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
@@ -82,7 +82,7 @@ export default (props) =>{
                         <label for="floatingTitle">Título del ticket</label>
                     </div>
                     <div class="mb-4 ">
-                        <select name='software' class="form-select" required onChange={handleOnChange} value={inputValues.software } > 
+                        <select name='software' class="form-select" required onChange={handleOnChange} value={inputValues.software.name } > 
                             <option value="">--Please choose an option--</option>
                                 {softwareIds.map(softwareIds => (
                                 <option key={softwareIds.id} value={softwareIds.id}>
