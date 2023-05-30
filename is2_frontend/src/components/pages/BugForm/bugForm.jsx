@@ -32,6 +32,7 @@ export default (props) =>{
     const reportBug = () =>{
         apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, status:"ToDo",urgency:1})
         .then(response =>{
+            console.log(response);
             if(response?.message === 'Reporte creado'){
                 setShowSuccessAlert(true);
                 
@@ -41,6 +42,7 @@ export default (props) =>{
             }
         })
         .catch(error => console.log('error',error))
+        
     }
 
     const handleOnChange = event =>{
