@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import BugReportList from "./DevBugReportList";
 import CommentColumn from "../../props/CommentColumn";
-import SideBar from "../Sidebar/Sidebar";
+
 import { generateBugReports } from "../../utils/generateBugReports";
 import "./DevView.css";
 import APIService from '../../services/APIService';
