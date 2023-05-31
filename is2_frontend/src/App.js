@@ -47,8 +47,6 @@ class App extends Component {
     return (
         <>
         <Router>
-        {/* <SideBarUser /> */}
-{/*           <Navbar />   */}
           <Routes>
               <Route path='/signup' element={<SignUp />} />
               {/* <Route path='/adminview' element= {<AdminViewMain />} /> */}
@@ -65,12 +63,21 @@ class App extends Component {
                   <AdminViewMain/>  
                 </ProtectedRoute>}
               />
+            
             <Route path='/devview' element={
               <ProtectedRoute redirectPath="/login"
                 isAllowed={logged && type_of_user === 'developer'}>
                 <SideBarDeveloper/>
                 <DevView />
               </ProtectedRoute>} 
+            />
+            
+            <Route path='/devstats' element={
+              <ProtectedRoute redirectPath="/login"
+                isAllowed={logged && type_of_user === 'developer'}>
+                <SideBarDeveloper />
+                <DevStats />
+              </ProtectedRoute>}
             /> 
             
             <Route path='/report' element={
