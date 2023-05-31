@@ -60,7 +60,7 @@ class App extends Component {
               <Route path='/adminview'element={<ProtectedRoute redirectPath="/login" 
                 isAllowed={logged && type_of_user === 'admin'}>
                   <SideBarAdmin/>
-                  <AdminViewMain/>  
+                  <AdminView/>  
                 </ProtectedRoute>}
               />
             
