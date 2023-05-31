@@ -245,7 +245,7 @@ def create_admin():
     name = request.json['name']
     email = request.json['email']
     password = request.json['password']
-    new_admin = Developer(name=name, email=email,password=password)
+    new_admin = Admin(name=name, email=email,password=password)
     db.session.add(new_admin)
     db.session.commit()
     return jsonify({'message': 'admin creado'})
