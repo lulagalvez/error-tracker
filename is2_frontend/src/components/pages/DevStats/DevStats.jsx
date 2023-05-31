@@ -24,12 +24,17 @@ function DevStats() {
                 switch(report.status){
                 case 'ToDo':
                     toDoCount=toDoCount+1;
+                    break;
+                
                 case 'Pending':
                     pendingCount=pendingCount+1;
+                    break;
                 case 'Testing':
                     testingCount=testingCount+1;
+                    break;
                 case 'closedCount':
                     closedCount=closedCount+1;
+                    break;
                 }
             }
         }
