@@ -1,0 +1,12 @@
+.welcome-icon {
+    display: flex;
+    align-items: center;
+    justify-content : flex-end !important; 
+    margin-right: 5px;
+}
+
+.welcome-icon__message {
+    font-size: 20px;
+    font-weight: bold;
+}
+
