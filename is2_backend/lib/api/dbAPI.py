@@ -136,9 +136,9 @@ def update_user(id):
     db.session.commit()
     return jsonify({'message': 'Usuario actualizado'})
 
-@app.route('/users/<id>', methods=['DELETE' ])
-def delete_user(id):
-    user = User.query.get_or_404(id)
+@app.route('/users/<email>', methods=['DELETE' ])
+def delete_user(email):
+    user = User.query.filter_by(email).first()
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message': 'Usuario eliminado'})
@@ -153,6 +153,13 @@ def get_dev(id):
     dev_data['email'] = dev.email
     dev_data['role'] = dev.role
     return jsonify({'dev': dev_data})
+
+@app.route('/devs/<email>', methods=['DELETE' ])
+def delete_dev(email):
+    dev = Developer.query.filter_by(email=email).first()
+    db.session.delete(dev)
+    db.session.commit()
+    return jsonify({'message':'Dev eliminado'})
 
 @app.route('/devs', methods=['GET' ])
 def get_devs():
@@ -202,14 +209,6 @@ def update_dev(id):
     dev.role = role
     db.session.commit()
     return jsonify({'message': 'Developer actualizado'})
-
-@app.route('/devs/<id>', methods=['DELETE'])
-def delete_dev(id):
-    dev = Developer.query.get_or_404(id)
-    db.session.delete(dev)
-    db.session.commit()
-    return jsonify({'message': 'Developer eliminado'})
-
 
 @app.route('/user_reports/<user_id>', methods=['GET'])
 def get_user_reports(user_id):

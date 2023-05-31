@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import Navbar from './components/Navbar';
 import './components/css/App.css';
 import Home from './components/pages/Home/Home';
@@ -18,15 +18,21 @@ import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "reac
 import Cookies from 'js-cookie';
 
 const ProtectedRoute = ({
-  isAllowed,
   redirectPath = '/login',
   children,
 }) => {
-  if (!isAllowed) {
+  const logged = Cookies.get('authenticated');
+  const type_of_user = Cookies.get('type_of_user');
+
+  if (!logged || !type_of_user) {
     return <Navigate to={redirectPath} replace />;
   }
 
-  return children ? children : <Outlet />;
+  if (children) {
+    return children;
+  }
+
+  return <Outlet />;
 };
 
 const logged = Cookies.get('authenticated');
@@ -45,22 +51,18 @@ class App extends Component {
 {/*           <Navbar />   */}
           <Routes>
               <Route path='/signup' element={<SignUp />} />
-              <Route path='/sidebaruser' element={<SideBarUser />} />  
-              <Route path='/sidebaradmin' element={<SideBarAdmin />} />  
-              <Route path='/sidebardeveloper' element={<SideBarDeveloper />} /> 
+              {/* <Route path='/adminview' element= {<AdminViewMain />} /> */}
               <Route path='/userreportview' element={<UserReportView />} />
               <Route path='/devstats' element={<DevStats />} />    
-              <Route path='/login' element={<LogIn />} />
+              <Route path='/login' element={<LogIn />} /> 
               <Route path='/' exact element={<LogIn/>}/>
               <Route path="*" element={<p>No hay nada aqui: 404</p>} />
 
               {/* RUTAS PROTEGIDAS */} 
-              <Route 
-                path='/adminview'
-                element={<ProtectedRoute redirectPath="/login" 
+              <Route path='/adminview'element={<ProtectedRoute redirectPath="/login" 
                 isAllowed={logged && type_of_user === 'admin'}>
                   <SideBarAdmin/>
-                  <AdminView/>  
+                  <AdminViewMain/>  
                 </ProtectedRoute>}
               />
             <Route path='/devview' element={

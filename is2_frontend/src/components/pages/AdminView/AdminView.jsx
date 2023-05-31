@@ -2,6 +2,8 @@ import React,{useEffect, useState} from 'react'
 import APIService from '../../services/APIService';
 import {BotonBorrar} from './BotonBorrar'
 import {BotonEditar} from './BotonEditar'
+import '../Sidebars/SidebarAdmin'
+import SideBarAdmin from '../Sidebars/SidebarAdmin';
 
 function AdminView() {
     const [reports,setReports] =React.useState([])
@@ -115,8 +117,7 @@ function AdminView() {
         setBugs(newArray);
     }
     //render
-    return( 
-        
+    return(
         <div class="container mt-4">
         <h1>Vista de lista de bugs</h1>
         <hr />
