@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import './CreateComment.css'
 
 const CreateComment = ({handleSubmit, submitLabel}) => {
@@ -20,7 +20,7 @@ const CreateComment = ({handleSubmit, submitLabel}) => {
             onChange={(e) => setText(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary custom-button" disabled={isTextAreaDisabled}>Submit</button>
+        <button className="btn btn-primary custom-button"  disabled={isTextAreaDisabled}>Submit</button>
       </form>
     </div>
   )

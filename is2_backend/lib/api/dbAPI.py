@@ -382,9 +382,23 @@ def get_comments():
 def get_comment(id):
     comment = Comment.query.filter_by(id=id).first()
     if comment:
-        return jsonify({'id': comment.id, 'name': comment.name})
+        return jsonify({'id': comment.id, 'content': comment.content, 'report_id': comment.report_id, 'commenter_id':comment.commenter_id, 'date': comment.date})
     else:
         return jsonify({'message': 'Comment not found'})
+    
+@app.route('/comments_in/<int:report_id>', methods=['GET'])
+def get_comment_in(report_id):
+    comments = Comment.query.filter_by(report_id=report_id)
+    temp = []
+    for comment in comments:
+        comment_data = {}
+        comment_data['id'] = comment.id
+        comment_data['content'] = comment.content
+        comment_data['date'] = comment.date
+        comment_data['report_id'] = comment.report_id
+        comment_data['commenter_id'] = comment.commenter_id
+        temp.append(comment_data)
+    return jsonify(temp)
     
 @app.route('/comments', methods=['POST'])
 def create_comment():

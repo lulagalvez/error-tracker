@@ -9,13 +9,13 @@ import APIService from '../services/APIService';
 
 const CommentColumn = ({ bugReport }) => {
   const [comments, setComments] = useState([]);
-  const[showErrorAlert,setShowErrorAlert]=useState(false);
-  const[showSuccessAlert,setShowSuccessAlert]=useState(false);
+  const[showErrorAlert,setShowErrorAlert] = useState(false);
+  const[showSuccessAlert,setShowSuccessAlert] = useState(false);
 
   const api_service = new APIService();
 
   const addComment = (text) => {
-    api_service.post('comments',{content: text, commenter_id:1, report_id: 1})
+    api_service.post('comments',{content: text, commenter_id:1, report_id: bugReport.id})
         .then(response =>{
             if(response?.message === 'Comentario creado'){
                 setShowSuccessAlert(true);
@@ -24,16 +24,17 @@ const CommentColumn = ({ bugReport }) => {
             }
         })
         .catch(error => console.log('error',error))
+
+        setComments([{content: text, commenter_id:1, report_id: bugReport.id}, ...comments]);
   }
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api_service.get('comments');
+      const response = await api_service.get('comments_in', bugReport.id);
       setComments(response);
     }
     fetchData();
-  }, []); 
-  
+  }, []);   
 
   return (
     <div className="col-lg-6">
@@ -70,7 +71,10 @@ const CommentColumn = ({ bugReport }) => {
       </div>
 
        {/* CREATE COMMENT */} 
-       <CreateComment submitLabel="Write" handleSubmit={addComment}/>  
+       <CreateComment 
+        submitLabel="Write" 
+        handleSubmit={addComment}
+        />  
     </div>
   );
 
