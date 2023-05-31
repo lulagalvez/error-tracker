@@ -12,6 +12,7 @@ export const SideBarAdmin = () => {
         Cookies.remove('name');
         Cookies.remove('email');
         Cookies.remove('type_of_user');
+        Cookies.remove('id');
     };
     return (
         <div className="sidebar">

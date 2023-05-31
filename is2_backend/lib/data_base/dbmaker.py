@@ -49,7 +49,7 @@ class Software (db.Model):
     name = db.Column(db.String(80), nullable=False)
     devs = db.relationship('Developer', secondary = software_dev, backref='softwares')
 
-class Developer(db.Model):
+class Developer(User):
     __tablename__= ('developer')
     id = db.Column (db.String(32), db.ForeignKey('user.id'),primary_key=True, default=get_uuid)
     reports = db.relationship('Report', backref = 'developer')
