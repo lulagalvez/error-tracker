@@ -1,7 +1,11 @@
 import React,{useEffect, useState} from 'react'
 import APIService from '../../services/APIService';
 import {BotonBorrar} from './BotonBorrar'
-import {BotonEditar} from './BotonEditar'
+import {Buscador} from './Buscador'
+import {CambiarPrioridad} from './CambiarPrioridad'
+import {CambiarEstado} from './CambiarEstado'
+import {Status} from './Status'
+import './TablaAdmin.css'
 import '../Sidebars/SidebarAdmin'
 import SideBarAdmin from '../Sidebars/SidebarAdmin';
 
@@ -112,6 +116,11 @@ function AdminView() {
         newArray[pos].state=nuevoSt;
         setBugs(newArray);
     }
+    const setDev=(pos,nuevoDev)=>{
+        var newArray=copiaArray();
+        newArray[pos].dev_id=nuevoDev;
+        setBugs(newArray);
+    }
     const deleteBug=(bug_id)=>{
         const newArray=bugs.filter((bug) => bug.id!==bug_id);
         setBugs(newArray);
@@ -125,24 +134,16 @@ function AdminView() {
         <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
         <div className="ms-3">
-            <p>
-            Cambiar prioridad: -
-            <input type="text" onChange={e => cambiarIdP(e.target.value)} placeholder="ID"/>
-            <input type="number" onChange={e => cambiarNum(e.target.valueAsNumber)} placeholder="Prioridad"/>
-            <button onClick={e => setPrioridad(idP,num)}>Cambiar</button>
-            </p>
-            <p>
-            Cambiar estado: -
-            <input type="text" onChange={e => cambiarIdE(e.target.value)} placeholder='ID'/>
-            <select onChange={e => cambiarEstado(e.target.value)}>
-                <option value="">--Seleccione una opcion--</option>
-                <option value="Cerrado">Cerrado</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Solicita Reasignar">Solicita Reasignar</option>
-                <option value="Testing">Testing</option>
-            </select>
-            <button onClick={e => setStatus(idE,estado)}>Cambiar</button>
-            </p>
+            <CambiarPrioridad
+                cambiarId={nuevo => cambiarIdP(nuevo)}
+                cambiarQ={nuevo => cambiarNum(nuevo)}
+                clickFunction={e => setPrioridad(idP,num)}
+            />
+            <CambiarEstado
+                cambiarId={nuevo => cambiarIdE(nuevo)}
+                cambiarStatus={nuevo => cambiarEstado(nuevo)}
+                clickFunction={e => setStatus(idE,estado)}
+            />
         </div>
         <table class="table table-striped">
         <thead>
@@ -168,8 +169,11 @@ function AdminView() {
                         {/* <td>fecha</td> */}
                         {/* <td>{val.description}</td> */}
                         <td>{val.urgency}</td>
-                        <td><BotonEditar/>{val.dev_id}</td>
-                        <td>{val.state}</td>
+                        <td><Buscador
+                            texto={val.dev_id}
+                            setTexto={nuevo => setDev(k,nuevo)}
+                        /></td>
+                        <td><Status nombre={val.state}/></td>
                         <td><BotonBorrar deleteFunction={e => deleteBug(val.id)}/></td>
                        
                          {/* falta agregar saltos de linea para cada depurador */}
