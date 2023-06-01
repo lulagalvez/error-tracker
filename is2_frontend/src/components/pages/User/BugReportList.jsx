@@ -39,7 +39,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   const filteredBugReports = bugReports.filter((bugReport) => {
     const title = bugReport.title.toString().toLowerCase();
     const status = bugReport.status.toString().toLowerCase();
-    const software = bugReport.software.toString();
+    const software = bugReport.software
     const isMatchingTitle = title.includes(searchTerm.toLowerCase());
     const isMatchingStatus = selectedStatus
       ? status === selectedStatus.toLowerCase()

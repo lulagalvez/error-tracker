@@ -95,7 +95,7 @@ function DevStats() {
                 <div className="col border border-1 position-relative">
                     <div  style={{ padding: "24px" }}>
                         <h4 className="position-relative top-0 start-0" > Overdue work</h4>
-                        <OverdueWork percentageProgress={completeness} />
+                        <OverdueWork percentageProgress='24' />
                     </div>
                 </div>
             </div>

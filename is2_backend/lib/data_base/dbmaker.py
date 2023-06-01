@@ -80,6 +80,7 @@ class Report (db.Model):
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable=True)
     dev_name = db.Column(db.String(30), nullable=True)
     software = db.Column (db.Integer, db.ForeignKey('software.id'))
+    software_name = db.Column(db.String(80), nullable=False)
     urgency = db.Column (db.String(80), nullable=True )
     status = db.Column (db.String(80),nullable=True)
 

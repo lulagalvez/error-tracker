@@ -269,6 +269,7 @@ def get_report(id):
     report_data['user_id'] = report.user_id
     report_data['dev_id'] = report.dev_id
     report_data['software'] = report.software
+    report_data['software_name'] = report.software_name
     report_data['urgency'] = report.urgency
     report_data['status'] = report.status
     return jsonify({'report': report_data})
@@ -288,6 +289,7 @@ def get_reports():
         report_data['dev_id'] = report.dev_id
         report_data['dev_name'] = report.dev_name        
         report_data['software'] = report.software
+        report_data['software_name'] = report.software_name
         report_data['urgency'] = report.urgency
         report_data['status'] = report.status
         temp.append(report_data)
@@ -306,9 +308,10 @@ def create_report():
         dev_id = request.json['dev_id']
         dev_name = request.json ['dev_name']
         software = request.json['software']
+        software_name = request.json['software_name']
         urgency = request.json['urgency'] 
         status = request.json['status']
-        new_report = Report(title=title, description=description, user_id=user_id,user_name=user_name,dev_id=dev_id,dev_name = dev_name,software = software, urgency = urgency, status = status)
+        new_report = Report(title=title, description=description, user_id=user_id,user_name=user_name,dev_id=dev_id,dev_name = dev_name,software = software,software_name=software_name, urgency = urgency, status = status)
         db.session.add(new_report)
         db.session.commit()
         return jsonify({'message':'Reporte creado'})
@@ -363,6 +366,7 @@ def get_dev_reports(dev_id):
         report_data['user_id'] = report.user_id
         report_data['dev_id'] = report.dev_id
         report_data['software'] = report.software
+        report_data['software_name'] = report.software_name
         report_data['urgency'] = report.urgency
         report_data['status'] = report.status
         temp.append(report_data)
@@ -381,6 +385,7 @@ def get_user_reports(user_id):
         report_data['user_id'] = report.user_id
         report_data['dev_id'] = report.dev_id
         report_data['software'] = report.software
+        report_data['software_name'] = report.software_name
         report_data['urgency'] = report.urgency
         report_data['status'] = report.status
         temp.append(report_data)

@@ -7,6 +7,7 @@ export default (props) =>{
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
+    const[softwareName,setSoftwareName]= useState('')
     const userid = Cookies.get('id');
     const username = Cookies.get('name');   
     console.log(userid,username);
@@ -32,7 +33,7 @@ export default (props) =>{
    
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null ,software: inputValues.software, status:"ToDo",urgency:1})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null , software: inputValues.software, software_name: softwareName ?? 'empty', status:"ToDo",urgency:1})
         .then(response =>{
             console.log(response);
             if(response?.message === 'Reporte creado'){
@@ -61,7 +62,21 @@ export default (props) =>{
             [name]:value
         });
     }
-
+    const handleOnSelect = event =>{
+        const {name,value} =event.target;
+        setInputValues({
+            ...inputValues,
+            [name]:value
+        });
+        console.log(inputValues.software);
+        for(var id in softwareIds){
+            if(id){
+                if(id==inputValues.software){
+                    setSoftwareName(softwareIds[id].name);
+                }
+            }
+        }
+    }
     const handleSubmit=(e)=>{
         e.preventDefault()
         reportBug();
@@ -83,7 +98,7 @@ export default (props) =>{
                         <label htmlFor="floatingTitle">Título del ticket</label>
                     </div>
                     <div className="mb-4 ">
-                        <select name='software' className="form-select" required onChange={handleOnChange} value={inputValues.software.name } > 
+                        <select name='software' className="form-select" required onChange={handleOnSelect} value={inputValues.software} > 
                             <option value="">--Please choose an option--</option>
                                 {softwareIds.map(softwareIds => (
                                 <option key={softwareIds.id} value={softwareIds.id}>
