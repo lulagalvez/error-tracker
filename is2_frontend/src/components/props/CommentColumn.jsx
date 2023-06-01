@@ -5,17 +5,20 @@ import moment from "moment";
 import CreateComment from "./CreateComment";
 import "./CommentColumn.css";
 import APIService from '../services/APIService';
+import Cookies from 'js-cookie';
 
 
 const CommentColumn = ({ bugReport }) => {
   const [comments, setComments] = useState([]);
   const[showErrorAlert,setShowErrorAlert] = useState(false);
   const[showSuccessAlert,setShowSuccessAlert] = useState(false);
+  const userid = Cookies.get('id');
+  const username = Cookies.get('name');
 
   const api_service = new APIService();
 
   const addComment = (text) => {
-    api_service.post('comments',{content: text, commenter_id:1, report_id: bugReport.id})
+    api_service.post('comments',{content: text, commenter_id:userid, report_id: bugReport.id, commenter_name:username})
         .then(response =>{
             if(response?.message === 'Comentario creado'){
                 setShowSuccessAlert(true);
@@ -25,7 +28,7 @@ const CommentColumn = ({ bugReport }) => {
         })
         .catch(error => console.log('error',error))
 
-        setComments([{content: text, commenter_id:1, report_id: bugReport.id}, ...comments]);
+        setComments([{content: text, commenter_id:userid, commenter_name:username, report_id: bugReport.id}, ...comments]);
   }
 
   useEffect(() => {
@@ -34,7 +37,7 @@ const CommentColumn = ({ bugReport }) => {
       setComments(response);
     }
     fetchData();
-  });   
+  }, [bugReport]);   
 
   return (
     <div className="col-lg-6">
@@ -57,7 +60,7 @@ const CommentColumn = ({ bugReport }) => {
               <div>
                 <div className="d-flex align-items-center">
                   <p className="m-0 me-2 comment-publisher">
-                    {comment.commenter_id}
+                    {comment.commenter_name}
                   </p>
                   <small className="text-muted">
                     {moment(comment.date).fromNow()}

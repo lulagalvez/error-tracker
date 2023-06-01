@@ -396,6 +396,7 @@ def get_comments():
         comment_data['date'] = comment.date
         comment_data['report_id'] = comment.report_id
         comment_data['commenter_id'] = comment.commenter_id
+        comment_data['commenter_name'] = comment.commenter_name
         temp.append(comment_data)
     return jsonify(temp)
 
@@ -403,7 +404,7 @@ def get_comments():
 def get_comment(id):
     comment = Comment.query.filter_by(id=id).first()
     if comment:
-        return jsonify({'id': comment.id, 'content': comment.content, 'report_id': comment.report_id, 'commenter_id':comment.commenter_id, 'date': comment.date})
+        return jsonify({'id': comment.id, 'content': comment.content, 'report_id': comment.report_id, 'commenter_id':comment.commenter_id, 'commenter_name':comment.commenter_name, 'date': comment.date})
     else:
         return jsonify({'message': 'Comment not found'})
     
@@ -418,6 +419,7 @@ def get_comment_in(report_id):
         comment_data['date'] = comment.date
         comment_data['report_id'] = comment.report_id
         comment_data['commenter_id'] = comment.commenter_id
+        comment_data['commenter_name'] = comment.commenter_name
         temp.append(comment_data)
     return jsonify(temp)
     
@@ -429,7 +431,8 @@ def create_comment():
         content = request.json['content']
         report_id = request.json['report_id']
         commenter_id = request.json['commenter_id']
-        new_comment = Comment(content=content, commenter_id=commenter_id, report_id=report_id)
+        commenter_name = request.json['commenter_name']
+        new_comment = Comment(content=content, commenter_id=commenter_id, commenter_name=commenter_name, report_id=report_id)
         db.session.add(new_comment)
         db.session.commit()
         return _corsify_actual_response(jsonify({'message':'Comentario creado'}))
