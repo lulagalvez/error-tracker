@@ -171,7 +171,7 @@ function AdminView() {
                         <td>{val.urgency}</td>
                         <td><Buscador
                             texto={val.dev_id}
-                            setTexto={nuevo => setDev(key,nuevo)}
+                            setTexto={nuevo => setDev(k,nuevo)}
                         /></td>
                         <td><Status nombre={val.state}/></td>
                         <td><BotonBorrar deleteFunction={e => deleteBug(val.id)}/></td>

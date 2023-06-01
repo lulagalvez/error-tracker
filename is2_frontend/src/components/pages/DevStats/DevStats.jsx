@@ -11,7 +11,7 @@ function DevStats() {
     const devId = Cookies.get('id');
     const [datosDevReport,setDatosDevReport] = useState([]);
     const api_service = new APIService();
-    let dataStatus=[];
+    let dataStatus=useRef([]);
     let completeness=useRef(0);
     async function getStatus(){
         let toDoCount=0;
@@ -52,7 +52,7 @@ function DevStats() {
           setDatosDevReport(response);
         };
         fetchData();
-        dataStatus = getStatus();
+        dataStatus.current = getStatus();
         getCompleteness();
         console.log(datosDevReport);
       }, []); 
