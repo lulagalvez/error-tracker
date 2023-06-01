@@ -214,7 +214,7 @@ def update_dev(id):
     return jsonify({'message': 'Developer actualizado'})
 
 @app.route('/devs/<id>', methods=['DELETE'])
-def delete_dev(id):
+def delete_dev_id(id):
     dev = Developer.query.get_or_404(id)
     db.session.delete(dev)
     db.session.commit()
@@ -432,7 +432,7 @@ def create_comment():
         new_comment = Comment(content=content, commenter_id=commenter_id, report_id=report_id)
         db.session.add(new_comment)
         db.session.commit()
-        return _corsify_actual_response(jsonify({'message':'Comentario creado'}))
+        return jsonify({'message':'Comentario creado'})
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
     
