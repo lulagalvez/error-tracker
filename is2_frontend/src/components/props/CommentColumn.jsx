@@ -34,7 +34,7 @@ const CommentColumn = ({ bugReport }) => {
       setComments(response);
     }
     fetchData();
-  }, []);   
+  });   
 
   return (
     <div className="col-lg-6">

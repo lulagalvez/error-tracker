@@ -63,12 +63,12 @@ def login():
     email = request.json["email"]
     password = request.json["password"]
     user = User.query.filter_by(email = email).first()
-    print("*********INICIA LOGIN*********\n")
+    print("**INICIA LOGIN**\n")
     if user is None:
         response = make_response  (jsonify({"error":"Correo o contraseña incorrectas"}), 401)
     if not bcrypt.check_password_hash(user.password, password):
         response = make_response(jsonify({"error": "Contraseña incorrecta"}), 401)
-    
+
     response = make_response(jsonify({
         "name": user.name,
         "id": user.id,
@@ -78,8 +78,10 @@ def login():
     response.set_cookie('email', user.email)
     response.set_cookie('authenticated', 'true')
     response.set_cookie('type_of_user',user.type_of_user)
+    response.set_cookie('id',user.id)
 
     return response
+
 @app.route("/@me", methods=['GET'])
 def get_current_user():
 
@@ -209,22 +211,6 @@ def delete_dev(id):
     db.session.commit()
     return jsonify({'message': 'Developer eliminado'})
 
-
-@app.route('/user_reports/<user_id>', methods=['GET'])
-def get_user_reports(user_id):
-    reports = Report.query.filter_by(user_id = user_id)
-    temp = []
-    for report in reports:
-        report_data = {}
-        report_data['id'] = report.id
-        report_data['title'] = report.title
-        report_data['date'] = report.date
-        report_data['description'] = report.description
-        report_data['user_id'] = report.user_id
-        report_data['dev_id'] = report.dev_id
-        temp.append(report_data)
-
-    return jsonify(temp)
 ######################################ADMIN######################################
 @app.route('/admins', methods=['GET' ])
 def get_admins():
@@ -346,6 +332,25 @@ def delete_report(id):
 @app.route('/dev_reports/<dev_id>', methods=['GET', ])
 def get_dev_reports(dev_id):
     reports = Report.query.filter_by(dev_id = dev_id)
+    temp = []
+    for report in reports:
+        report_data = {}
+        report_data['id'] = report.id
+        report_data['title'] = report.title
+        report_data['date'] = report.date
+        report_data['description'] = report.description
+        report_data['user_id'] = report.user_id
+        report_data['dev_id'] = report.dev_id
+        report_data['software'] = report.software
+        report_data['urgency'] = report.urgency
+        report_data['status'] = report.status
+        temp.append(report_data)
+
+    return jsonify(temp)
+
+@app.route('/user_reports/<user_id>', methods=['GET', ])
+def get_user_reports(user_id):
+    reports = Report.query.filter_by(user_id = user_id)
     temp = []
     for report in reports:
         report_data = {}
