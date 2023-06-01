@@ -6,6 +6,8 @@ import SideBarUser from "../Sidebars/SidebarUser";
 import { generateBugReports } from "../../utils/generateBugReports";
 import "./UserReportView.css";
 import APIService from '../../services/APIService';
+import Cookies from 'js-cookie';
+
 
 //Aqui tienen que estar los hooks de los bugreports, hasta el momento solo son generados en una funcion en utils, es un diccionario
 //dentro del codigo se usa status en vez de state, cambiar referencia en el json
@@ -13,17 +15,17 @@ import APIService from '../../services/APIService';
 const UserReportView = () => {
   const [selectedBugId, setSelectedBugId] = useState(null);
   const [bugReports, setReports] = useState([]);
+  const userid = Cookies.get('id');
 
   const api_service = new APIService();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api_service.get('reports');
+      const response = await api_service.get('user_reports', userid);
       setReports(response);
     }
     fetchData();
   }, []); 
-
 
   const handleBugReportClick = (bugReport) => {
     setSelectedBugId(bugReport.id);
