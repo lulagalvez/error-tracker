@@ -75,33 +75,11 @@ class Report (db.Model):
     title = db.Column (db.String(80), nullable=False)
     description = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
-<<<<<<< HEAD
-    user_id = db.Column (db.String(30), db.ForeignKey('user.id'))
-    dev_id = db.Column (db.String(30), db.ForeignKey('developer.id'), nullable=True)
-    software = db.Column (db.String(80), db.ForeignKey('software.name'))
-    urgency = db.Column (db.String(10), nullable=True )
-    status = db.Column (db.String(80),nullable=True) 
-
-""" class Report (db.Model):
-    __tablename__ = ('report')
-    id = db.Column (db.Integer, primary_key=True)
-    title = db.Column (db.String(80), nullable=False)
-    description = db.Column (db.Text, nullable = False)
-    date = db.Column (db.DateTime, default=datetime.utcnow)
-    user_id = db.Column (db.String(30), db.ForeignKey('user.id'))
-    user_name = db.Column (db.String(30),nullable = True)
-    dev_id = db.Column (db.String(30), db.ForeignKey('developer.id'), nullable=True)
-    dev_name = db.Column (db.String(30),nullable = True)
-    software = db.Column (db.String(80), db.ForeignKey('software.name'))
-    urgency = db.Column (db.String(10), nullable=True )
-    status = db.Column (db.String(80),nullable=True) """
-=======
     user_id = db.Column (db.Integer, db.ForeignKey('user.id'))
     dev_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable=True)
     software = db.Column (db.Integer, db.ForeignKey('software.id'))
     urgency = db.Column (db.String(80), nullable=True )
     status = db.Column (db.String(80),nullable=True)
->>>>>>> 35dff22b2789abc27914c466529555783071cf07
 
 class Comment (db.Model):
     __tablename__ = ('comment')

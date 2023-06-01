@@ -214,7 +214,7 @@ def update_dev(id):
     return jsonify({'message': 'Developer actualizado'})
 
 @app.route('/devs/<id>', methods=['DELETE'])
-def delete_dev(id):
+def delete_dev_id(id):
     dev = Developer.query.get_or_404(id)
     db.session.delete(dev)
     db.session.commit()
