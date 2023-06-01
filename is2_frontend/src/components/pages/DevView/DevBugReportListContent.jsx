@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import "./DevBugReportListContent.css";
 
+
 const DevBugReportListContent = ({
   searchTerm,
   selectedStatus,
@@ -25,7 +26,8 @@ const DevBugReportListContent = ({
   urgencyOptions,
   accessLevel,
   selectedBugId,
-}) => {
+}
+) => {
   return (
     <div className="container">
       <div className="d-flex mb-2">
@@ -140,7 +142,7 @@ const DevBugReportListContent = ({
             {/*BUG REPORT FILTER*/}
             {filteredBugReports.map((bugReport) => {
               const borderColor = statusColors[bugReport.status] || "gray"; // da valor por defecto
-
+              console.log("b",borderColor);
               return (
                 /*ON CLICK HANDLER*/
                 <div
@@ -181,9 +183,7 @@ const DevBugReportListContent = ({
 
                       <div>
                         {/*ESTADO, EL MARCO CAMBIA DE COLOR */}
-                        <div
-                          className={`card p-1 text-secondary m-0 ${borderColor}`}
-                        >
+                        <div className={`p-1 text-secondary m-0 ${borderColor} rounded`}>
                           {bugReport.status}
                         </div>
                       </div>

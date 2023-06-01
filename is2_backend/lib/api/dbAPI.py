@@ -25,8 +25,8 @@ app.secret_key = "FLASKQLOSIONOLOKO@"
 def _build_cors_preflight_response():
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", 'http://localhost:3000')
-    response.headers.add('Access-Control-Allow-Headers', "*")
-    response.headers.add('Access-Control-Allow-Methods', "*")
+    response.headers.add('Access-Control-Allow-Headers', "http://localhost:3000")
+    response.headers.add('Access-Control-Allow-Methods', "http://localhost:3000")
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 # CORS(app,resources={
@@ -121,7 +121,8 @@ def create_user():
     name = request.json['name']
     email = request.json['email']
     password = request.json['password']
-    new_user = User(name=name, email=email, password = password)
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_user = User(name=name, email=email, password = hashed_password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Usuario creado'})
@@ -179,7 +180,8 @@ def create_dev():
     name = request.json['name']
     email = request.json['email']
     password = request.json['password']
-    new_dev = Developer(name=name, email=email,password=password)
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_dev = Developer(name=name, email=email,password=hashed_password)
     db.session.add(new_dev)
     db.session.commit()
     return jsonify({'message': 'Developer creado'})
@@ -244,7 +246,8 @@ def create_admin():
     name = request.json['name']
     email = request.json['email']
     password = request.json['password']
-    new_admin = Admin(name=name, email=email,password=password)
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_admin = Admin(name=name, email=email,password=hashed_password)
     db.session.add(new_admin)
     db.session.commit()
     return jsonify({'message': 'admin creado'})
@@ -336,14 +339,21 @@ def update_report(id):
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
 
-@app.route('/reports/<id>', methods=['DELETE', ])
+@app.route('/reports/<id>', methods=['DELETE'])
 def delete_report(id):
     report = Report.query.get_or_404(id)
     db.session.delete(report)
     db.session.commit()
     return jsonify({'message': 'Reporte eliminado'})
 
-@app.route('/dev_reports/<dev_id>', methods=['GET', ])
+#@app.route('/reports/<id>', methods=['GET'])
+#def get_names(id):
+#    report = Report.query.filter_by(id).first()
+#    db.session.delete(report)
+#    db.session.commit()
+#    return jsonify({'message': 'Reporte eliminado'})
+
+@app.route('/dev_reports/<dev_id>', methods=['GET'])
 def get_dev_reports(dev_id):
     reports = Report.query.filter_by(dev_id = dev_id)
     temp = []
@@ -359,9 +369,8 @@ def get_dev_reports(dev_id):
         report_data['urgency'] = report.urgency
         report_data['status'] = report.status
         temp.append(report_data)
-
     return jsonify(temp)
-
+    
 #####################################SOFTWARE#####################################
 
 @app.route('/software', methods=['GET'])

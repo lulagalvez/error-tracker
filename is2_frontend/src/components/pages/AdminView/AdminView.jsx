@@ -17,23 +17,37 @@ function AdminView() {
     const [selectedDev,setSelectedDev]= React.useState('')
     let devsName=[]
 
-    const showData = () =>{
-        apiservice.get('reports')
-        //.then(response => response.json())
-        .then(response => {
-            console.log('reports',response);
-            setReports(response);
-        })
-         apiservice.get('devs')
-        .then(response =>{
-            console.log('devs',response);
-            setDevs(response);
-        })
-        // devsName=  devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))
-        // devsName = devs.map(function (item){
-        //     {label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }
-        // } )
-        console.log('devs name', devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id })))
+    const showData = async () =>{
+
+        
+        try {
+            const reportsResponse = await apiservice.get('reports');
+            console.log('reports', reportsResponse);
+            setReports(reportsResponse);
+        
+            const devsResponse = await apiservice.get('devs');
+            console.log('devs', devsResponse);
+            setDevs(devsResponse);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+        // apiservice.get('reports')
+        // //.then(response => response.json())
+        // .then(response => {
+        //     console.log('reports',response);
+        //     setReports(response);
+        // })
+        //  apiservice.get('devs')
+        // .then(response =>{
+        //     console.log('devs',response);
+        //     setDevs(response);
+        // })
+        // // devsName=  devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))
+        // // devsName = devs.map(function (item){
+        // //     {label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }
+        // // } )
+        // console.log('devs name', devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id })))
     }
     
 
@@ -159,21 +173,21 @@ function AdminView() {
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-            {bugs.map((val, key) => {
+            {reports.map((val, key) => {
                 return (
                     <tr key={key}>
                         <td>{val.id}</td>
                         <td>{val.title}</td>
-                        <td>{val.software}</td>
                         <td>{val.user_id}</td>
-                        {/* <td>fecha</td> */}
+                        <td>{val.software}</td>
+                        <td>{val.date}</td>
                         {/* <td>{val.description}</td> */}
                         <td>{val.urgency}</td>
                         <td><Buscador
                             texto={val.dev_id}
                             setTexto={nuevo => setDev(key,nuevo)}
                         /></td>
-                        <td><Status nombre={val.state}/></td>
+                        <td><Status nombre={val.status}/></td>
                         <td><BotonBorrar deleteFunction={e => deleteBug(val.id)}/></td>
                        
                          {/* falta agregar saltos de linea para cada depurador */}

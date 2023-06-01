@@ -138,7 +138,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
                       <div>
                         {/*ESTADO, EL MARCO CAMBIA DE COLOR */}
                         <div
-                          className={`card p-1 text-secondary m-0 ${borderColor}`}
+                          className={`p-1 text-secondary m-0 ${borderColor} rounded`}
                         >
                           {bugReport.status}
                         </div>
