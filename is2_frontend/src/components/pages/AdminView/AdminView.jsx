@@ -173,7 +173,7 @@ function AdminView() {
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-            {reports.map((val, key) => {
+            {bugs.map((val, key) => {
                 return (
                     <tr key={key}>
                         <td>{val.id}</td>
