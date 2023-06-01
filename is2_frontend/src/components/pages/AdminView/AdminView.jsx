@@ -178,7 +178,7 @@ function AdminView() {
                     <tr key={key}>
                         <td>{val.id}</td>
                         <td>{val.title}</td>
-                        <td>{val.user_id}</td>
+                        <td>{val.user_name}</td>
                         <td>{val.software}</td>
                         <td>{val.date}</td>
                         {/* <td>{val.description}</td> */}

@@ -7,8 +7,9 @@ export default (props) =>{
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
-    const userid = Cookies.get('id');   
-
+    const userid = Cookies.get('id');
+    const username = Cookies.get('name');   
+    console.log(userid,username);
     /*
     ESTADOS POSIBLES
     ToDo
@@ -31,7 +32,7 @@ export default (props) =>{
    
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, dev_id:null, software: inputValues.software, status:"ToDo",urgency:1})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null ,software: inputValues.software, status:"ToDo",urgency:1})
         .then(response =>{
             console.log(response);
             if(response?.message === 'Reporte creado'){
@@ -117,9 +118,7 @@ export default (props) =>{
             <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success" style={showSuccessAlert?{display:"block"}:{display:'none'}}>
                 <strong> Reporte enviado</strong> 
                    <button type="button" class="btn-close" data-bs-toggle="collapse" data-bs-target="#alert-success" aria-label="Close" aria-controls="alert-success" id="close-success" onClick={()=>setShowSuccessAlert(false)}></button>
-            </div>
-
-            
+            </div>      
 
             <div class="alert alert-danger alert-dismissible fade show " role="alert" id="alert-fail" style={showErrorAlert?{display:"block"}:{display:'none'}}>
                 <strong>¡Error! Reporte no enviado</strong>
