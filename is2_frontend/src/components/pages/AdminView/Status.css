@@ -1,0 +1,19 @@
+.closed{
+    color:#1f9254;
+    background-color: #ebf9f1;
+}
+
+.pending{
+    color:#cd6200;
+    background-color: #fef2e5;
+}
+
+.asking-reasign{
+    color:#a30d11;
+    background-color: #fbe7e8;
+}
+
+.testing{
+    color:#a2a359;
+    background-color:#eff183;
+}

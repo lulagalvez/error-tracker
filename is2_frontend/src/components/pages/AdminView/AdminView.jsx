@@ -1,7 +1,13 @@
 import React,{useEffect, useState} from 'react'
 import APIService from '../../services/APIService';
 import {BotonBorrar} from './BotonBorrar'
-import {BotonEditar} from './BotonEditar'
+import {Buscador} from './Buscador'
+import {CambiarPrioridad} from './CambiarPrioridad'
+import {CambiarEstado} from './CambiarEstado'
+import {Status} from './Status'
+import './TablaAdmin.css'
+import '../Sidebars/SidebarAdmin'
+import SideBarAdmin from '../Sidebars/SidebarAdmin';
 
 function AdminView() {
     const [reports,setReports] =React.useState([])
@@ -11,23 +17,37 @@ function AdminView() {
     const [selectedDev,setSelectedDev]= React.useState('')
     let devsName=[]
 
-    const showData = () =>{
-        apiservice.get('reports')
-        //.then(response => response.json())
-        .then(response => {
-            console.log('reports',response);
-            setReports(response);
-        })
-         apiservice.get('devs')
-        .then(response =>{
-            console.log('devs',response);
-            setDevs(response);
-        })
-        // devsName=  devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))
-        // devsName = devs.map(function (item){
-        //     {label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }
-        // } )
-        console.log('devs name', devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id })))
+    const showData = async () =>{
+
+        
+        try {
+            const reportsResponse = await apiservice.get('reports');
+            console.log('reports', reportsResponse);
+            setReports(reportsResponse);
+        
+            const devsResponse = await apiservice.get('devs');
+            console.log('devs', devsResponse);
+            setDevs(devsResponse);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+        // apiservice.get('reports')
+        // //.then(response => response.json())
+        // .then(response => {
+        //     console.log('reports',response);
+        //     setReports(response);
+        // })
+        //  apiservice.get('devs')
+        // .then(response =>{
+        //     console.log('devs',response);
+        //     setDevs(response);
+        // })
+        // // devsName=  devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }))
+        // // devsName = devs.map(function (item){
+        // //     {label: item.name, value: item.name == 'N/A' ? 'queso' : item.id }
+        // // } )
+        // console.log('devs name', devs.map(item=> ({label: item.name, value: item.name == 'N/A' ? 'queso' : item.id })))
     }
     
 
@@ -62,16 +82,83 @@ function AdminView() {
     //     // setReports(reportsResponse);
     // }
 
-
+    const [num,setNum]=useState(0);
+    const [idP,setIdP]=useState("");
+    const [idE,setIdE]=useState("");
+    const [estado,setEstado]=useState("");
+    const [bugs,setBugs]=useState(results);
+    const cambiarNum=(nuevo)=>{
+      setNum(nuevo);
+    }
+    const cambiarIdP=(nuevo)=>{
+      setIdP(nuevo);
+    }
+    const cambiarIdE=(nuevo)=>{
+      setIdE(nuevo);
+    }
+    const cambiarEstado=(nuevo)=>{
+      setEstado(nuevo);
+    }
+    const copiaArray=()=>{
+        var newArray=[];
+        bugs.map((bug)=>{
+            if(bug!==undefined) newArray.push(bug);
+        })
+        return newArray;
+    }
+    const getPos=(bug_id,array)=>{
+        for(var i=0;i<array.length;i++){
+            if(bug_id.startsWith(array[i].id)) return i;
+        }
+        return -1;
+    }
+    const setPrioridad=(bug_id,nuevaPr)=>{
+        var newArray=copiaArray();
+        const pos=getPos(bug_id,newArray);
+        if(pos==-1) return;
+        newArray[pos].urgency=nuevaPr;
+        newArray.sort((a,b)=>{
+            return a.urgency-b.urgency;
+        });
+        setBugs(newArray);
+    }
+    const setStatus=(bug_id,nuevoSt)=>{
+        if(nuevoSt=="") return;
+        var newArray=copiaArray();
+        const pos=getPos(bug_id,newArray);
+        if(pos==-1) return;
+        newArray[pos].state=nuevoSt;
+        setBugs(newArray);
+    }
+    const setDev=(pos,nuevoDev)=>{
+        var newArray=copiaArray();
+        newArray[pos].dev_id=nuevoDev;
+        setBugs(newArray);
+    }
+    const deleteBug=(bug_id)=>{
+        const newArray=bugs.filter((bug) => bug.id!==bug_id);
+        setBugs(newArray);
+    }
     //render
-    return( 
-        
+    return(
         <div class="container mt-4">
         <h1>Vista de lista de bugs</h1>
         <hr />
         {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}
         <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
+        <div className="ms-3">
+            <CambiarPrioridad
+                cambiarId={nuevo => cambiarIdP(nuevo)}
+                cambiarQ={nuevo => cambiarNum(nuevo)}
+                clickFunction={e => setPrioridad(idP,num)}
+            />
+            <CambiarEstado
+                cambiarId={nuevo => cambiarIdE(nuevo)}
+                cambiarStatus={nuevo => cambiarEstado(nuevo)}
+                clickFunction={e => setStatus(idE,estado)}
+            />
+        </div>
         <table class="table table-striped">
         <thead>
                         <tr>
@@ -86,19 +173,22 @@ function AdminView() {
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-            {results.map((val, key) => {
+            {reports.map((val, key) => {
                 return (
                     <tr key={key}>
                         <td>{val.id}</td>
                         <td>{val.title}</td>
-                        <td>{val.software}</td>
                         <td>{val.user_id}</td>
-                        {/* <td>fecha</td> */}
+                        <td>{val.software}</td>
+                        <td>{val.date}</td>
                         {/* <td>{val.description}</td> */}
                         <td>{val.urgency}</td>
-                        <td><BotonEditar/>{val.dev_id}</td>
-                        <td>{val.state}</td>
-                        <td><BotonBorrar/></td>
+                        <td><Buscador
+                            texto={val.dev_id}
+                            setTexto={nuevo => setDev(key,nuevo)}
+                        /></td>
+                        <td><Status nombre={val.status}/></td>
+                        <td><BotonBorrar deleteFunction={e => deleteBug(val.id)}/></td>
                        
                          {/* falta agregar saltos de linea para cada depurador */}
                        
@@ -122,4 +212,4 @@ function AdminView() {
     )
 }
 
-export default AdminView
+export default AdminView;

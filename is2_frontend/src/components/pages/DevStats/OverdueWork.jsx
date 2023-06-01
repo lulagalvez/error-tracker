@@ -1,5 +1,5 @@
 import React, { useEffect} from 'react'
-import './OverdueWork.css'
+
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 function OverdueWork(props) {

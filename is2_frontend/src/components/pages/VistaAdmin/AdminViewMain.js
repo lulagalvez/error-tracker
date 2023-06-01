@@ -4,6 +4,7 @@ import React from 'react';
 import {TablaAdmin} from './templates/TablaAdmin';
 /*import {CambiarEstado} from './templates/CambiarEstado'
 import {CambiarPrioridad} from './templates/CambiarPrioridad'*/
+import "./styles.css";
 
 function AdminViewMain() {
   return (

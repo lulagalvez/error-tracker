@@ -1,16 +1,39 @@
 import React, {useState, useEffect} from 'react'
 import './bugForm.css'
-import APIService from '../../services/APIService'
+import APIService from '../../services/APIService';
+import Cookies from 'js-cookie';
 export default (props) =>{
-    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:1});
+    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:[]});
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
+    const[softwareIds,setSoftwareIds]=useState([]);
+    const userid = Cookies.get('id');   
 
+    /*
+    ESTADOS POSIBLES
+    ToDo
+    Pending
+    Testing
+    Closed
 
+    PRIORIDADES POSIBLES
+    1
+    2
+    3
+    4
+    5
+
+    SOFTWARES POSIBLES 
+    Software1
+    Software2
+    Software3
+    */
+   
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:1, dev_id:null, software: inputValues.software, status:"to-do",urgency:null})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, dev_id:null, software: inputValues.software, status:"ToDo",urgency:1})
         .then(response =>{
+            console.log(response);
             if(response?.message === 'Reporte creado'){
                 setShowSuccessAlert(true);
                 
@@ -20,8 +43,16 @@ export default (props) =>{
             }
         })
         .catch(error => console.log('error',error))
+        
     }
-
+    useEffect(() => {
+        async function fetchData() {
+          const response = await apiservice.get('software');
+          setSoftwareIds(response);
+        }
+        fetchData();
+      }, []);
+    
     const handleOnChange = event =>{
         const {name,value} =event.target;
         setInputValues({
@@ -38,8 +69,8 @@ export default (props) =>{
     return(
         <>
         
-        <div class='container  mt-4 mb-4 border border-2 position-relative' style={{width:"657px", height:"807px", padding: "60px"}} >
-            <div class="position-absolute start-50 translate-middle">
+        <div class='container text-center mb-4 border border-2' style={{width:"657px", height:"807px", padding: "60px"}} >
+            <div class="text-center">
             <h1  className="titulo">{props.title}</h1>
             </div>
             <div class=" mx-auto mt-4 mb-4 md-4 lx-4" style={{padding:"60px", width:"500px"}}>
@@ -51,9 +82,13 @@ export default (props) =>{
                         <label for="floatingTitle">Título del ticket</label>
                     </div>
                     <div class="mb-4 ">
-                        <select name='software' class="form-select" required onChange={handleOnChange} value={inputValues.software } > 
-                            <option value='1'>Software 1</option>
-                            <option value='2'>Software 2</option>
+                        <select name='software' class="form-select" required onChange={handleOnChange} value={inputValues.software.name } > 
+                            <option value="">--Please choose an option--</option>
+                                {softwareIds.map(softwareIds => (
+                                <option key={softwareIds.id} value={softwareIds.id}>
+                                    {softwareIds.name}
+                                </option>
+                                ))}
                         </select>
                     </div>
 

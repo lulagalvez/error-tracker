@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState } from 'react'
-//import { JobStatusData } from './Data'
 import ProgressBarSoftware from './ProgressBarSoftware'
 
 const pct = 100
