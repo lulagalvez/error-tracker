@@ -1,12 +1,12 @@
 import React, {Component, useEffect} from 'react';
-import Navbar from './components/Navbar';
-import './components/css/App.css';
-import Home from './components/pages/Home/Home';
+/* import Navbar from './components/Navbar'; */
+import './components/css/App.css';/* 
+import Home from './components/pages/Home/Home'; */
 import CrearBug from './components/pages/BugForm/bugForm';
 import AdminView from './components/pages/AdminView/AdminView';
-import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain';
+/* import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain'; */
 import DevView from './components/pages/DevView/DevView';
-import DevView_test from './components/pages/DevView/DevView_test';
+/* import DevView_test from './components/pages/DevView/DevView_test'; */
 import UserReportView from  './components/pages/User/UserReportView'; 
 import SideBarUser  from './components/pages/Sidebars/SidebarUser';
 import SideBarAdmin from './components/pages/Sidebars/SidebarAdmin';
@@ -14,8 +14,10 @@ import SideBarDeveloper from './components/pages/Sidebars/SidebarDeveloper';
 import SignUp from './components/pages/SignUp/SignUp';
 import LogIn from './components/pages/Login/Login';
 import DevStats from './components/pages/DevStats/DevStats'
+import WelcomeIcon from './components/welcome';
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
+import { components } from 'react-select';
 
 const ProtectedRoute = ({
   redirectPath = '/login',
@@ -47,10 +49,9 @@ class App extends Component {
     return (
         <>
         <Router>
-        {/* <SideBarUser /> */}
-{/*           <Navbar />   */}
           <Routes>
               <Route path='/signup' element={<SignUp />} />
+             <Route path='/welcome' element={<WelcomeIcon />} />
               {/* <Route path='/adminview' element= {<AdminViewMain />} /> */}
               <Route path='/userreportview' element={<UserReportView />} />
               <Route path='/devstats' element={<DevStats />} />    
@@ -61,21 +62,34 @@ class App extends Component {
               {/* RUTAS PROTEGIDAS */} 
               <Route path='/adminview'element={<ProtectedRoute redirectPath="/login" 
                 isAllowed={logged && type_of_user === 'admin'}>
+                  <WelcomeIcon/>
                   <SideBarAdmin/>
                   <AdminView/>  
                 </ProtectedRoute>}
               />
+            
             <Route path='/devview' element={
               <ProtectedRoute redirectPath="/login"
                 isAllowed={logged && type_of_user === 'developer'}>
+                <WelcomeIcon />
                 <SideBarDeveloper/>
                 <DevView />
               </ProtectedRoute>} 
+            />
+            
+            <Route path='/devstats' element={
+              <ProtectedRoute redirectPath="/login"
+                isAllowed={logged && type_of_user === 'developer'}>
+                <WelcomeIcon />
+                <SideBarDeveloper />
+                <DevStats />
+              </ProtectedRoute>}
             /> 
             
             <Route path='/report' element={
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
+              <WelcomeIcon />
               <SideBarUser />
               <CrearBug title='Reportar bug'/>
             </ProtectedRoute>} />
@@ -83,6 +97,7 @@ class App extends Component {
             <Route path='/my_reports' element={
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
+              <WelcomeIcon />
               <SideBarUser/>
               <UserReportView />
             </ProtectedRoute>} /> 

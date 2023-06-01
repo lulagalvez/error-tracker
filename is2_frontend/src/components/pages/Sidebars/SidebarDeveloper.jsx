@@ -22,7 +22,7 @@ export const SideBarDeveloper = () => {
                 </div>
             </Link>
 
-            <Link to="/report">
+            <Link to="/devstats">
                 <div className="icon-container new-report">
                     <i className="bi bi-clipboard-data-fill"></i>
                     <h1>Estadísticas</h1>
