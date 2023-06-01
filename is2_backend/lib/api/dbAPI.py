@@ -311,7 +311,7 @@ def create_report():
         new_report = Report(title=title, description=description, user_id=user_id,user_name=user_name,dev_id=dev_id,dev_name = dev_name,software = software, urgency = urgency, status = status)
         db.session.add(new_report)
         db.session.commit()
-        return _corsify_actual_response(jsonify({'message':'Reporte creado'}))
+        return jsonify({'message':'Reporte creado'})
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 

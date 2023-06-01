@@ -24,15 +24,15 @@ function SoftwareCompletition() {
           </div>
 
 
-          <div class="progress flex-grow-1 position-relative" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{
+          <div className="progress flex-grow-1 position-relative" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{
             'height': '40px',
-            'border-radius': '30px'
+            'borderRadius': '30px'
           }}>
             <span className='position-absolute top-50 start-50 translate-middle text-white fs-5'>70%</span>
-            <div class="progress-bar" style={{
+            <div className="progress-bar" style={{
               width: '70%',
-              'background-color': '#34C759',
-              'border-radius': '30px'
+              'backgroundColor': '#34C759',
+              'borderRadius': '30px'
             }}></div>
           </div>
 
