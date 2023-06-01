@@ -87,7 +87,8 @@ class Comment (db.Model):
     content = db.Column (db.Text, nullable = False)
     date = db.Column (db.DateTime, default=datetime.utcnow)
     report_id = db.Column (db.Integer, db.ForeignKey('report.id'), nullable=False)
-    commenter_id = db.Column (db.Integer, db.ForeignKey('developer.id'), nullable=False)
+    commenter_id = db.Column (db.Integer, db.ForeignKey('user.id'), nullable=False)
+    commenter_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
 
 
 

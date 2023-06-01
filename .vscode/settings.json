@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./is2_backend/lib/data_base"
-    ]
+    ],
+    "python.pythonPath": "env\\Scripts\\python.exe"
 }
