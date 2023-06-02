@@ -14,8 +14,6 @@ function AdminView() {
     let devsName=[]
 
     const showData = async () =>{
-
-        
         try {
             const reportsResponse = await apiservice.get('reports');
             console.log('reports', reportsResponse);
@@ -36,6 +34,7 @@ function AdminView() {
         // console.log(e.target.value)
     }
     async function handleDevSelect(event) {
+        console.log("true dat")
         const devId = event.target.value;
         setSelectedDev(devId);
     }
@@ -57,6 +56,8 @@ function AdminView() {
     const [estado,setEstado]=useState("");
     useEffect( ()=> {
         showData()
+        console.log("right ere boss")
+      //  console.log('bugs', bugs);
     }, [])
 
     // async function handleDevSelect(event) {
@@ -86,14 +87,16 @@ function AdminView() {
         reports[pos].dev_id=nuevoDev;
       //  setBugs(newArray);
     }
-    const deleteReport  = (id) => {
-        if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
-            console.log(id)
-            apiservice.delete("reports", id)
 
-            const temp = [...reports];
-            temp.splice(id, 1);
-            setReports(temp);
+    const updateReportDev = (report, dev) => {
+        apiservice.patch("reports", report.id, )
+    }
+
+    const deleteReport  = (report) => {
+        if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
+            apiservice.delete("reports", report.id)
+
+            setReports(reports.filter(item => item !== report));
         }
     }
     
@@ -111,7 +114,7 @@ function AdminView() {
                     Cambiar prioridad: -
                     <input type="text" onChange={e => setNumP(e.target.value)} placeholder="ID"/>
                     <input type="number" onChange={e => setIdP(e.target.value)} placeholder="Prioridad"/>
-                    <button onClick={setPrioridad}>Cambiar</button>
+                    <button onClick={() => setPrioridad()}>Cambiar</button>
                 </p>
             </div>
             <div>
@@ -160,7 +163,7 @@ function AdminView() {
                         <td><Status nombre={val.status}/></td>
                         <td>
                             <BotonBorrar
-                                report={val.id}
+                                report={val}
                                 deleteReport={deleteReport}
                             />
                         </td>
@@ -168,13 +171,14 @@ function AdminView() {
                          {/* falta agregar saltos de linea para cada depurador */}
                        
                         <div className='Devs-container' style={{ width: '300px' }}>
-                        <p>{selectedDev}</p>
+                        <p>{selectedDev.name}</p>
+
                         <select id="devs" onChange={handleDevSelect}>
                             <option value="">--Please choose an option--</option>
                             {devs.map(dev => (
-                            <option key={dev.name} value={dev.name}>
-                                {dev.name}
-                            </option>
+                                <option key={dev.id} value={dev.id}>
+                                    {dev.name}
+                                </option>
                             ))}
                         </select>
                     </div>
