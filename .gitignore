@@ -3,7 +3,7 @@
 /is2_backend/venv/*
 /is2_backend/venv/
 /venv/
-/instances/
+/instances/example.db
 
 # Python virtual environment
 venv/
