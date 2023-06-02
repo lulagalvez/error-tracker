@@ -133,10 +133,15 @@ function AdminView() {
         reports[pos].dev_id=nuevoDev;
       //  setBugs(newArray);
     }
-    const deleteBug=(bug_id)=>{
-        var newArray=results.filter((bug) => bug.id!==bug_id);
-        results=newArray;
-     //   setBugs(newArray);
+    const deleteReport  = (id) => {
+        if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
+            console.log(id)
+            apiservice.delete("reports", id)
+
+            const temp = [...reports];
+            temp.splice(id, 1);
+            setReports(temp);
+        }
     }
     
     //render
@@ -191,7 +196,12 @@ function AdminView() {
                             setTexto={nuevo => setDev(key,nuevo)}
                         /></td>
                         <td><Status nombre={val.status}/></td>
-                        <td><BotonBorrar deleteFunction={e => deleteBug(val.id)}/></td>
+                        <td>
+                            <BotonBorrar
+                                report={val.id}
+                                deleteReport={deleteReport}
+                            />
+                        </td>
                        
                          {/* falta agregar saltos de linea para cada depurador */}
                        
