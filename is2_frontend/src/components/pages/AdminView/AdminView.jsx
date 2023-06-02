@@ -96,7 +96,7 @@ function AdminView() {
         if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
             apiservice.delete("reports", report.id)
 
-            setReports(reports.filter(item => item !== report));
+            setReports(reports?.filter(item => item !== report));
         }
     }
     
@@ -109,27 +109,43 @@ function AdminView() {
         <div class= "container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
         <br /> <br />
         <div className="ms-3">
-            <div>
-                <p>
-                    Cambiar prioridad: -
-                    <input type="text" onChange={e => setNumP(e.target.value)} placeholder="ID"/>
-                    <input type="number" onChange={e => setIdP(e.target.value)} placeholder="Prioridad"/>
-                    <button onClick={() => setPrioridad()}>Cambiar</button>
+                 <p>
+                    Cambiar prioridad: 
                 </p>
+            <form>  
+            <div className="row">
+
+                    <div className="col-3"><input className="form-control" type="text" onChange={e => setNumP(e.target.value)} placeholder="ID"/> </div>
+                    
+                    <div className="col-3"><input className="form-control" type="number" onChange={e => setIdP(e.target.value)} placeholder="Prioridad" min="1" max="6"/></div>
+                    <div className="col-2"><button className="btn btn-outline-secondary" onClick={() => setPrioridad()}>Cambiar</button></div>
+                
             </div>
+            </form>
+
             <div>
-      <p>
-            Cambiar estado: -
-            <input type="text" onChange={e => setNumE(e.target.value)} placeholder='ID'/>
-            <select onChange={e => setIdE(e.target.value)}>
-                <option value="">--Seleccione una opcion--</option>
-                <option value="Closed">Cerrado</option>
-                <option value="Pending">Pendiente</option>
-                <option value="ToDo">Por asignar</option>
-                <option value="Testing">Testing</option>
-            </select>
-            <button onClick={setStatus}>Cambiar</button>
-      </p>
+            <p>
+            Cambiar estado:
+            </p>
+            <form>  
+            <div className="row">
+                <div className="col-3">
+                <input className="form-control"  type="text" onChange={e => setNumE(e.target.value)} placeholder='ID'/>
+                </div>
+                <div className="col-3">
+                <select className="form-select"  onChange={e => setIdE(e.target.value)}>
+                    <option value="">--Seleccione una opcion--</option>
+                    <option value="Closed">Cerrado</option>
+                    <option value="Pending">Pendiente</option>
+                    <option value="ToDo">Por asignar</option>
+                    <option value="Testing">Testing</option>
+                </select>
+                </div>
+                <div className="col-2">
+                    <button className="btn btn-outline-secondary" onClick={() => setStatus}>Cambiar</button>
+                </div>
+            </div>
+            </form>
     </div>
         </div>
         <table class="table table-striped">
@@ -146,7 +162,7 @@ function AdminView() {
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-            {results.map((val, key) => {
+            {results && results.map((val, key) => {
                 return (
                     <tr key={key}>
                         <td style={{ textAlign: 'center' }}>{val.id}</td>
@@ -175,7 +191,7 @@ function AdminView() {
 
                         <select id="devs" onChange={handleDevSelect}>
                             <option value="">--Please choose an option--</option>
-                            {devs.map(dev => (
+                            {devs && devs.map(dev => (
                                 <option key={dev.id} value={dev.id}>
                                     {dev.name}
                                 </option>
