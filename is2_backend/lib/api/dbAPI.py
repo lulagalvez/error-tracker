@@ -358,6 +358,17 @@ def update_reportstatus(id,status):
     db.session.commit()
     return jsonify({'message': 'Estado del reporte actualizado'})
 
+@app.route('/reports/<id>/update_dev/<email>', methods=['PATCH'])
+def update_report_dev(id,email):
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    report = Report.query.get(id)
+    dev = User.query.filter_by(email = email).first()
+    report.dev_name = dev.name
+    report.dev_id = dev.id
+    db.session.commit()
+    return jsonify({'message': 'Depurador del reporte actualizado'})
+
 @app.route('/reports/<id>', methods=['DELETE'])
 def delete_report(id):
     report = Report.query.get_or_404(id)
