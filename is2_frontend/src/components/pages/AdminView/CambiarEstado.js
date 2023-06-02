@@ -10,7 +10,7 @@ export const CambiarEstado = ({cambiarId,cambiarStatus,clickFunction}) => {
                 <option value="">--Seleccione una opcion--</option>
                 <option value="Closed">Cerrado</option>
                 <option value="Pending">Pendiente</option>
-                <option value="ToDo">Solicita Reasignar</option>
+                <option value="ToDo">Por asignar</option>
                 <option value="Testing">Testing</option>
             </select>
             <button onClick={clickFunction}>Cambiar</button>
