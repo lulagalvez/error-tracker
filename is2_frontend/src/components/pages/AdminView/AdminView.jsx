@@ -79,7 +79,7 @@ function AdminView() {
     useEffect( ()=> {
         showData()
       //  console.log('bugs', bugs);
-    }, [])
+    }, reports)
 
     // async function handleDevSelect(event) {
     //     const devId = event.target.value;
@@ -135,14 +135,12 @@ function AdminView() {
         reports[pos].dev_id=nuevoDev;
       //  setBugs(newArray);
     }
-    const deleteReport  = (id) => {
+    const deleteReport  = (report) => {
         if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
-            console.log(id)
-            apiservice.delete("reports", id)
+            console.log(report.id)
+            apiservice.delete("reports", report.id)
 
-            const temp = [...reports];
-            temp.splice(id, 1);
-            setReports(temp);
+            setReports(reports.filter(item => item !== report));
         }
     }
     
@@ -200,7 +198,7 @@ function AdminView() {
                         <td><Status nombre={val.status}/></td>
                         <td>
                             <BotonBorrar
-                                report={val.id}
+                                report={val}
                                 deleteReport={deleteReport}
                             />
                         </td>
