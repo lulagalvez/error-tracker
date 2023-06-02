@@ -3,15 +3,13 @@ import './bugForm.css'
 import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
 export default (props) =>{
-    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:[]});
+    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:0});
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
-    const[softwareName,setSoftwareName]= useState('')
     const software_name= useRef('');
     const userid = Cookies.get('id');
     const username = Cookies.get('name');   
-    console.log(userid,username);
     /*
     ESTADOS POSIBLES
     ToDo
@@ -31,7 +29,10 @@ export default (props) =>{
     Software2
     Software3
     */
-   
+    const delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+      );
+
     const apiservice=new APIService();
     const reportBug = () =>{
         apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null , software: inputValues.software, software_name: software_name.current ?? '', status:"ToDo",urgency:1})
@@ -54,7 +55,8 @@ export default (props) =>{
           setSoftwareIds(response);
         }
         fetchData();
-      }, []);
+        
+      }, [inputValues.software]);
     
     const handleOnChange = event =>{
         const {name,value} =event.target;
@@ -62,18 +64,14 @@ export default (props) =>{
             ...inputValues,
             [name]:value
         });
+        const val = softwareIds?.find(x =>  x.id == inputValues.software);
+        software_name.current=val?.name ?? '';
     }
-    const handleOnSelect = event =>{
-        const {name,value} =event.target;
-        setInputValues({
-            ...inputValues,
-            [name]:value
-        });
-    }
+
     const handleSubmit=(e)=>{
-        e.preventDefault()
+        e.preventDefault();
         reportBug();
-        setInputValues({title:'', description:'',pasos:"",software:[]});
+        setInputValues({title:'', description:'',pasos:"",software:0});
         software_name.current='';
     }
     
@@ -93,13 +91,14 @@ export default (props) =>{
                         <label htmlFor="floatingTitle">Título del ticket</label>
                     </div>
                     <div className="mb-4 ">
-                        <select name='software' className="form-select" required onChange={handleOnSelect} value={inputValues.software} > 
+                        <select name='software' className="form-select" required onChange={handleOnChange} value={inputValues.software} > 
                             <option value="">--Please choose an option--</option>
-                                {softwareIds.map(softwareIds => (
+                                {softwareIds && softwareIds.map(softwareIds => (
                                 <option key={softwareIds.id} value={softwareIds.id}>
-                                    {software_name.current=softwareIds.name}
+                                    {softwareIds.name}
                                 </option>
                                 ))}
+                                
                         </select>
                     </div>
 

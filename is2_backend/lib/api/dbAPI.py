@@ -509,7 +509,12 @@ def create_software():
     db.session.add(new_soft)
     db.session.commit()
     return jsonify({'message': 'Software creado'})
-
+@app.route('/software/<id>', methods=['DELETE'])
+def delete_software_id(id):
+    software = Software.query.get_or_404(id)
+    db.session.delete(software)
+    db.session.commit()
+    return jsonify({'message': 'Software eliminado'})
 def get_software_reports(id):
     reports = Report.query.filter_by(software_id=id).all()
     if reports:

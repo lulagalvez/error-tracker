@@ -39,7 +39,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   const filteredBugReports = bugReports.filter((bugReport) => {
     const title = bugReport.title.toString().toLowerCase();
     const status = bugReport.status.toString().toLowerCase();
-    const software = bugReport.software;
+    const software = bugReport.software_name.toString().toLowerCase();
     const isMatchingTitle = title.includes(searchTerm.toLowerCase());
     const isMatchingStatus = selectedStatus
       ? status === selectedStatus.toLowerCase()
@@ -133,7 +133,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
                       </div>
                       {/*SOFTWARE*/}
                       <h6 className="text-secondary m-0">
-                        Software: {bugReport.software}
+                        Software: {bugReport.software_name}
                       </h6>
                       <div>
                         {/*ESTADO, EL MARCO CAMBIA DE COLOR */}

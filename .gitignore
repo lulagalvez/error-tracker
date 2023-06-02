@@ -24,7 +24,7 @@ node_modules/
 *.db
 
 # Dependency directories
-lib/
+
 lib64/
 include/
 bin/
