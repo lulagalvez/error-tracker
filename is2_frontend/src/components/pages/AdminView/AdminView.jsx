@@ -88,8 +88,6 @@ function AdminView() {
     //     // setReports(reportsResponse);
     // }
 
-
-
     const cambiarIdE=(nuevo)=>{
       setIdE(nuevo);
     }
