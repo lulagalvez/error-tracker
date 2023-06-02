@@ -339,6 +339,25 @@ def update_report(id):
     db.session.commit()
     return jsonify({'message': 'Reporte actualizado'})
 
+@app.route('/reports/<id>/update_priority/<priority>', methods=['PATCH'])
+
+def update_reportprio(id,priority):
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    report = Report.query.get(id)
+    report.urgency = priority
+    db.session.commit()
+    return jsonify({'message': 'Prioridad del reporte actualizado'})
+    
+@app.route('/reports/<id>/update_status/<status>', methods=['PATCH'])
+def update_reportstatus(id,status):
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    report = Report.query.get(id)
+    report.status = status
+    db.session.commit()
+    return jsonify({'message': 'Estado del reporte actualizado'})
+
 @app.route('/reports/<id>', methods=['DELETE'])
 def delete_report(id):
     report = Report.query.get_or_404(id)

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import './bugForm.css'
 import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
@@ -8,6 +8,7 @@ export default (props) =>{
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
     const[softwareName,setSoftwareName]= useState('')
+    const software_name= useRef('');
     const userid = Cookies.get('id');
     const username = Cookies.get('name');   
     console.log(userid,username);
@@ -33,7 +34,7 @@ export default (props) =>{
    
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null , software: inputValues.software, software_name: softwareName ?? 'empty', status:"ToDo",urgency:1})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null , software: inputValues.software, software_name: software_name.current ?? '', status:"ToDo",urgency:1})
         .then(response =>{
             console.log(response);
             if(response?.message === 'Reporte creado'){
@@ -68,18 +69,12 @@ export default (props) =>{
             ...inputValues,
             [name]:value
         });
-        console.log(inputValues.software);
-        for(var id in softwareIds){
-            if(id){
-                if(id==inputValues.software){
-                    setSoftwareName(softwareIds[id].name);
-                }
-            }
-        }
     }
     const handleSubmit=(e)=>{
         e.preventDefault()
         reportBug();
+        setInputValues({title:'', description:'',pasos:"",software:[]});
+        software_name.current='';
     }
     
     return(
@@ -102,7 +97,7 @@ export default (props) =>{
                             <option value="">--Please choose an option--</option>
                                 {softwareIds.map(softwareIds => (
                                 <option key={softwareIds.id} value={softwareIds.id}>
-                                    {softwareIds.name}
+                                    {software_name.current=softwareIds.name}
                                 </option>
                                 ))}
                         </select>
