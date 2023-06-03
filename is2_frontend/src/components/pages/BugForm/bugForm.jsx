@@ -9,7 +9,8 @@ export default (props) =>{
     const[softwareIds,setSoftwareIds]=useState([]);
     const software_name= useRef('');
     const userid = Cookies.get('id');
-    const username = Cookies.get('name');   
+    const username = Cookies.get('name');
+    const useremail = Cookies.get('email')   
     /*
     ESTADOS POSIBLES
     ToDo
@@ -35,7 +36,7 @@ export default (props) =>{
 
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, dev_id:null,dev_name:null , software: inputValues.software, software_name: software_name.current ?? '', status:"ToDo",urgency:1})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, user_email: useremail, dev_id:null,dev_name:null ,dev_email:null, software: inputValues.software, software_name: software_name.current ?? '', status:"ToDo",urgency:1})
         .then(response =>{
             console.log(response);
             if(response?.message === 'Reporte creado'){

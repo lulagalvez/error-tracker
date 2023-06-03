@@ -16,13 +16,13 @@ const UserReportView = () => {
   const [selectedBugId, setSelectedBugId] = useState(null);
   const [bugReports, setReports] = useState([]);
   const[softwareName,setSoftwareName]= useState([]);
-  const userid = Cookies.get('id');
+  const user_email = Cookies.get('email');
 
   const api_service = new APIService();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api_service.get('user_reports', userid);
+      const response = await api_service.get('user_reports', user_email);
       setReports(response);
     }
     fetchData();

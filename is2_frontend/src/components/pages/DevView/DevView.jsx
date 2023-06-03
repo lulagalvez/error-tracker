@@ -14,13 +14,13 @@ import Cookies from 'js-cookie';
 const DevView = () => {
   const [selectedBugId, setSelectedBugId] = useState(null);
   const [bugReports, setReports] = useState([]);
-  const devid = Cookies.get('id');
+  const dev_email = Cookies.get('email');
 
   const api_service = new APIService();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api_service.get('dev_reports', devid);
+      const response = await api_service.get('dev_reports', dev_email);
       setReports(response);
     }
     fetchData();

@@ -265,9 +265,14 @@ def get_report(id):
     report_data = {}
     report_data['id'] = report.id
     report_data['title'] = report.title
+    report_data['date'] = report.date
     report_data['description'] = report.description
     report_data['user_id'] = report.user_id
+    report_data['user_name'] = report.user_name 
+    report_data['user_email'] = report.user_email 
     report_data['dev_id'] = report.dev_id
+    report_data['dev_name'] = report.dev_name        
+    report_data['dev_email'] = report.dev_email        
     report_data['software'] = report.software
     report_data['software_name'] = report.software_name
     report_data['urgency'] = report.urgency
@@ -286,8 +291,10 @@ def get_reports():
         report_data['description'] = report.description
         report_data['user_id'] = report.user_id
         report_data['user_name'] = report.user_name 
+        report_data['user_email'] = report.user_email 
         report_data['dev_id'] = report.dev_id
         report_data['dev_name'] = report.dev_name        
+        report_data['dev_email'] = report.dev_email        
         report_data['software'] = report.software
         report_data['software_name'] = report.software_name
         report_data['urgency'] = report.urgency
@@ -305,13 +312,26 @@ def create_report():
         description = request.json['description']
         user_id = request.json['user_id']
         user_name = request.json ['user_name']
+        user_email = request.json['user_email']
         dev_id = request.json['dev_id']
         dev_name = request.json ['dev_name']
+        dev_email = request.json ['dev_email']
         software = request.json['software']
         software_name = request.json['software_name']
         urgency = request.json['urgency'] 
         status = request.json['status']
-        new_report = Report(title=title, description=description, user_id=user_id,user_name=user_name,dev_id=dev_id,dev_name = dev_name,software = software,software_name=software_name, urgency = urgency, status = status)
+        new_report = Report(title=title,
+                            description=description,
+                            user_id=user_id,
+                            user_name=user_name,
+                            user_email=user_email,
+                            dev_id=dev_id,
+                            dev_name = dev_name,
+                            dev_email=dev_email,
+                            software = software,
+                            software_name=software_name, 
+                            urgency = urgency, 
+                            status = status)
         db.session.add(new_report)
         db.session.commit()
         return jsonify({'message':'Reporte creado'})
@@ -331,7 +351,7 @@ def update_report(id):
     status = request.json['status']
     report.title =  title
     report.description = description
-    report.dev_id=dev_id
+    report.dev_id = dev_id
     report.user_id = user_id
     report.software = software
     report.urgency = urgency
@@ -366,6 +386,7 @@ def update_report_dev(id,email):
     dev = User.query.filter_by(email = email).first()
     report.dev_name = dev.name
     report.dev_id = dev.id
+    report.dev_email = dev.email
     db.session.commit()
     return jsonify({'message': 'Depurador del reporte actualizado'})
 
@@ -383,9 +404,9 @@ def delete_report(id):
 #    db.session.commit()
 #    return jsonify({'message': 'Reporte eliminado'})
 
-@app.route('/dev_reports/<dev_id>', methods=['GET'])
-def get_dev_reports(dev_id):
-    reports = Report.query.filter_by(dev_id = dev_id)
+@app.route('/dev_reports/<email>', methods=['GET'])
+def get_dev_reports(email):
+    reports = Report.query.filter_by(dev_email = email)
     temp = []
     for report in reports:
         report_data = {}
@@ -394,7 +415,11 @@ def get_dev_reports(dev_id):
         report_data['date'] = report.date
         report_data['description'] = report.description
         report_data['user_id'] = report.user_id
+        report_data['user_name'] = report.user_name 
+        report_data['user_email'] = report.user_email 
         report_data['dev_id'] = report.dev_id
+        report_data['dev_name'] = report.dev_name        
+        report_data['dev_email'] = report.dev_email        
         report_data['software'] = report.software
         report_data['software_name'] = report.software_name
         report_data['urgency'] = report.urgency
@@ -402,9 +427,9 @@ def get_dev_reports(dev_id):
         temp.append(report_data)
     return jsonify(temp)
 
-@app.route('/user_reports/<user_id>', methods=['GET', ])
-def get_user_reports(user_id):
-    reports = Report.query.filter_by(user_id = user_id)
+@app.route('/user_reports/<email>', methods=['GET', ])
+def get_user_reports(email):
+    reports = Report.query.filter_by(user_email = email)
     temp = []
     for report in reports:
         report_data = {}
@@ -413,7 +438,11 @@ def get_user_reports(user_id):
         report_data['date'] = report.date
         report_data['description'] = report.description
         report_data['user_id'] = report.user_id
+        report_data['user_name'] = report.user_name 
+        report_data['user_email'] = report.user_email 
         report_data['dev_id'] = report.dev_id
+        report_data['dev_name'] = report.dev_name        
+        report_data['dev_email'] = report.dev_email        
         report_data['software'] = report.software
         report_data['software_name'] = report.software_name
         report_data['urgency'] = report.urgency
