@@ -1,0 +1,11 @@
+.custom-button {
+	background: #44d1ca;
+	color: white;
+	border-style: outset;
+	border-color: #44d1ca;
+	height: 50px;
+	width: 100px;
+	font: bold15px arial,sans-serif;
+	text-shadow: none;
+}
+  

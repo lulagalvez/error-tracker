@@ -15,7 +15,6 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   };
 
   /*ESTADOS POSIBLES DE UN TICKET PARA ASIGNARLES EL COLOR EN EL .CSS*/
-
   const statusColors = {
     Pending: "status-pending",
     ToDo: "status-to-do",
@@ -38,9 +37,9 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   };
 
   const filteredBugReports = bugReports.filter((bugReport) => {
-    const title = bugReport.title.toLowerCase();
-    const status = bugReport.status.toLowerCase();
-    const software = bugReport.software.toLowerCase();
+    const title = bugReport.title.toString().toLowerCase();
+    const status = bugReport.status.toString().toLowerCase();
+    const software = bugReport.software_name.toString().toLowerCase();
     const isMatchingTitle = title.includes(searchTerm.toLowerCase());
     const isMatchingStatus = selectedStatus
       ? status === selectedStatus.toLowerCase()
@@ -53,7 +52,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
 
   const statusOptions = Object.keys(statusColors);
   const softwareOptions = [
-    ...new Set(bugReports.map((bugReport) => bugReport.software)),
+    ...new Set(bugReports.map((bugReport) => bugReport.software_name)),
   ];
 
   return (
@@ -134,12 +133,12 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
                       </div>
                       {/*SOFTWARE*/}
                       <h6 className="text-secondary m-0">
-                        Software: {bugReport.software}
+                        Software: {bugReport.software_name}
                       </h6>
                       <div>
                         {/*ESTADO, EL MARCO CAMBIA DE COLOR */}
                         <div
-                          className={`card p-1 text-secondary m-0 ${borderColor}`}
+                          className={`p-1 text-secondary m-0 ${borderColor} rounded`}
                         >
                           {bugReport.status}
                         </div>
