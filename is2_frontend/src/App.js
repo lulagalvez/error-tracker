@@ -10,7 +10,6 @@ import DevView_test from './components/pages/DevView/DevView_test';
 import UserReportView from  './components/pages/User/UserReportView'; 
 import SideBar from './components/pages/Sidebar/Sidebar';
 import SignUp from './components/pages/SignUp/SignUp';
-import SideBar from './components/pages/Sidebar/Sidebar';
 import LogIn from './components/pages/Login/Login';
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
