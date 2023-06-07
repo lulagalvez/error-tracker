@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import APIService from '../../services/APIService';
 import "bootstrap/dist/css/bootstrap.min.css"
 import "../../css/SignUp.css"
+import { useNavigate } from 'react-router-dom';
 
 export default (props) => {
     const [name, setName] = useState('');
@@ -10,7 +11,7 @@ export default (props) => {
     const [showAlert, setShowAlert] = useState(false);
 
     const apiservice = new APIService();
-
+    const navigate = useNavigate();
     const handleOnChangeName = (e) => {
         setName(e.target.value);
     };
@@ -30,6 +31,7 @@ export default (props) => {
         setName('');
         setEmail('');
         setPassword('');
+        navigate("/login");
     };
 
     const SignUp = async () => {
@@ -40,7 +42,7 @@ export default (props) => {
         <div className="Auth-form-container">
             <form className="Auth-form" onSubmit={handleSubmit}>
                 <div className="Auth-form-content">
-                    <h3 className="Auth-form-title">Registrarse</h3>
+                    <h3 className="Auth-form-title">Registrarse en Debugger</h3>
                     {showAlert && (
                         <div className="alert alert-success" role="alert">
                             Usuario registrado correctamente.
