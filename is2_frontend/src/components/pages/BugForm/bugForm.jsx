@@ -1,14 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import './bugForm.css'
 import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
 export default (props) =>{
-    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:[]});
+    const[inputValues,setInputValues] =useState({title:'', description:'',pasos:"",software:0});
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
-    const userid = Cookies.get('id');   
-
+    const software_name= useRef('');
+    const userid = Cookies.get('id');
+    const username = Cookies.get('name');
+    const useremail = Cookies.get('email')   
     /*
     ESTADOS POSIBLES
     ToDo
@@ -28,10 +30,13 @@ export default (props) =>{
     Software2
     Software3
     */
-   
+    const delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+      );
+
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, dev_id:null, software: inputValues.software, status:"ToDo",urgency:1})
+        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, user_email: useremail, dev_id:null,dev_name:null ,dev_email:null, software: inputValues.software, software_name: software_name.current ?? '', status:"ToDo",urgency:1})
         .then(response =>{
             console.log(response);
             if(response?.message === 'Reporte creado'){
@@ -51,7 +56,8 @@ export default (props) =>{
           setSoftwareIds(response);
         }
         fetchData();
-      }, []);
+        
+      }, [inputValues.software]);
     
     const handleOnChange = event =>{
         const {name,value} =event.target;
@@ -59,71 +65,74 @@ export default (props) =>{
             ...inputValues,
             [name]:value
         });
+        const val = softwareIds?.find(x =>  x.id == inputValues.software);
+        software_name.current=val?.name ?? '';
     }
 
     const handleSubmit=(e)=>{
-        e.preventDefault()
+        e.preventDefault();
         reportBug();
+        setInputValues({title:'', description:'',pasos:"",software:0});
+        software_name.current='';
     }
     
     return(
         <>
         
-        <div class='container text-center mb-4 border border-2' style={{width:"657px", height:"807px", padding: "60px"}} >
-            <div class="text-center">
+        <div className='container text-center mb-4 border border-2' style={{width:"657px", height:"807px", padding: "60px"}} >
+            <div className="text-center">
             <h1  className="titulo">{props.title}</h1>
             </div>
-            <div class=" mx-auto mt-4 mb-4 md-4 lx-4" style={{padding:"60px", width:"500px"}}>
+            <div className=" mx-auto mt-4 mb-4 md-4 lx-4" style={{padding:"60px", width:"500px"}}>
                 <form onSubmit={handleSubmit} >
 
-                    <div class="form-floating mb-4">
-                        <input name='title' class="form-control" id= "floatingTitle"placeholder='Titulo del ticket' maxLength={30} required
+                    <div className="form-floating mb-4">
+                        <input name='title' className="form-control" id= "floatingTitle"placeholder='Titulo del ticket' maxLength={30} required
                         onChange={handleOnChange} value={inputValues.title} ></input>
-                        <label for="floatingTitle">Título del ticket</label>
+                        <label htmlFor="floatingTitle">Título del ticket</label>
                     </div>
-                    <div class="mb-4 ">
-                        <select name='software' class="form-select" required onChange={handleOnChange} value={inputValues.software.name } > 
+                    <div className="mb-4 ">
+                        <select name='software' className="form-select" required onChange={handleOnChange} value={inputValues.software} > 
                             <option value="">--Please choose an option--</option>
-                                {softwareIds.map(softwareIds => (
+                                {softwareIds && softwareIds.map(softwareIds => (
                                 <option key={softwareIds.id} value={softwareIds.id}>
                                     {softwareIds.name}
                                 </option>
                                 ))}
+                                
                         </select>
                     </div>
 
-                    <div class="form-floating mb-3">
-                        <textarea name='description' id="floatingDescription" class="form-control" style={{height: "130px", resize: "none"}} placeholder='Descripción detallada del bug' required 
+                    <div className="form-floating mb-3">
+                        <textarea name='description' id="floatingDescription" className="form-control" style={{height: "130px", resize: "none"}} placeholder='Descripción detallada del bug' required 
                         onChange={handleOnChange} value={inputValues.description } ></textarea>
-                        <label for="floatingDescription">Descripción detallada del bug</label>
+                        <label htmlFor="floatingDescription">Descripción detallada del bug</label>
                     </div>  
 
-                    <div class="form-floating mb-3">
-                        <textarea name='pasos' class="form-control" id="floatingSteps" style={{height: "130px", resize: "none"}} placeholder='Pasos detallados para reproducir el bug' required
+                    <div className="form-floating mb-3">
+                        <textarea name='pasos' className="form-control" id="floatingSteps" style={{height: "130px", resize: "none"}} placeholder='Pasos detallados para reproducir el bug' required
                         onChange={handleOnChange} value={inputValues.pasos }  ></textarea>
-                        <label for="floatingSteps">Pasos detallados para reproducir el bug</label>
+                        <label htmlFor="floatingSteps">Pasos detallados para reproducir el bug</label>
                     </div>
-                    <div class="mb-3">
-                    <input type="file" class="form-control"></input>
+                    <div className="mb-3">
+                    <input type="file" className="form-control"></input>
                     </div>
-                    <div class="mb-5 position-absolute start-50 translate-middle-x">
-                    <button type='submit' class='btn btn-info' > <a>{props.title}</a></button>
+                    <div className="mb-5 position-absolute start-50 translate-middle-x">
+                    <button type='submit' className='btn btn-info' > <a>{props.title}</a></button>
                     </div>
                 </form>
             </div>
-            <div class="container mt-9 mb-9">
+            <div className="container mt-9 mb-9">
 
       
-            <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success" style={showSuccessAlert?{display:"block"}:{display:'none'}}>
+            <div className="alert alert-success alert-dismissible fade show" role="alert" id="alert-success" style={showSuccessAlert?{display:"block"}:{display:'none'}}>
                 <strong> Reporte enviado</strong> 
-                   <button type="button" class="btn-close" data-bs-toggle="collapse" data-bs-target="#alert-success" aria-label="Close" aria-controls="alert-success" id="close-success" onClick={()=>setShowSuccessAlert(false)}></button>
+                   <button type="button" className="btn-close" data-bs-toggle="collapse" data-bs-target="#alert-success" aria-label="Close" aria-controls="alert-success" id="close-success" onClick={()=>setShowSuccessAlert(false)}></button>
             </div>
 
-            
-
-            <div class="alert alert-danger alert-dismissible fade show " role="alert" id="alert-fail" style={showErrorAlert?{display:"block"}:{display:'none'}}>
+            <div className="alert alert-danger alert-dismissible fade show " role="alert" id="alert-fail" style={showErrorAlert?{display:"block"}:{display:'none'}}>
                 <strong>¡Error! Reporte no enviado</strong>
-                  <button type="button" class="btn-close" data-bs-toggle="collapse" data-bs-target="#alert-fail" aria-label="Close" aria-controls="alert-fail" id="close-fail" onClick={()=>setShowErrorAlert(false)}></button>
+                  <button type="button" className="btn-close" data-bs-toggle="collapse" data-bs-target="#alert-fail" aria-label="Close" aria-controls="alert-fail" id="close-fail" onClick={()=>setShowErrorAlert(false)}></button>
             </div>
 
         </div>

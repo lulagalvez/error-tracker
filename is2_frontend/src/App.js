@@ -53,8 +53,7 @@ class App extends Component {
               <Route path='/signup' element={<SignUp />} />
              <Route path='/welcome' element={<WelcomeIcon />} />
               {/* <Route path='/adminview' element= {<AdminViewMain />} /> */}
-              <Route path='/userreportview' element={<UserReportView />} />
-              <Route path='/devstats' element={<DevStats />} />    
+              <Route path='/userreportview' element={<UserReportView />} />   
               <Route path='/login' element={<LogIn />} /> 
               <Route path='/' exact element={<LogIn/>}/>
               <Route path="*" element={<p>No hay nada aqui: 404</p>} />
@@ -70,7 +69,7 @@ class App extends Component {
             
             <Route path='/devview' element={
               <ProtectedRoute redirectPath="/login"
-                isAllowed={logged && type_of_user === 'developer'}>
+                isAllowed={logged && type_of_user === 'developer' | 'admin'}>
                 <WelcomeIcon />
                 <SideBarDeveloper/>
                 <DevView />

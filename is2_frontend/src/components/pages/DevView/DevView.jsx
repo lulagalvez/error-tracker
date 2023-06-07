@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import BugReportList from "./DevBugReportList";
+import DevBugReportList from "./DevBugReportList";
 import CommentColumn from "../../props/CommentColumn";
 import SideBar from "../Sidebars/SidebarDeveloper";
 import { generateBugReports } from "../../utils/generateBugReports";
 import "./DevView.css";
 import APIService from '../../services/APIService';
+import Cookies from 'js-cookie';
 
 //Aqui tienen que estar los hooks de los bugreports, hasta el momento solo son generados en una funcion en utils, es un diccionario
 //dentro del codigo se usa status en vez de state, cambiar referencia en el json
@@ -13,17 +14,17 @@ import APIService from '../../services/APIService';
 const DevView = () => {
   const [selectedBugId, setSelectedBugId] = useState(null);
   const [bugReports, setReports] = useState([]);
+  const dev_email = Cookies.get('email');
 
   const api_service = new APIService();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api_service.get('reports');
+      const response = await api_service.get('dev_reports', dev_email);
       setReports(response);
     }
     fetchData();
   }, []); 
-
 
   const handleBugReportClick = (bugReport) => {
     setSelectedBugId(bugReport.id);
@@ -47,7 +48,7 @@ const DevView = () => {
             </div>
           </div>
           {/*BUG REPORT CON EL RESTO DE LAS COLUMNAS */}
-          <BugReportList
+          <DevBugReportList
             bugReports={bugReports}
             onClick={handleBugReportClick}
             accessLevel={accessLevel}

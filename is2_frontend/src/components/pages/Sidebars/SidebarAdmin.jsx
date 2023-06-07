@@ -31,14 +31,14 @@ export const SideBarAdmin = () => {
                 </div>
             </Link>
 
-            <Link >
+            <Link>
                 <div className="icon-container">
                     <i className="bi bi-clipboard-data-fill"></i>
                     <h1>Estadísticas</h1>
                     <span className="oval"></span>
                 </div>
             </Link>
-            <Link to="/my_reports">
+            <Link>
                 <div className="icon-container">
                     <i className="bi bi-clipboard2-check-fill"></i>
                     <h1>Mis Reportes</h1>

@@ -161,10 +161,10 @@ const DevBugReportListContent = ({
                         <p className="text-secondary m-0">{bugReport.date}</p>
                       </div>
                       {/*SOFTWARE*/}
-                      <h6 className="text-secondary m-0">
-                        Software: {bugReport.software}
+                      <h6 className="text-secondary m-2">
+                        Software: {bugReport.software_name}
                       </h6>
-                      <h6 className="text-secondary m-0">
+                      <h6 className="text-secondary m-2">
                         Urgency: {bugReport.urgency}
                       </h6>
                       {/* DELETE BUTTON */}

@@ -45,6 +45,14 @@ export default class APIService{
             .then(response => response.data)
             .catch(error => console.log(error));
     }
+    patch(url,id,data,type){
+        let apiUrl = `${this.domain}/${url}`;
+        if (id) {
+            apiUrl = `${apiUrl}/${id}/update_${type}/${data}`;
+        }
+
+        return axios.patch(apiUrl)
+    }    
     
     put(url, id, data) {
         let apiUrl = `${this.domain}/${url}`;

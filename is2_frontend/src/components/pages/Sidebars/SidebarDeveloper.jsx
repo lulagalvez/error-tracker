@@ -16,7 +16,7 @@ export const SideBarDeveloper = () => {
     };
     return (
         <div className="sidebar">
-            <Link to="/my_reports">
+            <Link to="/devview">
                 <div className="logo-container-user">
                     <span>DebuGGer</span>
                 </div>
@@ -30,7 +30,7 @@ export const SideBarDeveloper = () => {
                 </div>
             </Link>
 
-            <Link to="/my_reports">
+            <Link to="/devview">
                 <div className="icon-container my-reports">
                     <i className="bi bi-clipboard2-check-fill"></i>
                     <h1>Mis Reportes</h1>
