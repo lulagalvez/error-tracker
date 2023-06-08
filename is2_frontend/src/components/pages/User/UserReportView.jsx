@@ -73,8 +73,6 @@ const UserReportView = () => {
               />
             )}
           </div>
-
-          {/* Add other columns or components */}
         </div>
       </div>
     </div>

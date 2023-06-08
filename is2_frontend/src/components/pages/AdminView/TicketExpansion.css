@@ -1,0 +1,40 @@
+.description-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.description-container {
+  max-height: 200px; /* Adjust the height as per your requirement */
+  overflow: auto;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.description {
+  word-wrap: break-word;
+}
+
+.description::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+}
+
+.description {
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.custom-button {
+	background: #44d1ca;
+	color: white;
+	border-style: outset;
+	border-color: #44d1ca;
+	height: 50px;
+	width: 100px;
+	font: bold15px arial,sans-serif;
+	text-shadow: none;
+}
+  
