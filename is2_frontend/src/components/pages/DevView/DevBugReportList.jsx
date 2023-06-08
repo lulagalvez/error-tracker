@@ -13,8 +13,7 @@ const DevBugReportList = ({
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedSoftware, setSelectedSoftware] = useState("");
   const [selectedUrgency, setSelectedUrgency] = useState("");
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [bugToDelete, setBugToDelete] = useState(null);
+
 
   /*ESTADOS POSIBLES DE UN TICKET PARA ASIGNARLES EL COLOR EN EL .CSS*/
   const statusColors = {
@@ -46,20 +45,7 @@ const DevBugReportList = ({
     setSelectedUrgency(event.target.value);
   };
 
-  const handleDeleteConfirmation = (bugReport) => {
-    setBugToDelete(bugReport);
-    setShowDeleteConfirmation(true);
-  };
 
-  const handleConfirmDelete = () => {
-    setShowDeleteConfirmation(false);
-    setBugToDelete(null);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteConfirmation(false);
-    setBugToDelete(null);
-  };
 
   const filteredBugReports = bugReports.filter((bugReport) => {
     const title = bugReport.title.toString().toLowerCase();
@@ -98,17 +84,15 @@ const DevBugReportList = ({
       selectedStatus={selectedStatus}
       selectedSoftware={selectedSoftware}
       selectedUrgency={selectedUrgency}
-      showDeleteConfirmation={showDeleteConfirmation}
-      bugToDelete={bugToDelete}
+
+
       statusColors={statusColors}
       handleClick={handleClick}
       handleSearch={handleSearch}
       handleStatusChange={handleStatusChange}
       handleSoftwareChange={handleSoftwareChange}
       handleUrgencyChange={handleUrgencyChange}
-      handleDeleteConfirmation={handleDeleteConfirmation}
-      handleConfirmDelete={handleConfirmDelete}
-      handleCancelDelete={handleCancelDelete}
+
       filteredBugReports={filteredBugReports}
       statusOptions={statusOptions}
       softwareOptions={softwareOptions}

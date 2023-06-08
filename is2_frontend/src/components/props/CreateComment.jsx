@@ -20,7 +20,7 @@ const CreateComment = ({handleSubmit, submitLabel}) => {
             onChange={(e) => setText(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary custom-button"  disabled={isTextAreaDisabled}>Submit</button>
+        <button className="custom-button"  disabled={isTextAreaDisabled}>Submit</button>
       </form>
     </div>
   )
