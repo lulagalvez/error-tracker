@@ -26,7 +26,7 @@ import React from 'react'
                 <input
                   type="text"
                   className="form-control mr-1"
-                  placeholder="Search..."
+                  placeholder="Buscar..."
                   value={searchTerm}
                   onChange={handleSearch}
                 />
@@ -37,30 +37,13 @@ import React from 'react'
                 {/* SPACER */}
                 <div className="w-100"></div>
         
-                {/* STATUS DROPDOWN MENU */}
-                <select
-                  className="form-control mr-1"
-                  value={selectedStatus}
-                  onChange={handleStatusChange}
-                >
-                  <option value="">All Status</option>
-                  {statusOptions.map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </select>
-        
-                {/* SPACER */}
-                <div className="mx-1"></div>
-        
-                {/* SOFTWARE DROPDOWN MENU */}
-                <select
+                 {/* SOFTWARE DROPDOWN MENU */}
+                 <select
                   className="form-control"
                   value={selectedSoftware}
                   onChange={handleSoftwareChange}
                 >
-                  <option value="">All Software</option>
+                  <option value="">Softwares</option>
                   {softwareOptions.map((software) => (
                     <option key={software} value={software}>
                       {software}
@@ -68,7 +51,7 @@ import React from 'react'
                   ))}
                 </select>
                         {/* SPACER */}
-            <div className="mx-1"></div>
+                <div className="mx-1"></div>
 
                 {/* PRIORITY DROPDOWN MENU */}
                 <select
@@ -76,7 +59,7 @@ import React from 'react'
                 value={selectedUrgency}
                 onChange={handleUrgencyChange}
                 >
-                <option value="">All Urgency</option>
+                <option value="">Prioridades</option>
                 {urgencyOptions &&
                     urgencyOptions.map((urgency) => (
                     <option key={urgency} value={urgency}>
@@ -84,6 +67,40 @@ import React from 'react'
                     </option>
                     ))}
                 </select>
+
+                {/* SPACER */}
+                <div className="mx-1"></div>
+                {/* DEV DROPDOWN MENU */}
+                <select
+                className="form-control mr-1"
+                value={selectedFilterDev}
+                onChange={handleFilterDevChange}
+                >
+                <option value="">Depuradores</option>
+                {devOptions &&
+                    devOptions.map((dev) => (
+                    <option key={dev} value={dev}>
+                        {dev}
+                    </option>
+                    ))}
+                </select>                
+                {/* SPACER */}
+                <div className="mx-1"></div>
+        
+                {/* STATUS DROPDOWN MENU */}
+                <select
+                  className="form-control mr-1"
+                  value={selectedStatus}
+                  onChange={handleStatusChange}
+                >
+                  <option value="">Estados</option>
+                  {statusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>            
+
             </div>
                 {/* SPACER */}
             <div className="mx-1"></div>

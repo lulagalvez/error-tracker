@@ -15,6 +15,7 @@ function AdminView() {
     const [selectedStatus, setSelectedStatus] = useState("");
     const [selectedSoftware, setSelectedSoftware] = useState("");
     const [selectedUrgency, setSelectedUrgency] = useState("");
+    const [selectedFilterDev,setSelectedFilterDev] = useState("");
     const [numP, setNumP] = useState(0);
     const [idP, setIdP] = useState(0);
     const [numE, setNumE] = useState(0);
@@ -61,7 +62,9 @@ function AdminView() {
       const handleUrgencyChange = (event) => {
         setSelectedUrgency(event.target.value);
       };
-    
+      const handleFilterDevChange = (event) => {
+        setSelectedFilterDev(event.target.value);
+      };
     // filtrado
     // const results = !search ? reports : reports.filter
     let results = []
@@ -81,10 +84,14 @@ function AdminView() {
     const filteredBugReports = reports.filter((reports) => {
         const title = reports.title.toString().toLowerCase();
         const status = reports.status.toString().toLowerCase();
-        const software = reports.software_name.toString().toLowerCase();
+        const software = reports.software_name?.toString().toLowerCase();
+        const developer = reports.dev_name?.toString().toLowerCase();
         const urgency = reports.urgency.toString().toLowerCase();
-        const isMatchingUrgency = selectedUrgency
+        const isMatchingUrgency = selectedUrgencyw
           ? reports.urgency === selectedUrgency.toLowerCase()
+          : true;
+          const isMatchingDev = selectedFilterDev
+          ? reports.dev_name === selectedFilterDev.toLowerCase()
           : true;
         const isMatchingTitle = title.includes(searchTerm.toLowerCase());
         const isMatchingStatus = selectedStatus
@@ -97,7 +104,8 @@ function AdminView() {
           isMatchingUrgency &&
           isMatchingTitle &&
           isMatchingStatus &&
-          isMatchingSoftware
+          isMatchingSoftware &&
+          isMatchingDev
         );
       });
       const statusOptions = Object.keys(statusColors);
@@ -106,6 +114,9 @@ function AdminView() {
       ];
       const urgencyOptions = [
         ...new Set(reports.map((reports) => reports.urgency)),
+      ];
+      const devOptions = [
+        ...new Set(reports.map((reports) => reports.dev_name)),
       ];
     // async function handleDevSelect(event) {
     //     const devId = event.target.value;
@@ -158,18 +169,7 @@ function AdminView() {
             <h1>Vista de lista de bugs</h1>
             <hr />
             {/* <input id="search" type="text" onChange={handleSearch} placsholder="Buscar por nombre de bug" /> */}
-            <Filter searchTerm={searchTerm}
-                    selectedStatus={selectedStatus}
-                    selectedSoftware={selectedSoftware}
-                    selectedUrgency={selectedUrgency}
-                    filteredBugReports={filteredBugReports}
-                    handleSearch={handleSearch}
-                    handleStatusChange={handleStatusChange}
-                    handleSoftwareChange={handleSoftwareChange}
-                    handleUrgencyChange={handleUrgencyChange} 
-                    statusOptions={statusOptions}
-                    softwareOptions={softwareOptions}
-                    urgencyOptions={urgencyOptions}/>
+
             <br /> <br />
             <div className="ms-3">
                 <p>
@@ -211,6 +211,21 @@ function AdminView() {
                     </form>
                 </div>
             </div>
+                        <Filter searchTerm={searchTerm}
+                    selectedStatus={selectedStatus}
+                    selectedSoftware={selectedSoftware}
+                    selectedUrgency={selectedUrgency}
+                    selectedFilterDev={selectedFilterDev}
+                    filteredBugReports={filteredBugReports}
+                    handleSearch={handleSearch}
+                    handleStatusChange={handleStatusChange}
+                    handleSoftwareChange={handleSoftwareChange}
+                    handleUrgencyChange={handleUrgencyChange} 
+                    handleFilterDevChange={handleFilterDevChange}
+                    statusOptions={statusOptions}
+                    softwareOptions={softwareOptions}
+                    urgencyOptions={urgencyOptions}
+                    devOptions={devOptions}/>
             <table class="table table-striped">
                 <thead>
                     <tr>
