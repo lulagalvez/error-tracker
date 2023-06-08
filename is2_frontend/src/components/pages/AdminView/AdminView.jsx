@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import APIService from '../../services/APIService';
 import { BotonBorrar } from './BotonBorrar'
-import { Buscador } from './Buscador'
 import { Status } from './Status'
 import './TablaAdmin.css'
+import Filter from './Filter'
 
 function AdminView() {
     const [reports, setReports] = React.useState([])
@@ -11,8 +11,22 @@ function AdminView() {
     const [devs, setDevs] = React.useState([]);
     const api_service = new APIService();
     const [selectedDev, setSelectedDev] = React.useState('')
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("");
+    const [selectedSoftware, setSelectedSoftware] = useState("");
+    const [selectedUrgency, setSelectedUrgency] = useState("");
+    const [numP, setNumP] = useState(0);
+    const [idP, setIdP] = useState(0);
+    const [numE, setNumE] = useState(0);
+    const [idE, setIdE] = useState("");
+    const [estado, setEstado] = useState("");
     let devsName = []
-
+    const statusColors = {
+        Pending: "status-pending",
+        ToDo: "status-to-do",
+        Testing: "status-testing",
+        Closed: "status-closed",
+      };
     const showData = async () => {
         try {
             const reportsResponse = await api_service.get('reports');
@@ -27,13 +41,27 @@ function AdminView() {
         }
     }
 
-
     // funcion de busqueda
     const searcher = (e) => {
         setSearch(e.target.value)
         // console.log(e.target.value)
     }
-
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+      };
+    
+      const handleStatusChange = (event) => {
+        setSelectedStatus(event.target.value);
+      };
+    
+      const handleSoftwareChange = (event) => {
+        setSelectedSoftware(event.target.value);
+      };
+    
+      const handleUrgencyChange = (event) => {
+        setSelectedUrgency(event.target.value);
+      };
+    
     // filtrado
     // const results = !search ? reports : reports.filter
     let results = []
@@ -45,17 +73,40 @@ function AdminView() {
             dato.title.toLowerCase().includes(search.toLocaleLowerCase())
         )
     }
-    const [numP, setNumP] = useState(0);
-    const [idP, setIdP] = useState(0);
-    const [numE, setNumE] = useState(0);
-    const [idE, setIdE] = useState("");
-    const [estado, setEstado] = useState("");
     useEffect(() => {
         showData()
         console.log("right ere boss")
         //  console.log('bugs', bugs);
     }, [])
-
+    const filteredBugReports = reports.filter((reports) => {
+        const title = reports.title.toString().toLowerCase();
+        const status = reports.status.toString().toLowerCase();
+        const software = reports.software_name.toString().toLowerCase();
+        const urgency = reports.urgency.toString().toLowerCase();
+        const isMatchingUrgency = selectedUrgency
+          ? reports.urgency === selectedUrgency.toLowerCase()
+          : true;
+        const isMatchingTitle = title.includes(searchTerm.toLowerCase());
+        const isMatchingStatus = selectedStatus
+          ? status === selectedStatus.toLowerCase()
+          : true;
+        const isMatchingSoftware = selectedSoftware
+          ? software === selectedSoftware.toLowerCase()
+          : true;
+        return (
+          isMatchingUrgency &&
+          isMatchingTitle &&
+          isMatchingStatus &&
+          isMatchingSoftware
+        );
+      });
+      const statusOptions = Object.keys(statusColors);
+      const softwareOptions = [
+        ...new Set(reports.map((reports) => reports.software_name)),
+      ];
+      const urgencyOptions = [
+        ...new Set(reports.map((reports) => reports.urgency)),
+      ];
     // async function handleDevSelect(event) {
     //     const devId = event.target.value;
     //     // setSelectedDev(devId);
@@ -69,6 +120,7 @@ function AdminView() {
         }
         return -1;
     }
+
     const setPrioridad = (event) => {
 
         api_service.patch('reports', numP, idP, 'priority')
@@ -105,8 +157,19 @@ function AdminView() {
         <div class="container mt-4">
             <h1>Vista de lista de bugs</h1>
             <hr />
-            {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}
-            <div class="container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
+            {/* <input id="search" type="text" onChange={handleSearch} placsholder="Buscar por nombre de bug" /> */}
+            <Filter searchTerm={searchTerm}
+                    selectedStatus={selectedStatus}
+                    selectedSoftware={selectedSoftware}
+                    selectedUrgency={selectedUrgency}
+                    filteredBugReports={filteredBugReports}
+                    handleSearch={handleSearch}
+                    handleStatusChange={handleStatusChange}
+                    handleSoftwareChange={handleSoftwareChange}
+                    handleUrgencyChange={handleUrgencyChange} 
+                    statusOptions={statusOptions}
+                    softwareOptions={softwareOptions}
+                    urgencyOptions={urgencyOptions}/>
             <br /> <br />
             <div className="ms-3">
                 <p>
@@ -162,7 +225,7 @@ function AdminView() {
                         <th scope="col">Accion</th>
                     </tr>
                 </thead>
-                {results && results.map((val, key) => {
+                {filteredBugReports && filteredBugReports.map((val, key) => {
                     return (
                         <tr key={key}>
                             <td style={{ textAlign: 'center' }}>{val.id}</td>

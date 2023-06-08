@@ -1,33 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import "./DevBugReportListContent.css";
-
+import FloatingReasign from "./FloatingReasign";
 
 const DevBugReportListContent = ({
   searchTerm,
   selectedStatus,
   selectedSoftware,
   selectedUrgency,
-  showDeleteConfirmation,
-  bugToDelete,
+
   statusColors,
   handleClick,
   handleSearch,
   handleStatusChange,
   handleSoftwareChange,
   handleUrgencyChange,
-  handleDeleteConfirmation,
-  handleConfirmDelete,
-  handleCancelDelete,
+
   filteredBugReports,
   statusOptions,
   softwareOptions,
   urgencyOptions,
   accessLevel,
   selectedBugId,
-}
-) => {
+}) => {
+  const [showFloatingReasign, setShowFloatingReasign] = useState(false);
+  const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
+  const [selectedTicketId, setSelectedTicketId] = useState(null);
+
+  const handleOpenFloatingReasign = (ticketId,ticketTitle) => {
+    setSelectedTicketId(ticketId);
+    setSelectedTicketTitle(ticketTitle);
+    setShowFloatingReasign(true);
+  };
+
+  const handleCloseFloatingReasign = () => {
+    setShowFloatingReasign(false);
+  };
+
+  const handleSubmitIssue = (issueText) => {
+    // Handle submitting the issue text
+    console.log("Submitted issue:", issueText);
+    handleCloseFloatingReasign();
+  };
+
   return (
     <div className="container">
       <div className="d-flex mb-2">
@@ -97,41 +113,14 @@ const DevBugReportListContent = ({
         </select>
       </div>
 
-      {/* DELETE CONFIRMATION MODAL */}
-      {showDeleteConfirmation && bugToDelete && (
-        <div className="modal-backdrop show">
-          <div className="modal" tabIndex="-1" role="dialog">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirm Delete</h5>
-                </div>
-                <div className="modal-body">
-                  <p>
-                    Are you sure you want to delete the bug report:{" "}
-                    <strong>{bugToDelete.title}</strong>?
-                  </p>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={handleConfirmDelete}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={handleCancelDelete}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/*FLOATING REASIGN WINDOW*/}
+      {showFloatingReasign && (
+        <FloatingReasign
+          title={selectedTicketTitle}
+          ticketId={selectedTicketId}
+          onClose={handleCloseFloatingReasign}
+          onSubmit={handleSubmitIssue}
+        />
       )}
 
       {/*INICIO DE LISTA DE BUGS*/}
@@ -142,7 +131,7 @@ const DevBugReportListContent = ({
             {/*BUG REPORT FILTER*/}
             {filteredBugReports.map((bugReport) => {
               const borderColor = statusColors[bugReport.status] || "gray"; // da valor por defecto
-              console.log("b",borderColor);
+              console.log("b", borderColor);
               return (
                 /*ON CLICK HANDLER*/
                 <div
@@ -167,12 +156,14 @@ const DevBugReportListContent = ({
                       <h6 className="text-secondary m-2">
                         Urgency: {bugReport.urgency}
                       </h6>
-                      {/* DELETE BUTTON */}
-                        {/* Modificar posteriormente para que sirva para la reasignacion  */}
+                      {/* REASIGN BUTTON */}
+                      {/* Modificar posteriormente para que sirva para la reasignacion  */}
                       {accessLevel > 1 && (
                         <button
-                          className="btn delete-btn "
-                          onClick={() => handleDeleteConfirmation(bugReport)}
+                          className="btn delete-btn"
+                          onClick={() =>
+                            handleOpenFloatingReasign(bugReport.id,bugReport.title)
+                          }
                         >
                           <FontAwesomeIcon
                             icon={faPencilAlt}
@@ -183,7 +174,9 @@ const DevBugReportListContent = ({
 
                       <div>
                         {/*ESTADO, EL MARCO CAMBIA DE COLOR */}
-                        <div className={`p-1 text-secondary m-0 ${borderColor} rounded`}>
+                        <div
+                          className={`p-1 text-secondary m-0 ${borderColor} rounded`}
+                        >
                           {bugReport.status}
                         </div>
                       </div>
