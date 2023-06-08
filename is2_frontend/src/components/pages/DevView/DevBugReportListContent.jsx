@@ -28,7 +28,7 @@ const DevBugReportListContent = ({
   const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
   const [selectedTicketId, setSelectedTicketId] = useState(null);
 
-  const handleOpenFloatingReasign = (ticketId,ticketTitle) => {
+  const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
     setSelectedTicketId(ticketId);
     setSelectedTicketTitle(ticketTitle);
     setShowFloatingReasign(true);
@@ -61,24 +61,6 @@ const DevBugReportListContent = ({
 
         {/* SPACER */}
         <div className="w-100"></div>
-
-        {/* STATUS DROPDOWN MENU */}
-        <select
-          className="form-control mr-1"
-          value={selectedStatus}
-          onChange={handleStatusChange}
-        >
-          <option value="">All Status</option>
-          {statusOptions.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-
-        {/* SPACER */}
-        <div className="mx-1"></div>
-
         {/* SOFTWARE DROPDOWN MENU */}
         <select
           className="form-control"
@@ -110,6 +92,22 @@ const DevBugReportListContent = ({
                 {urgency}
               </option>
             ))}
+        </select>
+        {/* SPACER */}
+        <div className="mx-1"></div>
+
+        {/* STATUS DROPDOWN MENU */}
+        <select
+          className="form-control mr-1"
+          value={selectedStatus}
+          onChange={handleStatusChange}
+        >
+          <option value="">All Status</option>
+          {statusOptions.map((status) => (
+            <option key={status} value={status}>
+              {status}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -162,7 +160,10 @@ const DevBugReportListContent = ({
                         <button
                           className="btn delete-btn"
                           onClick={() =>
-                            handleOpenFloatingReasign(bugReport.id,bugReport.title)
+                            handleOpenFloatingReasign(
+                              bugReport.id,
+                              bugReport.title
+                            )
                           }
                         >
                           <FontAwesomeIcon

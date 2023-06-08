@@ -5,3 +5,15 @@
 .td{
     text-align:center;
 }
+
+.table {
+    table-layout: fixed;
+  }
+  
+  .active {
+    background-color: #25cfd486; /* Customize the background color as needed */
+  }
+  
+  .expanded-row {
+    background-color: #17888b86; /* Customize the background color as needed */
+  }

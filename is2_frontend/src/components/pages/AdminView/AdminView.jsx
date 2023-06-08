@@ -1,214 +1,140 @@
-import React, { useEffect, useState } from 'react'
-import APIService from '../../services/APIService';
-import { BotonBorrar } from './BotonBorrar'
-import { Buscador } from './Buscador'
-import { Status } from './Status'
-import './TablaAdmin.css'
+// AdminView.js
+import React, { useEffect, useState } from "react";
+import APIService from "../../services/APIService";
+import SearchBar from "./SearchBar";
+import PriorityForm from "./PriorityForm";
+import StatusForm from "./StatusForm";
+import TicketRow from "./TicketRow";
+import TicketExpansion from "./TicketExpansion";
+import "./TablaAdmin.css";
 
 function AdminView() {
-    const [reports, setReports] = React.useState([])
-    const [search, setSearch] = React.useState('');
-    const [devs, setDevs] = React.useState([]);
-    const api_service = new APIService();
-    const [selectedDev, setSelectedDev] = React.useState('')
-    let devsName = []
+  const [reports, setReports] = useState([]);
+  const [search, setSearch] = useState("");
+  const [devs, setDevs] = useState([]);
+  const api_service = new APIService();
+  const [selectedDev, setSelectedDev] = useState("");
+  let devsName = [];
 
-    const showData = async () => {
-        try {
-            const reportsResponse = await api_service.get('reports');
-            console.log('reports', reportsResponse);
-            setReports(reportsResponse);
+  const showData = async () => {
+    try {
+      const reportsResponse = await api_service.get("reports");
+      console.log("reports", reportsResponse);
+      setReports(reportsResponse);
 
-            const devsResponse = await api_service.get('devs');
-            console.log('devs', devsResponse);
-            setDevs(devsResponse);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+      const devsResponse = await api_service.get("devs");
+      console.log("devs", devsResponse);
+      setDevs(devsResponse || []); // Ensure devsResponse is not undefined
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
+  };
 
-
-    // funcion de busqueda
-    const searcher = (e) => {
-        setSearch(e.target.value)
-        // console.log(e.target.value)
+  const handleAssignDeveloper = (ticket, selectedDeveloper) => {
+    if (selectedDeveloper) {
+      const updatedTicket = {
+        ...ticket,
+        assignedDeveloper: selectedDeveloper.id,
+      };
+      updateTicket(updatedTicket);
+      // Handle the logic for assigning the selected developer to the ticket
     }
+  };
 
-    // filtrado
-    // const results = !search ? reports : reports.filter
-    let results = []
-    if (!search) {
-        results = reports
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  let results = [];
+  if (!search) {
+    results = reports;
+  } else {
+    results = reports.filter((dato) =>
+      dato.title.toLowerCase().includes(search.toLocaleLowerCase())
+    );
+  }
+
+  const deleteReport = (report) => {
+    if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
+      api_service.delete("reports", report.id);
+      setReports(reports?.filter((item) => item !== report));
     }
-    else {
-        results = reports.filter((dato) =>
-            dato.title.toLowerCase().includes(search.toLocaleLowerCase())
-        )
-    }
-    const [numP, setNumP] = useState(0);
-    const [idP, setIdP] = useState(0);
-    const [numE, setNumE] = useState(0);
-    const [idE, setIdE] = useState("");
-    const [estado, setEstado] = useState("");
-    useEffect(() => {
-        showData()
-        console.log("right ere boss")
-        //  console.log('bugs', bugs);
-    }, [])
+  };
 
-    // async function handleDevSelect(event) {
-    //     const devId = event.target.value;
-    //     // setSelectedDev(devId);
-    //     const reportsResponse = await api_service.put('update_report', devId);
-    //     // setReports(reportsResponse);
-    // }
+  const updateTicket = (updatedTicket) => {
+    const updateTicket = async (updatedTicket) => {
+      try {
+        await api_service.put("reports", updatedTicket.id, updatedTicket);
+        setReports(
+          reports.map((report) =>
+            report.id === updatedTicket.id ? updatedTicket : report
+          )
+        );
+        console.log("Ticket updated successfully:", updatedTicket);
+      } catch (error) {
+        console.error("Error updating ticket:", error);
+      }
+    };
+  };
 
-    const getPos = (bug_id, array) => {
-        for (var i = 0; i < array.length; i++) {
-            if (bug_id.startsWith(array[i].id)) return i;
-        }
-        return -1;
-    }
-    const setPrioridad = (event) => {
+  const [selectedTicket, setSelectedTicket] = useState(null);
 
-        api_service.patch('reports', numP, idP, 'priority')
-            .then(response => console.log(response));
-    }
-    const setStatus = (event) => {
-        api_service.patch('reports', numE, idE, 'status')
-            .then(response => console.log(response));
-    }
-    const setDev = (pos, nuevoDev) => {
-        //var newArray=copiaArray();
-        reports[pos].dev_id = nuevoDev;
-        //  setBugs(newArray);
-    }
+  const handleTicketClick = (ticket) => {
+    setSelectedTicket(ticket === selectedTicket ? null : ticket);
+  };
 
-    const handleDevSelect = (event, report) => {
-        const dev_email = event.target.value;
-        api_service.patch('reports', report.id, dev_email, 'dev')
-            .then(response => console.log(response));
-    }
+  useEffect(() => {
+    showData();
+    console.log("right here boss");
+  }, []);
 
-
-
-    const deleteReport = (report) => {
-        if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
-            api_service.delete("reports", report.id)
-
-            setReports(reports?.filter(item => item !== report));
-        }
-    }
-
-    //render
-    return (
-        <div class="container mt-4">
-            <h1>Vista de lista de bugs</h1>
-            <hr />
-            {/* <input id="search" type="text" onChange={handleSearch} placeholder="Buscar por nombre de bug" /> */}
-            <div class="container mt-4"><input className="search-bar" type="search" class="form-control" value={search} onChange={searcher} placeholder="Buscar por nombre de bug" /></div>
-            <br /> <br />
-            <div className="ms-3">
-                <p>
-                    Cambiar prioridad:
-                </p>
-                <form>
-                    <div className="row">
-
-                        <div className="col-3"><input className="form-control" type="text" onChange={e => setNumP(e.target.value)} placeholder="ID" /> </div>
-
-                        <div className="col-3"><input className="form-control" type="number" onChange={e => setIdP(e.target.value)} placeholder="Prioridad" min="1" max="6" /></div>
-                        <div className="col-2"><button className="btn btn-outline-secondary" onClick={() => setPrioridad()}>Cambiar</button></div>
-
-                    </div>
-                </form>
-
-                <div>
-                    <p>
-                        Cambiar estado:
-                    </p>
-                    <form>
-                        <div className="row">
-                            <div className="col-3">
-                                <input className="form-control" type="text" onChange={e => setNumE(e.target.value)} placeholder='ID' />
-                            </div>
-                            <div className="col-3">
-                                <select className="form-select" onChange={e => setIdE(e.target.value)}>
-                                    <option value="">--Seleccione una opcion--</option>
-                                    <option value="Closed">Cerrado</option>
-                                    <option value="Pending">Pendiente</option>
-                                    <option value="ToDo">Por asignar</option>
-                                    <option value="Testing">Testing</option>
-                                </select>
-                            </div>
-                            <div className="col-2">
-                                <button className="btn btn-outline-secondary" onClick={() => setStatus}>Cambiar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Tracking ID</th>
-                        <th scope="col">Titulo</th>
-                        <th scope="col">Usuario</th>
-                        <th scope="col">Software</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Prioridad</th>
-                        <th scope="col">Depurador</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Accion</th>
-                    </tr>
-                </thead>
-                {results && results.map((val, key) => {
-                    return (
-                        <tr key={key}>
-                            <td style={{ textAlign: 'center' }}>{val.id}</td>
-                            <td style={{ textAlign: 'center' }}>{val.title}</td>
-                            <td style={{ textAlign: 'center' }}>{val.user_name}</td>
-                            <td style={{ textAlign: 'center' }}>{val.software_name}</td>
-                            <td style={{ textAlign: 'center' }}>{val.date}</td>
-                            {/* <td>{val.description}</td> */}
-                            <td style={{ textAlign: 'center' }}>{val.urgency}</td>
-                            <td style={{ textAlign: 'center' }}>{val.dev_name}</td>
-                            {/* <td>
-                                <Buscador
-                                    texto={val.dev_id}
-                                    setTexto={nuevo => setDev(key, nuevo)}
-                                />
-                            </td> */}
-                            <td>
-                                <Status
-                                    nombre={val.status}
-                                />
-                            </td>
-                            <td>
-                                <BotonBorrar
-                                    report={val}
-                                    deleteReport={deleteReport}
-                                />
-                            </td>
-
-                            {/* falta agregar saltos de linea para cada depurador */}
-
-                            <div className='Devs-container' style={{ width: '300px' }}>
-                                <select id="devs" onChange={e => handleDevSelect(e, val)}>
-                                    <option value="">Asignar Depurador</option>
-                                    {devs.map(dev => (
-                                        <option key={dev.id} value={dev.email}>
-                                            {dev.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </tr>
-                    )
-                })}
-            </table>
-        </div>
-    )
+  return (
+    <div className="container mt-4">
+      <h1>Vista de lista de bugs</h1>
+      <hr />
+      <SearchBar search={search} handleSearch={handleSearch} />
+      <br />
+      <PriorityForm api_service={api_service} />
+      <br />
+      <StatusForm api_service={api_service} />
+      <br />
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Tracking ID</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Software</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Prioridad</th>
+            <th scope="col">Depurador</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          {results &&
+            results.map((ticket, key) => (
+              <React.Fragment key={key}>
+                <TicketRow
+                  ticket={ticket}
+                  handleClick={handleTicketClick}
+                  deleteReport={deleteReport}
+                  selectedTicket={selectedTicket}
+                />
+                {selectedTicket === ticket && (
+                  <TicketExpansion
+                    developers={devs}
+                    ticket={ticket}
+                    updateTicket={handleAssignDeveloper}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default AdminView;
