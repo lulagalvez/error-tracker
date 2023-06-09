@@ -17,7 +17,6 @@ import DevStats from './components/pages/DevStats/DevStats'
 import WelcomeIcon from './components/welcome';
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
-import { components } from 'react-select';
 
 const ProtectedRoute = ({
   redirectPath = '/login',
