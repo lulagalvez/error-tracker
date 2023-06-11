@@ -50,15 +50,15 @@ function DevStats() {
         async function fetchData() {
             const response = await api_service.get('dev_reports', devId);
             setDatosDevReport(response);
-            console.log(response);
+            // console.log(response);
         };
         fetchData();
         dataStatus.current = getStatus();
         getCompleteness();
-        console.log(datosDevReport);
+        // console.log(datosDevReport);
     }, []);
 
-    console.log(datosDevReport)
+    // console.log(datosDevReport)
 
     const [datosDona, setDatosDona] = useState({
         labels: ["closed", "testing", "pending", "to-do"],
@@ -81,6 +81,34 @@ function DevStats() {
         ],
     })
 
+    const dummySW = [
+        {
+            name: "Software 1",
+            jobsDone: 8,
+            totalJobs: 11
+        },
+        {
+            name: "Software 2",
+            jobsDone: 62,
+            totalJobs: 99
+        },
+        {
+            name: "Software 3",
+            jobsDone: 0,
+            totalJobs: 0
+        },
+        {
+            name: "Software 4",
+            jobsDone: 12,
+            totalJobs: 17
+        },
+        {
+            name: "Software 5",
+            jobsDone: 12,
+            totalJobs: 17
+        }
+    ]
+
     return <>
         <div className="container" style={{ "paddingLeft": "150px" }}>
             <div className="row">
@@ -92,7 +120,7 @@ function DevStats() {
                     </div>
                 </div>
                 <div className="col  border border-1 position-relative">
-                    <SoftwareCompletition />
+                    <SoftwareCompletition softwareData={dummySW} />
                 </div>
 
                 <div className="col border border-1 position-relative">
