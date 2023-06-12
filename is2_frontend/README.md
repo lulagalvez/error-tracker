@@ -71,3 +71,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 npm install @fortawesome/free-solid-svg-icons
+npm install mdbreact

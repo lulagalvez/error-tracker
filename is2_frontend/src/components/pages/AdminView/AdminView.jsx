@@ -92,12 +92,12 @@ function AdminView() {
     <div className="container mt-4">
       <h1>Vista de lista de bugs</h1>
       <hr />
-      <SearchBar search={search} handleSearch={handleSearch} />
+      {/* <SearchBar search={search} handleSearch={handleSearch} />
       <br />
       <PriorityForm api_service={api_service} />
       <br />
       <StatusForm api_service={api_service} />
-      <br />
+      <br /> */}
       <table className="table table-striped">
         <thead>
           <tr>

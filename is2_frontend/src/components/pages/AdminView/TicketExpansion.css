@@ -1,5 +1,5 @@
 .description-box {
-  display: grid;
+
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
 }
@@ -37,4 +37,7 @@
 	font: bold15px arial,sans-serif;
 	text-shadow: none;
 }
-  
+
+.top-padding {
+  padding-top: 20px;
+}
