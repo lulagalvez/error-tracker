@@ -1,12 +1,10 @@
 // AdminView.js
 import React, { useEffect, useState } from "react";
 import APIService from "../../services/APIService";
-import SearchBar from "./SearchBar";
 import PriorityForm from "./PriorityForm";
 import StatusForm from "./StatusForm";
-import TicketRow from "./TicketRow";
-import TicketExpansion from "./TicketExpansion";
 import "./TablaAdmin.css";
+import AdminViewTable from "./AdminViewTable";
 
 function AdminView() {
   const [reports, setReports] = useState([]);
@@ -14,6 +12,7 @@ function AdminView() {
   const [devs, setDevs] = useState([]);
   const api_service = new APIService();
   const [selectedDev, setSelectedDev] = useState("");
+  const [reportFilter, setReportFilter] = useState("");
   let devsName = [];
 
   const showData = async () => {
@@ -30,58 +29,6 @@ function AdminView() {
     }
   };
 
-  const handleAssignDeveloper = (ticket, selectedDeveloper) => {
-    if (selectedDeveloper) {
-      const updatedTicket = {
-        ...ticket,
-        assignedDeveloper: selectedDeveloper.id,
-      };
-      updateTicket(updatedTicket);
-      // Handle the logic for assigning the selected developer to the ticket
-    }
-  };
-
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
-
-  let results = [];
-  if (!search) {
-    results = reports;
-  } else {
-    results = reports.filter((dato) =>
-      dato.title.toLowerCase().includes(search.toLocaleLowerCase())
-    );
-  }
-
-  const deleteReport = (report) => {
-    if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
-      api_service.delete("reports", report.id);
-      setReports(reports?.filter((item) => item !== report));
-    }
-  };
-
-  const updateTicket = (updatedTicket) => {
-    const updateTicket = async (updatedTicket) => {
-      try {
-        await api_service.put("reports", updatedTicket.id, updatedTicket);
-        setReports(
-          reports.map((report) =>
-            report.id === updatedTicket.id ? updatedTicket : report
-          )
-        );
-        console.log("Ticket updated successfully:", updatedTicket);
-      } catch (error) {
-        console.error("Error updating ticket:", error);
-      }
-    };
-  };
-
-  const [selectedTicket, setSelectedTicket] = useState(null);
-
-  const handleTicketClick = (ticket) => {
-    setSelectedTicket(ticket === selectedTicket ? null : ticket);
-  };
 
   useEffect(() => {
     showData();

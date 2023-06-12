@@ -8,7 +8,12 @@ from flask_migrate import Migrate
 from config import ApplicationConfig
 from flask_cors import CORS,  cross_origin
 from flask import Flask, jsonify, request, make_response, abort, session
-from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin
+from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev
+from sqlalchemy import text
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '../data_base/imgs'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'jpg', 'png', 'log'}
 
 
 migrate = Migrate(app, db)
@@ -308,30 +313,67 @@ def create_report():
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
     elif request.method =="POST":
+        # Obtener los datos del reporte desde el cuerpo de la solicitud
         title = request.json['title']
         description = request.json['description']
         user_id = request.json['user_id']
-        user_name = request.json ['user_name']
+        user_name = request.json['user_name']
         user_email = request.json['user_email']
         dev_id = request.json['dev_id']
-        dev_name = request.json ['dev_name']
-        dev_email = request.json ['dev_email']
+        dev_name = request.json['dev_name']
+        dev_email = request.json['dev_email']
         software = request.json['software']
         software_name = request.json['software_name']
-        urgency = request.json['urgency'] 
+        urgency = request.json['urgency']
         status = request.json['status']
-        new_report = Report(title=title,
-                            description=description,
-                            user_id=user_id,
-                            user_name=user_name,
-                            user_email=user_email,
-                            dev_id=dev_id,
-                            dev_name = dev_name,
-                            dev_email=dev_email,
-                            software = software,
-                            software_name=software_name, 
-                            urgency = urgency, 
-                            status = status)
+
+        # Verificar si se adjuntó un archivo
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename != '':
+                # Verificar la extensión del archivo adjunto
+                if file.filename.rsplit('.', 1)[1].lower() not in ALLOWED_EXTENSIONS:
+                    return jsonify({'error': 'Archivo no permitido'}), 400
+
+                # Generar un nombre seguro para el archivo adjunto
+                filename = secure_filename(file.filename)
+                # Guardar el archivo en la ruta de almacenamiento
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+                # Guardar el nombre del archivo adjunto en la base de datos
+                # Agrega el nombre del archivo adjunto a tu modelo Report
+                new_report = Report(
+                    title=title,
+                    description=description,
+                    user_id=user_id,
+                    user_name=user_name,
+                    user_email=user_email,
+                    dev_id=dev_id,
+                    dev_name=dev_name,
+                    dev_email=dev_email,
+                    software=software,
+                    software_name=software_name,
+                    urgency=urgency,
+                    status=status,
+                    attachment=filename  # Agrega el nombre del archivo adjunto al modelo
+                )
+        else:
+            # Si no se adjuntó ningún archivo, crea el objeto Report sin el campo de archivo adjunto
+            new_report = Report(
+                title=title,
+                description=description,
+                user_id=user_id,
+                user_name=user_name,
+                user_email=user_email,
+                dev_id=dev_id,
+                dev_name=dev_name,
+                dev_email=dev_email,
+                software=software,
+                software_name=software_name,
+                urgency=urgency,
+                status=status
+            )
+
         db.session.add(new_report)
         db.session.commit()
         return jsonify({'message':'Reporte creado'})
@@ -396,6 +438,22 @@ def delete_report(id):
     db.session.delete(report)
     db.session.commit()
     return jsonify({'message': 'Reporte eliminado'})
+
+@app.route('/reports/reassign', methods=['PATCH'])
+def reassign(id):
+    id = request.json('id')
+    report=Report.query.get(id)
+    report.reassign = True
+    db.session.commit()
+    return jsonify ({'message':'Reasignacion activada'})
+
+@app.route('/reports/deassign', methods=['PATCH'])
+def deassign(id):
+    id = request.json('id')
+    report=Report.query.get(id)
+    report.reassign = False
+    db.session.commit()
+    return jsonify ({'message':'Reasignacion desactivada'})
 
 #@app.route('/reports/<id>', methods=['GET'])
 #def get_names(id):
@@ -522,6 +580,43 @@ def get_softwares():
         temp.append(software_data)
     return jsonify(temp)
 
+@app.route('/software/append', methods=['PUT'])
+def software_append():
+    id = request.json['id']
+    dev_email = request.json['email']
+    
+    software = Software.query.filter_by(id=id).first()
+    dev = Developer.query.filter_by(email=dev_email).first()
+    
+    if software is None:
+        return jsonify({'error': 'Software not found'})
+    
+    if dev is None:
+        return jsonify({'error': 'Developer not found'})
+    
+    software.devs.append(dev)
+    
+    db.session.add(software)
+    db.session.commit()
+    
+    return jsonify({'software': software.name, 'developer': dev.name})
+
+
+@app.route('/software_dev', methods=['GET'])
+def get_software_dev():
+    software_dev_entries = db.session.query(software_dev).all()
+
+    software_dev_list = []
+    for entry in software_dev_entries:
+        software_dev_dict = {
+            'software_id': entry.software_id,
+            'dev_id': entry.dev_id
+        }
+        software_dev_list.append(software_dev_dict)
+
+    return jsonify({'software_dev': software_dev_list})
+
+
 @app.route('/software/<int:id>', methods=['GET'])
 def get_software(id):
     software = Software.query.filter_by(id=id).first()
@@ -549,6 +644,7 @@ def create_software():
     db.session.add(new_soft)
     db.session.commit()
     return jsonify({'message': 'Software creado'})
+
 @app.route('/software/<id>', methods=['DELETE'])
 def delete_software_id(id):
     software = Software.query.get_or_404(id)

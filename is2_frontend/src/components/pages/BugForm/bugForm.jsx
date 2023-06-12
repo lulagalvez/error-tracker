@@ -7,10 +7,11 @@ export default (props) =>{
     const[showErrorAlert,setShowErrorAlert]=useState(false);
     const[showSuccessAlert,setShowSuccessAlert]=useState(false);
     const[softwareIds,setSoftwareIds]=useState([]);
+    const[selectedFile,setSelectedFile] = useState(null);
     const software_name= useRef('');
     const userid = Cookies.get('id');
     const username = Cookies.get('name');
-    const useremail = Cookies.get('email')   
+    const useremail = Cookies.get('email');   
     /*
     ESTADOS POSIBLES
     ToDo
@@ -36,7 +37,19 @@ export default (props) =>{
 
     const apiservice=new APIService();
     const reportBug = () =>{
-        apiservice.post('reports',{title: inputValues.title, description: inputValues.description, user_id:userid, user_name:username, user_email: useremail, dev_id:null,dev_name:null ,dev_email:null, software: inputValues.software, software_name: software_name.current ?? '', status:"ToDo",urgency:1})
+        const formData = new FormData();
+        formData.append('file',selectedFile)
+        apiservice.post('reports',{title: inputValues.title, 
+            description: inputValues.description, 
+            user_id:userid, user_name:username, 
+            user_email: useremail, 
+            dev_id:null,dev_name:null ,dev_email:null, 
+            software: inputValues.software, 
+            software_name: software_name.current ?? '', 
+            status:"ToDo",
+            urgency:1,
+            attachement:selectedFile})
+            
         .then(response =>{
             console.log(response);
             if(response?.message === 'Reporte creado'){
@@ -74,6 +87,7 @@ export default (props) =>{
         reportBug();
         setInputValues({title:'', description:'',pasos:"",software:0});
         software_name.current='';
+        setSelectedFile(null);
     }
     
     return(
@@ -114,9 +128,11 @@ export default (props) =>{
                         onChange={handleOnChange} value={inputValues.pasos }  ></textarea>
                         <label htmlFor="floatingSteps">Pasos detallados para reproducir el bug</label>
                     </div>
+                    
                     <div className="mb-3">
-                    <input type="file" className="form-control"></input>
+                    <input type="file" className="form-control" onChange={(e) => setSelectedFile(e.target.files[0])} />
                     </div>
+                    
                     <div className="mb-5 position-absolute start-50 translate-middle-x">
                     <button type='submit' className='btn btn-info' > <a>{props.title}</a></button>
                     </div>

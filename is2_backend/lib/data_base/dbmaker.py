@@ -39,15 +39,15 @@ class User(db.Model):
         self.password = password
 
 software_dev = db.Table('software_dev',
-                    db.Column('software_id', db.Integer, db.ForeignKey('software.id')),
-                    db.Column('dev_id', db.Integer, db.ForeignKey('developer.id'))
+                    db.Column('software_id', db.String(32), db.ForeignKey('software.id')),
+                    db.Column('dev_id', db.String(32), db.ForeignKey('developer.id'))
                     )
 
 class Software (db.Model):
     __tablename__ = ('software')
     id = db.Column (db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    devs = db.relationship('Developer', secondary = software_dev, backref='softwares')
+    devs = db.relationship('Developer', secondary = software_dev, backref='software')
 
 class Developer(User):
     __tablename__= ('developer')
@@ -85,6 +85,8 @@ class Report (db.Model):
     software_name= db.Column(db.String(80))
     urgency = db.Column (db.String(80), nullable=True )
     status = db.Column (db.String(80),nullable=True)
+    attachment = db.Column(db.LargeBinary, nullable=True)
+    reassign = db.Column(db.Boolean, default=False)
 
 class Comment (db.Model):
     __tablename__ = ('comment')
@@ -94,8 +96,6 @@ class Comment (db.Model):
     report_id = db.Column (db.Integer, db.ForeignKey('report.id'), nullable=False)
     commenter_id = db.Column (db.Integer, db.ForeignKey('user.id'), nullable=False)
     commenter_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
-
-
 
 with app.app_context():
     db.create_all()
