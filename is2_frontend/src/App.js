@@ -15,6 +15,7 @@ import SignUp from './components/pages/SignUp/SignUp';
 import LogIn from './components/pages/Login/Login';
 import DevStats from './components/pages/DevStats/DevStats'
 import WelcomeIcon from './components/welcome';
+import BellIcon from './components/bell';
 import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
 import Cookies from 'js-cookie';
 
@@ -87,6 +88,7 @@ class App extends Component {
             <Route path='/report' element={
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
+              <BellIcon/>
               <WelcomeIcon />
               <SideBarUser />
               <CrearBug title='Reportar bug'/>
