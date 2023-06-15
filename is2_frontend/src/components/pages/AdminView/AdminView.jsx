@@ -10,7 +10,6 @@ import "./TablaAdmin.css";
 
 function AdminView() {
   const [reports, setReports] = useState([]);
-  const [search, setSearch] = useState("");
   const [devs, setDevs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -42,6 +41,7 @@ function AdminView() {
   const handleFilterDevChange = (event) => {
     setSelectedFilterDev(event.target.value);
   };  
+
   const filteredBugReports = reports.filter((reports) => {
     const title = reports.title.toString().toLowerCase();
     const status = reports.status.toString().toLowerCase();
@@ -86,6 +86,8 @@ function AdminView() {
       console.log("reports", reportsResponse);
       setReports(reportsResponse);
 
+      const devsCountNotClosed= await api_service.get("count_notclosed_bug_reports");
+      console.log("devcounts", devsCountNotClosed);
       const devsResponse = await api_service.get("devs");
       console.log("devs", devsResponse);
       setDevs(devsResponse || []); // Ensure devsResponse is not undefined
@@ -139,6 +141,7 @@ function AdminView() {
   useEffect(() => {
     showData();
   }, []);
+
 
   return (
     <div className="container mt-4">
