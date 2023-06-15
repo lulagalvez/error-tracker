@@ -387,6 +387,8 @@ def update_report(id):
     title = request.json['title']
     description = request.json['description']
     dev_id = request.json['dev_id']
+    dev_email = request.json['dev_email']
+    dev_name = request.json['dev_name']
     user_id = request.json['user_id']
     software = request.json['software']
     urgency = request.json['urgency'] 
@@ -394,6 +396,8 @@ def update_report(id):
     report.title =  title
     report.description = description
     report.dev_id = dev_id
+    report.dev_email = dev_email
+    report.dev_name = dev_name
     report.user_id = user_id
     report.software = software
     report.urgency = urgency

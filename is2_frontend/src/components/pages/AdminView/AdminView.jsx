@@ -114,7 +114,6 @@ function AdminView() {
   };
 
   const updateTicket = (updatedTicket) => {
-    console.log(updatedTicket);
     const updateTicket = async () => {
       try {
         await api_service.put("reports", updatedTicket.id, updatedTicket);
@@ -139,7 +138,6 @@ function AdminView() {
 
   useEffect(() => {
     showData();
-    console.log("right here boss");
   }, []);
 
   return (
