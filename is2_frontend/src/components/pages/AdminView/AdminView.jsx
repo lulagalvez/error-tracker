@@ -30,7 +30,7 @@ function AdminView() {
     }
   };
 
-  const handleAssignDeveloper = (ticket, selectedDeveloper) => {
+  /* const handleAssignDeveloper = (ticket, selectedDeveloper) => {
     if (selectedDeveloper) {
       const updatedTicket = {
         ...ticket,
@@ -39,7 +39,7 @@ function AdminView() {
       updateTicket(updatedTicket);
       // Handle the logic for assigning the selected developer to the ticket
     }
-  };
+  }; */
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -62,7 +62,8 @@ function AdminView() {
   };
 
   const updateTicket = (updatedTicket) => {
-    const updateTicket = async (updatedTicket) => {
+    console.log(updatedTicket);
+    const updateTicket = async () => {
       try {
         await api_service.put("reports", updatedTicket.id, updatedTicket);
         setReports(
@@ -75,6 +76,7 @@ function AdminView() {
         console.error("Error updating ticket:", error);
       }
     };
+    updateTicket();
   };
 
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -126,7 +128,7 @@ function AdminView() {
                   <TicketExpansion
                     developers={devs}
                     ticket={ticket}
-                    updateTicket={handleAssignDeveloper}
+                    handleSubmit={updateTicket}
                   />
                 )}
               </React.Fragment>

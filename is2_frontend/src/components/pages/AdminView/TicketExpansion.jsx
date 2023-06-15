@@ -4,7 +4,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "./TicketExpansion.css";
 
-const TicketExpansion = ({ developers, ticket, updateTicket }) => {
+const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
   const [selectedPriority, setSelectedPriority] = useState(ticket.priority);
   const [selectedStatus, setSelectedStatus] = useState(ticket.status);
@@ -26,9 +26,11 @@ const TicketExpansion = ({ developers, ticket, updateTicket }) => {
     if (selectedDeveloper) {
       const updatedTicket = {
         ...ticket,
-        assignedDeveloper: selectedDeveloper.id,
+        dev_id: selectedDeveloper.id,
+        dev_email: selectedDeveloper.email,
+        dev_name: selectedDeveloper.name
       };
-      updateTicket(updatedTicket);
+      handleSubmit(updatedTicket);
       console.log("Assigning developer:", selectedDeveloper);
     }
   };
