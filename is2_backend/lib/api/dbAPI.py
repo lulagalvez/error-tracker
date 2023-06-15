@@ -656,17 +656,6 @@ def delete_software_id(id):
     db.session.commit()
     return jsonify({'message': 'Software eliminado'})
 
-@app.route('/count_notclosed_bug_reports', methods=['GET'])
-def count_notclosed_bug_reports():
-    developers=Developer.query.all()
-    result={}
-    for developer in developers:
-        count= Report.query.filter(
-            Report.dev_id == developer.id,
-            Report.status != 'Closed'
-        ).count()
-        result[developer.id]= count
-    return jsonify(result)
 
 def get_software_reports(id):
     reports = Report.query.filter_by(software_id=id).all()
@@ -678,6 +667,17 @@ def get_software_reports(id):
     else:
         return jsonify({'message': 'No reports found for software'})
 
+@app.route('/count_notclosed_bug_reports', methods=['GET'])
+def count_notclosed_bug_reports():
+    developers=Developer.query.all()
+    result={}
+    for developer in developers:
+        count= Report.query.filter(
+            Report.dev_id == developer.id,
+            Report.status != 'Closed'
+        ).count()
+        result[developer.id]= count
+    return jsonify(result)
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
 
