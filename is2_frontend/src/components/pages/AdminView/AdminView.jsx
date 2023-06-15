@@ -1,9 +1,9 @@
 // AdminView.js
 import React, { useEffect, useState } from "react";
 import APIService from "../../services/APIService";
-import SearchBar from "./SearchBar";
 import PriorityForm from "./PriorityForm";
 import StatusForm from "./StatusForm";
+import Filter from "./Filter";
 import TicketRow from "./TicketRow";
 import TicketExpansion from "./TicketExpansion";
 import "./TablaAdmin.css";
@@ -12,9 +12,73 @@ function AdminView() {
   const [reports, setReports] = useState([]);
   const [search, setSearch] = useState("");
   const [devs, setDevs] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedSoftware, setSelectedSoftware] = useState("");
+  const [selectedUrgency, setSelectedUrgency] = useState("");
+  const [selectedFilterDev,setSelectedFilterDev] = useState("");    
   const api_service = new APIService();
-  const [selectedDev, setSelectedDev] = useState("");
-  let devsName = [];
+  const statusColors = {
+    Pending: "status-pending",
+    ToDo: "status-to-do",
+    Testing: "status-testing",
+    Closed: "status-closed",
+  };
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleStatusChange = (event) => {
+    setSelectedStatus(event.target.value);
+  };
+
+  const handleSoftwareChange = (event) => {
+    setSelectedSoftware(event.target.value);
+  };
+
+  const handleUrgencyChange = (event) => {
+    setSelectedUrgency(event.target.value);
+  };
+  const handleFilterDevChange = (event) => {
+    setSelectedFilterDev(event.target.value);
+  };  
+  const filteredBugReports = reports.filter((reports) => {
+    const title = reports.title.toString().toLowerCase();
+    const status = reports.status.toString().toLowerCase();
+    const software = reports.software_name?.toString().toLowerCase();
+    const developer = reports.dev_name?.toString().toLowerCase();
+    const urgency = reports.urgency.toString().toLowerCase();
+    const isMatchingUrgency = selectedUrgency
+      ? urgency === selectedUrgency.toLowerCase()
+      : true;
+      const isMatchingDev = selectedFilterDev
+      ? developer === selectedFilterDev.toLowerCase()
+      : true;
+    const isMatchingTitle = title.includes(searchTerm.toLowerCase());
+    const isMatchingStatus = selectedStatus
+      ? status === selectedStatus.toLowerCase()
+      : true;
+    const isMatchingSoftware = selectedSoftware
+      ? software === selectedSoftware.toLowerCase()
+      : true;
+    return (
+      isMatchingUrgency &&
+      isMatchingTitle &&
+      isMatchingStatus &&
+      isMatchingSoftware &&
+      isMatchingDev
+    );
+  },[]);
+  const statusOptions = Object.keys(statusColors);
+  const softwareOptions = [
+    ...new Set(reports.map((reports) => reports.software_name)),
+  ];
+  const urgencyOptions = [
+    ...new Set(reports.map((reports) => reports.urgency)),
+  ];
+  const devOptions = [
+    ...new Set(reports.map((reports) => reports.dev_name)),
+  ];
 
   const showData = async () => {
     try {
@@ -41,18 +105,6 @@ function AdminView() {
     }
   }; */
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
-
-  let results = [];
-  if (!search) {
-    results = reports;
-  } else {
-    results = reports.filter((dato) =>
-      dato.title.toLowerCase().includes(search.toLocaleLowerCase())
-    );
-  }
 
   const deleteReport = (report) => {
     if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
@@ -100,6 +152,21 @@ function AdminView() {
       <br />
       <StatusForm api_service={api_service} />
       <br /> */}
+        <Filter searchTerm={searchTerm}
+        selectedStatus={selectedStatus}
+        selectedSoftware={selectedSoftware}
+        selectedUrgency={selectedUrgency}
+        selectedFilterDev={selectedFilterDev}
+        filteredBugReports={filteredBugReports}
+        handleSearch={handleSearch}
+        handleStatusChange={handleStatusChange}
+        handleSoftwareChange={handleSoftwareChange}
+        handleUrgencyChange={handleUrgencyChange} 
+        handleFilterDevChange={handleFilterDevChange}
+        statusOptions={statusOptions}
+        softwareOptions={softwareOptions}
+        urgencyOptions={urgencyOptions}
+        devOptions={devOptions}/>      
       <table className="table table-striped">
         <thead>
           <tr>
@@ -115,8 +182,8 @@ function AdminView() {
           </tr>
         </thead>
         <tbody>
-          {results &&
-            results.map((ticket, key) => (
+          {filteredBugReports &&
+            filteredBugReports.map((ticket, key) => (
               <React.Fragment key={key}>
                 <TicketRow
                   ticket={ticket}
