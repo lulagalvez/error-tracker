@@ -27,6 +27,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
     reports = db.relationship('Report', backref = 'user')
+    notifications = db.relationship('Notification', backref='user', primaryjoin='User.id == Notification.user_id')
+    notification_counter = db.Column(db.Integer, default=0)
     type_of_user = db.Column ('type',db.String(20), default=lambda: User.__table__.name)
     __mapper_args__ = {
         'polymorphic_on':type_of_user,
@@ -96,6 +98,13 @@ class Comment (db.Model):
     report_id = db.Column (db.Integer, db.ForeignKey('report.id'), nullable=False)
     commenter_id = db.Column (db.Integer, db.ForeignKey('user.id'), nullable=False)
     commenter_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
+
+class Notification (db.Model):
+    __tablename__ = ('notification')
+    id = db.Column (db.Integer, primary_key=True)
+    content = db.Column (db.Text, nullable=True)
+    user_id = db.Column (db.String(32), db.ForeignKey('user.id'), nullable=False)
+    user_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
 
 with app.app_context():
     db.create_all()

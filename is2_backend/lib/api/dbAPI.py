@@ -8,13 +8,12 @@ from flask_migrate import Migrate
 from config import ApplicationConfig
 from flask_cors import CORS,  cross_origin
 from flask import Flask, jsonify, request, make_response, abort, session
-from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev
+from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '../data_base/imgs'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'jpg', 'png', 'log'}
-
 
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
@@ -651,6 +650,8 @@ def delete_software_id(id):
     db.session.delete(software)
     db.session.commit()
     return jsonify({'message': 'Software eliminado'})
+
+@app.route('/software_report/<id>', methods=['GET'])
 def get_software_reports(id):
     reports = Report.query.filter_by(software_id=id).all()
     if reports:
@@ -661,6 +662,23 @@ def get_software_reports(id):
     else:
         return jsonify({'message': 'No reports found for software'})
 
+#####################################NOTIFICATION#####################################
+@app.route('/notification/<rep_id>', methods=['POST'])
+def post_notification(rep_id):
+    assoc_report = Report.get(rep_id)
+    
+    report_id = assoc_report.id
+    user_id =  assoc_report.user_id
+    user_name = assoc_report.user_name
+    type = request.json['type']
+    content = type + user_name + assoc_report.title
+    new_notification = Notification(content=content,
+                                    report_id=report_id,
+                                    user_id=user_id,
+                                    user_name=user_name)
+    db.session.add(new_notification)
+    db.session.commit()
+    return jsonify(new_notification)
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
 
