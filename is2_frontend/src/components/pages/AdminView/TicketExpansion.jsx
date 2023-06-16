@@ -31,8 +31,9 @@ const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
         dev_name: selectedDeveloper.name
       };
       handleSubmit(updatedTicket);
-      window.location.reload();
-
+      setTimeout(() => {
+        window.location.reload();
+      }, 350); 
     }
   };
 
