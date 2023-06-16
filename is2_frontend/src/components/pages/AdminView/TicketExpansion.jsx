@@ -31,7 +31,8 @@ const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
         dev_name: selectedDeveloper.name
       };
       handleSubmit(updatedTicket);
-      console.log("Assigning developer:", selectedDeveloper);
+      window.location.reload();
+
     }
   };
 

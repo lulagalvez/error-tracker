@@ -1,4 +1,4 @@
-// AdminView.js
+
 import React, { useEffect, useState } from "react";
 import APIService from "../../services/APIService";
 import PriorityForm from "./PriorityForm";
@@ -11,6 +11,7 @@ import "./TablaAdmin.css";
 function AdminView() {
   const [reports, setReports] = useState([]);
   const [devs, setDevs] = useState([]);
+  const [devsCount, setDevsCount] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedSoftware, setSelectedSoftware] = useState("");
@@ -41,7 +42,19 @@ function AdminView() {
   const handleFilterDevChange = (event) => {
     setSelectedFilterDev(event.target.value);
   };  
-
+  const devRecommendation = () =>{
+    const developersWithCount = Object.entries(devsCount).map(([id, count]) => ({
+      id,
+      count: count || 0
+    }));
+    const sortedDevs= devs.sort((a,b) => {
+      const countA = developersWithCount.find(dev => dev.id === a.id).count;
+      const countB = developersWithCount.find(dev => dev.id === b.id).count;
+      return countA - countB;
+    })
+    console.log("devCount",devsCount);
+    setDevs(sortedDevs);
+  };
   const filteredBugReports = reports.filter((reports) => {
     const title = reports.title.toString().toLowerCase();
     const status = reports.status.toString().toLowerCase();
@@ -86,11 +99,21 @@ function AdminView() {
       console.log("reports", reportsResponse);
       setReports(reportsResponse);
 
-      const devsCountNotClosed= await api_service.get("count_notclosed_bug_reports");
-      console.log("devcounts", devsCountNotClosed);
+      const devsCountResponse= await api_service.get("count_notclosed_bug_reports");
+      console.log("devcounts", devsCountResponse);
+      setDevsCount(devsCountResponse || []);
+
       const devsResponse = await api_service.get("devs");
       console.log("devs", devsResponse);
       setDevs(devsResponse || []); // Ensure devsResponse is not undefined
+
+    const sortedDevs = devsResponse.sort((a, b) => {
+      const countA = devsCountResponse[a.id] || 0;
+      const countB = devsCountResponse[b.id] || 0;
+      return countA - countB;
+    });
+    setDevs(sortedDevs);    
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -141,7 +164,12 @@ function AdminView() {
   useEffect(() => {
     showData();
   }, []);
-
+  useEffect(() => {
+    if (devs.length > 0 && devsCount.length > 0) {
+      devRecommendation();
+    }
+    console.log("devsProbando",devs);
+  }, [devs, devsCount]);
 
   return (
     <div className="container mt-4">
