@@ -22,19 +22,26 @@ const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
     setSelectedDeveloper(selected[0]);
   };
 
-  const handleAssignDeveloper = () => {
+  const handleAssign = () => {
+    var updatedTicket = ticket;
     if (selectedDeveloper) {
-      const updatedTicket = {
-        ...ticket,
+      updatedTicket = {
+        ...updatedTicket,
         dev_id: selectedDeveloper.id,
         dev_email: selectedDeveloper.email,
         dev_name: selectedDeveloper.name
       };
-      handleSubmit(updatedTicket);
-      setTimeout(() => {
+      /* setTimeout(() => {
         window.location.reload();
-      }, 350); 
+      }, 350);  */
     }
+    if (selectedStatus) {
+      updatedTicket = {
+        ...updatedTicket,
+        status: selectedStatus
+      };
+    }
+    handleSubmit(updatedTicket);
   };
 
   const handleSearchChange = (event) => {
@@ -95,7 +102,7 @@ const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
               <option value="Closed">Cerrado</option>
             </select>
             <div className="top-padding d-flex justify-content-end">
-            <button onClick={handleAssignDeveloper} className="custom-button">
+            <button onClick={handleAssign} className="custom-button">
               Assign
             </button>
           </div>
