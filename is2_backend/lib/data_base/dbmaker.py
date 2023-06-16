@@ -99,12 +99,16 @@ class Comment (db.Model):
     commenter_id = db.Column (db.Integer, db.ForeignKey('user.id'), nullable=False)
     commenter_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
 
-class Notification (db.Model):
-    __tablename__ = ('notification')
-    id = db.Column (db.Integer, primary_key=True)
-    content = db.Column (db.Text, nullable=True)
-    user_id = db.Column (db.String(32), db.ForeignKey('user.id'), nullable=False)
-    user_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
+class Notification(db.Model):
+    __tablename__ = 'notification'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.String(32), db.ForeignKey('user.id'), nullable=False)
+    user_name = db.Column(db.String(80), db.ForeignKey('user.name'), nullable=False)
+    developer_id = db.Column(db.String(32), db.ForeignKey('developer.id'))
+    developer_name = db.Column(db.String(32))
+    type = db.Column(db.String(20), nullable=False)
+    software = db.Column(db.String(30))
 
 with app.app_context():
     db.create_all()

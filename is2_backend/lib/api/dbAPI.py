@@ -568,8 +568,6 @@ def create_comment():
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
     
-
-
 #####################################SOFTWARE#####################################
 
 @app.route('/software', methods=['GET'])
@@ -677,6 +675,53 @@ def count_notclosed_bug_reports():
         ).count()
         result[developer.id]= count
     return jsonify(result)
+
+
+#####################################NOTIFICATIONS#####################################
+@app.route('/notification/<rep_id>/<type>', methods=['POST'])
+def create_notification(rep_id, type):
+    report = Report.query.filter_by(id = rep_id).first()
+    user_id = report.user_id
+    user_name = report.user_name
+    developer_id = report.dev_id
+    developer_name = report.dev_name
+    software = report.software_name
+    content = str(type) +' '+str(software) + ' ' + str(user_name) + ' ' +str(developer_name)
+    new_notification = Notification(content = content, 
+                                    user_id = user_id, 
+                                    user_name = user_name,
+                                    developer_id=developer_id,
+                                    type = type,
+                                    software = software)
+    db.session.add(new_notification)
+    db.session.commit()
+    return jsonify ({'content':content, 
+                    'user_name':user_name, 
+                    'developer_name':developer_name,
+                    'type':type})
+
+@app.route('/notification/<user_email>', methods=['GET'])
+def get_user_notifications(user_email):
+    notifications = []
+    user = User.query.filter_by(email=user_email).first()
+    if user:
+        notifications = user.notifications
+        notification_list = []
+        for notification in notifications:
+            notification_dict = {
+                'id': notification.id,
+                'content': notification.content,
+                'user_id': notification.user_id,
+                'user_name': notification.user_name,
+                'developer_id': notification.developer_id,
+                'developer_name': notification.developer_name,
+                'type': notification.type
+            }
+            notification_list.append(notification_dict)
+        return jsonify(notification_list)
+    else:
+        return jsonify({'message': 'Este usuario no existe'})
+
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
 
