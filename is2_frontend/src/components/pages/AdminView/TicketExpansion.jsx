@@ -4,7 +4,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "./TicketExpansion.css";
 
-const TicketExpansion = ({ developers, ticket, updateTicket }) => {
+const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
   const [selectedPriority, setSelectedPriority] = useState(ticket.priority);
   const [selectedStatus, setSelectedStatus] = useState(ticket.status);
@@ -22,15 +22,26 @@ const TicketExpansion = ({ developers, ticket, updateTicket }) => {
     setSelectedDeveloper(selected[0]);
   };
 
-  const handleAssignDeveloper = () => {
+  const handleAssign = () => {
+    var updatedTicket = ticket;
     if (selectedDeveloper) {
-      const updatedTicket = {
-        ...ticket,
-        assignedDeveloper: selectedDeveloper.id,
+      updatedTicket = {
+        ...updatedTicket,
+        dev_id: selectedDeveloper.id,
+        dev_email: selectedDeveloper.email,
+        dev_name: selectedDeveloper.name
       };
-      updateTicket(updatedTicket);
-      console.log("Assigning developer:", selectedDeveloper);
+      /* setTimeout(() => {
+        window.location.reload();
+      }, 350);  */
     }
+    if (selectedStatus) {
+      updatedTicket = {
+        ...updatedTicket,
+        status: selectedStatus
+      };
+    }
+    handleSubmit(updatedTicket);
   };
 
   const handleSearchChange = (event) => {
@@ -91,7 +102,7 @@ const TicketExpansion = ({ developers, ticket, updateTicket }) => {
               <option value="Closed">Cerrado</option>
             </select>
             <div className="top-padding d-flex justify-content-end">
-            <button onClick={handleAssignDeveloper} className="custom-button">
+            <button onClick={handleAssign} className="custom-button">
               Assign
             </button>
           </div>

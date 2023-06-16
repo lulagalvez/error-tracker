@@ -386,6 +386,8 @@ def update_report(id):
     title = request.json['title']
     description = request.json['description']
     dev_id = request.json['dev_id']
+    dev_email = request.json['dev_email']
+    dev_name = request.json['dev_name']
     user_id = request.json['user_id']
     software = request.json['software']
     urgency = request.json['urgency'] 
@@ -393,6 +395,8 @@ def update_report(id):
     report.title =  title
     report.description = description
     report.dev_id = dev_id
+    report.dev_email = dev_email
+    report.dev_name = dev_name
     report.user_id = user_id
     report.software = software
     report.urgency = urgency
@@ -662,23 +666,17 @@ def get_software_reports(id):
     else:
         return jsonify({'message': 'No reports found for software'})
 
-#####################################NOTIFICATION#####################################
-@app.route('/notification/<rep_id>', methods=['POST'])
-def post_notification(rep_id):
-    assoc_report = Report.get(rep_id)
-    
-    report_id = assoc_report.id
-    user_id =  assoc_report.user_id
-    user_name = assoc_report.user_name
-    type = request.json['type']
-    content = type + user_name + assoc_report.title
-    new_notification = Notification(content=content,
-                                    report_id=report_id,
-                                    user_id=user_id,
-                                    user_name=user_name)
-    db.session.add(new_notification)
-    db.session.commit()
-    return jsonify(new_notification)
+@app.route('/count_notclosed_bug_reports', methods=['GET'])
+def count_notclosed_bug_reports():
+    developers=Developer.query.all()
+    result={}
+    for developer in developers:
+        count= Report.query.filter(
+            Report.dev_id == developer.id,
+            Report.status != 'Closed'
+        ).count()
+        result[developer.id]= count
+    return jsonify(result)
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
 
