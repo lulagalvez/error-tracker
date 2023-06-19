@@ -109,6 +109,16 @@ class Notification(db.Model):
     developer_name = db.Column(db.String(32))
     type = db.Column(db.String(20), nullable=False)
     software = db.Column(db.String(30))
+    
+class Reassignation(db.Model):
+    __tablename__ = 'reassignation'
+    id = db.Column (db.Integer, primary_key=True)
+    content = db.Column (db.Text, nullable=True)
+    report_id = db.Column (db.Integer, db.ForeignKey('report.id'), nullable=False)
+    dev_id = db.Column (db.String(32), db.ForeignKey('user.id'), nullable=False)
+    dev_name = db.Column (db.String(80), db.ForeignKey('user.name'), nullable=False)
+    dev_email = db.Column (db.String(80), db.ForeignKey('user.email'), nullable=False)
+    date = db.Column (db.DateTime, default=datetime.utcnow)
 
 with app.app_context():
     db.create_all()
