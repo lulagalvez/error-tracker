@@ -43,7 +43,7 @@ const UserReportView = () => {
             {/* <SideBar /> */}
           </div>
         </div>
-        <div className="col-5">
+        <div className="col-4">
           <div className="row">
             <div className="col">
               <div className="p-4"></div>
@@ -57,7 +57,7 @@ const UserReportView = () => {
             selectedBugId={selectedBugId}
           />
         </div>
-        <div className="col-5">
+        <div className="col-6">
           <div className="row">
             <div className="col">
               <div className="p-5"></div>

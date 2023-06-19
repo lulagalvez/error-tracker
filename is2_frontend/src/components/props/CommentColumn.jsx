@@ -40,7 +40,7 @@ const CommentColumn = ({ bugReport }) => {
   }, [bugReport]);   
 
   return (
-    <div className="col-lg-6">
+    <div className="col-lg-10">
       <div className="card mb-4 border-0 shadow-sm">
         <div className="card-body">
           <h5 className="card-title">Bug Report Details</h5>
