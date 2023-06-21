@@ -17,6 +17,7 @@ function AdminView() {
   const [selectedSoftware, setSelectedSoftware] = useState("");
   const [selectedUrgency, setSelectedUrgency] = useState("");
   const [selectedFilterDev,setSelectedFilterDev] = useState("");    
+  const [dictSoftwareDev, setDictSoftwareDev] = useState("");
   const api_service = new APIService();
   const statusColors = {
     Pending: "status-pending",
@@ -113,7 +114,10 @@ function AdminView() {
       return countA - countB;
     });
     setDevs(sortedDevs);    
-      
+    
+    const devSoftwareResponse = await api_service.get("software_dev");
+    console.log("software_dev", devSoftwareResponse);
+    setDictSoftwareDev(devSoftwareResponse);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
