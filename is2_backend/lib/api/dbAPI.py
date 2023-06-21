@@ -44,6 +44,7 @@ def _build_cors_preflight_response():
 #     })
 
 ######################################SESSION ROUTES######################################
+
 @app.route ('/register', methods=['POST'])
 def register_user():
     name = request.json["name"]
@@ -621,9 +622,11 @@ def get_software_dev():
 
 @app.route('/software_dev/associate',methods=['POST'])
 def associate_software_dev():
-    developer_id = request.form.get('developer_id')
-    software_id = request.form.get('software_id')
-
+    data = request.get_json()
+    developer_id = data.get('developer_id')
+    software_id = data.get('software_id')
+    print("dev_id type:", type(developer_id))
+    print("software_id type:", type(software_id))
 
     try:
         developer = Developer.query.filter_by(id=developer_id).one()

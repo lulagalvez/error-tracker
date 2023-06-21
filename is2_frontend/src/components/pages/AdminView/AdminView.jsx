@@ -173,7 +173,6 @@ function AdminView() {
     if (devs.length > 0 && devsCount.length > 0) {
       devRecommendation();
     }
-    console.log("devsProbando",devs);
   }, [devs, devsCount]);
 
   return (
