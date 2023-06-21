@@ -61,7 +61,7 @@ class App extends Component {
               {/* RUTAS PROTEGIDAS */} 
               <Route path='/adminview'element={<ProtectedRoute redirectPath="/login" 
                 isAllowed={logged && type_of_user === 'admin'}>
-                  <WelcomeIcon/>
+                  <BellIcon />
                   <SideBarAdmin/>
                   <AdminView/>  
                 </ProtectedRoute>}
@@ -70,7 +70,7 @@ class App extends Component {
             <Route path='/devview' element={
               <ProtectedRoute redirectPath="/login"
                 isAllowed={logged && type_of_user === 'developer' | 'admin'}>
-                <WelcomeIcon />
+                <BellIcon />
                 <SideBarDeveloper/>
                 <DevView />
               </ProtectedRoute>} 
@@ -79,7 +79,7 @@ class App extends Component {
             <Route path='/devstats' element={
               <ProtectedRoute redirectPath="/login"
                 isAllowed={logged && type_of_user === 'developer'}>
-                <WelcomeIcon />
+                <BellIcon />
                 <SideBarDeveloper />
                 <DevStats />
               </ProtectedRoute>}
@@ -89,7 +89,6 @@ class App extends Component {
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
               <BellIcon/>
-              <WelcomeIcon />
               <SideBarUser />
               <CrearBug title='Reportar bug'/>
             </ProtectedRoute>} />
@@ -97,7 +96,7 @@ class App extends Component {
             <Route path='/my_reports' element={
             <ProtectedRoute redirectPath="/login"
               isAllowed={logged && type_of_user === 'user'}>
-              <WelcomeIcon />
+              <BellIcon />
               <SideBarUser/>
               <UserReportView />
             </ProtectedRoute>} /> 

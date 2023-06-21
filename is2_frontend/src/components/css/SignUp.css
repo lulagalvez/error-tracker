@@ -5,6 +5,15 @@
     width: 100vw;
     height: 100vh;
     background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+    position: relative;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .Auth-form {

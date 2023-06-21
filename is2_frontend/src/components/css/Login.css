@@ -4,6 +4,10 @@
 body {
     font-family: 'Montserrat', sans-serif;
 }
+.welcome-text {
+    text-align: center;
+}
+
 .Auth-form-container {
     display: flex;
     justify-content: center;
@@ -34,6 +38,13 @@ body {
     font-size: 24px;
     color: rgb(34, 34, 34);
     font-weight: 800;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 25px;
 }
 
 label {

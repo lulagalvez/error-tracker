@@ -4,7 +4,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Sidebar.css";
 import Cookies from 'js-cookie'
-import logo from '../../images/Debugger.png'
+import WelcomeIcon from '../../welcome';
+
 
 export const SideBarDeveloper = () => {
     const handleLogout = () => {
@@ -21,7 +22,7 @@ export const SideBarDeveloper = () => {
                     <span>DebuGGer</span>
                 </div>
             </Link>
-
+            <WelcomeIcon />
             <Link to="/devstats">
                 <div className="icon-container new-report">
                     <i className="bi bi-clipboard-data-fill"></i>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import APIService from '../../services/APIService';
 import "bootstrap/dist/css/bootstrap.min.css"
 import "../../css/SignUp.css"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default (props) => {
     const [name, setName] = useState('');
@@ -40,7 +40,11 @@ export default (props) => {
 
     return (
         <div className="Auth-form-container">
-            <form className="Auth-form" onSubmit={handleSubmit}>
+            <div className="welcome-text">
+                <h1>Bienvenido a Debugger</h1>
+                <p>Con Debugger podrás registrar y gestionar eficientemente los bugs de tus proyectos!</p>
+            </div>
+            <div className="Auth-form">
                 <div className="Auth-form-content">
                     <h3 className="Auth-form-title">Registrarse en Debugger</h3>
                     {showAlert && (
@@ -86,8 +90,13 @@ export default (props) => {
                             Enviar
                         </button>
                     </div>
+                    <div className="form-group mt-3">
+                        <div className="Auth-form-text">¿Ya tienes una cuenta?</div>
+                        <Link to="/login">Iniciar sesión</Link>
+                    </div>
                 </div>
-            </form>
+            </div>
+          
         </div>
     )
 }

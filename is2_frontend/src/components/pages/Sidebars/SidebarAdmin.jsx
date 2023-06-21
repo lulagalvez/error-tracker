@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Sidebar.css";
 import Cookies from 'js-cookie'
-import logo from '../../images/Debugger.png'
+import WelcomeIcon from '../../welcome';
 
 export const SideBarAdmin = () => {
     const handleLogout = () => {
@@ -22,7 +22,7 @@ export const SideBarAdmin = () => {
                     <span>DebuGGer</span>
                 </div>
             </Link>
-
+            <WelcomeIcon/>
             <Link to="/adminview">
                 <div className="icon-container assign-bug">
                     <i className="bi bi-file-person-fill"></i>
