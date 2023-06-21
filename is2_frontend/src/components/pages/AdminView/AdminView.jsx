@@ -113,11 +113,12 @@ function AdminView() {
       const countB = devsCountResponse[b.id] || 0;
       return countA - countB;
     });
-    setDevs(sortedDevs);    
-    
+    setDevs(sortedDevs);
     const devSoftwareResponse = await api_service.get("software_dev");
     console.log("software_dev", devSoftwareResponse);
     setDictSoftwareDev(devSoftwareResponse);
+
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -229,6 +230,7 @@ function AdminView() {
                     developers={devs}
                     ticket={ticket}
                     handleSubmit={updateTicket}
+                    dictSoftwareDev={dictSoftwareDev}
                   />
                 )}
               </React.Fragment>

@@ -11,6 +11,7 @@ from flask import Flask, jsonify, request, make_response, abort, session
 from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification, Reassignation
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
+from sqlalchemy.orm.exc import NoResultFound
 
 UPLOAD_FOLDER = '../data_base/imgs'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'jpg', 'png', 'log'}
@@ -617,6 +618,21 @@ def get_software_dev():
 
     return jsonify({'software_dev': software_dev_list})
 
+
+@app.route('/software_dev/associate',methods=['POST'])
+def associate_software_dev():
+    developer_id = request.form.get('developer_id')
+    software_id = request.form.get('software_id')
+
+
+    try:
+        developer = Developer.query.filter_by(id=developer_id).one()
+        software = Software.query.filter_by(id=software_id).one()
+        software.devs.append(developer)
+        db.session.commit()
+        return 'Developer associated with software successfully.'
+    except NoResultFound:
+        return 'Failed to associate developer with software.'
 
 @app.route('/software/<int:id>', methods=['GET'])
 def get_software(id):
