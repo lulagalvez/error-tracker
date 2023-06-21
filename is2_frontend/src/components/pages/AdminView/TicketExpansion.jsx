@@ -4,7 +4,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "./TicketExpansion.css";
 
-const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
+const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) => {
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
   const [selectedPriority, setSelectedPriority] = useState(ticket.priority);
   const [selectedStatus, setSelectedStatus] = useState(ticket.status);
@@ -41,6 +41,9 @@ const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
         status: selectedStatus
       };
     }
+    
+  
+    console.log("devfilter",filteredDevelopers);
     handleSubmit(updatedTicket);
   };
 
@@ -48,10 +51,16 @@ const TicketExpansion = ({ developers, ticket, handleSubmit }) => {
     setSearchValue(event.target.value);
   };
 
-  const filteredDevelopers = developers.filter((developer) =>
-    developer.name.toLowerCase().includes(searchValue.toLowerCase())
-  );
-
+  const filteredDevelopers = developers.filter((developer) => {
+    const isMatchingName = developer.name.toLowerCase().includes(searchValue.toLowerCase());
+    const isMatchingSoftware = dictSoftwareDev.software_dev.some((softwareDev) => {
+      const softwareId = Number(softwareDev.software_id); // Parse software_id as a number
+      return softwareDev.dev_id === developer.id && softwareId === ticket.software;
+    });
+  
+    return isMatchingName && isMatchingSoftware;
+  });
+  
   return (
     <tr>
       <td colSpan="9">

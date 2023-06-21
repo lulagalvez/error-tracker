@@ -17,6 +17,7 @@ function AdminView() {
   const [selectedSoftware, setSelectedSoftware] = useState("");
   const [selectedUrgency, setSelectedUrgency] = useState("");
   const [selectedFilterDev,setSelectedFilterDev] = useState("");    
+  const [dictSoftwareDev, setDictSoftwareDev] = useState("");
   const api_service = new APIService();
   const statusColors = {
     Pending: "status-pending",
@@ -112,8 +113,12 @@ function AdminView() {
       const countB = devsCountResponse[b.id] || 0;
       return countA - countB;
     });
-    setDevs(sortedDevs);    
-      
+    setDevs(sortedDevs);
+    const devSoftwareResponse = await api_service.get("software_dev");
+    console.log("software_dev", devSoftwareResponse);
+    setDictSoftwareDev(devSoftwareResponse);
+
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -168,7 +173,6 @@ function AdminView() {
     if (devs.length > 0 && devsCount.length > 0) {
       devRecommendation();
     }
-    console.log("devsProbando",devs);
   }, [devs, devsCount]);
 
   return (
@@ -225,6 +229,7 @@ function AdminView() {
                     developers={devs}
                     ticket={ticket}
                     handleSubmit={updateTicket}
+                    dictSoftwareDev={dictSoftwareDev}
                   />
                 )}
               </React.Fragment>
