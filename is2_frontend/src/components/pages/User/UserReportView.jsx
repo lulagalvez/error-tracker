@@ -9,13 +9,10 @@ import APIService from '../../services/APIService';
 import Cookies from 'js-cookie';
 
 
-//Aqui tienen que estar los hooks de los bugreports, hasta el momento solo son generados en una funcion en utils, es un diccionario
-//dentro del codigo se usa status en vez de state, cambiar referencia en el json
-
 const UserReportView = () => {
   const [selectedBugId, setSelectedBugId] = useState(null);
   const [bugReports, setReports] = useState([]);
-  const[softwareName,setSoftwareName]= useState([]);
+  const [softwareName, setSoftwareName] = useState([]);
   const user_email = Cookies.get('email');
 
   const api_service = new APIService();
@@ -26,18 +23,18 @@ const UserReportView = () => {
       setReports(response);
     }
     fetchData();
-  }, []); 
+  }, []);
 
   const handleBugReportClick = (bugReport) => {
     setSelectedBugId(bugReport.id);
   };
 
   const accessLevel = 2;
-  const columnPadding = "p-5";
+
   return (
-    <div className="container-fluid pt-4">
+    <div className="container-fluid pt-4 justify-content-center align-items-center">
       <div className="row">
-        <div className="col-2 ">
+        <div className="col-2">
           {/*SIDEBAR CON UNA COLUMNA ASIGNADA*/}
           <div className="sidebar-wrapper">
             {/* <SideBar /> */}

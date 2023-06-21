@@ -41,8 +41,7 @@ export default (props) =>{
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        apiservice
-            .post('reports', {
+        apiservice.post('reports', {
                 title: inputValues.title,
                 description: inputValues.description,
                 user_id: userid,
@@ -57,18 +56,21 @@ export default (props) =>{
                 urgency: 1,
                 attachement: selectedFile
             })
+
             .then((response) => {
                 console.log(response);
                 if (response?.message === 'Reporte creado') {
                     setShowSuccessAlert(true);
-                    // Crear la notificación después de reportar el bug
-                
-                       
                 } else {
                     setShowErrorAlert(true);
                 }
             })
             .catch((error) => console.log('error', error));
+             console.log(software_name.current ?? '')
+            apiservice.post('notification_user', 
+                {email:useremail, 
+                software: software_name.current ?? '',
+                type:'Posted'}) 
     };
     useEffect(() => {
         async function fetchData() {

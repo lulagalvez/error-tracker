@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IconContext } from 'react-icons';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaTrash } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 import './css/notibell.css';
 import APIService from '../components/services/APIService';
@@ -11,13 +11,14 @@ const NotiBell = () => {
     const [isNotificationOpen, setNotificationOpen] = useState(false);
     const [notificationCount, setNotificationCount] = useState(0);
     const [notifications, setNotifications] = useState([]);
+    const [notificationsToDelete, setNotificationsToDelete] = useState([]);
 
     const handleClick = () => {
         setNotificationOpen(!isNotificationOpen);
         if (!isNotificationOpen) {
             setNotificationCount(0);
         }
-        // reiniciar contador despues de cerrar
+        // Reiniciar contador después de cerrar
     };
 
     useEffect(() => {
@@ -36,6 +37,15 @@ const NotiBell = () => {
         fetchNotifications();
     }, [user_email]);
 
+    const handleDelete = async () => {
+        try {
+            await api_service.patchById('notification',user_email);
+            setNotifications([]);
+            setNotificationCount(0);
+        } catch (error) {
+            console.error('Error deleting notifications:', error);
+        }
+    };
     return (
         <div className="bell-icon" onClick={handleClick}>
             <IconContext.Provider value={{ className: 'bell-icon__icon' }}>
@@ -45,15 +55,28 @@ const NotiBell = () => {
                 <FaBell />
             </IconContext.Provider>
             {isNotificationOpen && (
-                <ul className="notification-list">
-                    {notifications.length > 0 ? (
-                        notifications.map((notification) => (
-                            <li key={notification.id}>{notification.content}</li>
-                        ))
-                    ) : (
-                        <li>¡Estás al día! 😄</li>
-                    )}
-                </ul>
+                <div className="notification-container">
+                    <div className="notification-header">
+                        <div className="notification-title"></div>
+                        {notifications.length > 0 && (
+                            <div>
+                                <FaTrash className="trash-icon" onClick={handleDelete}/>
+                            </div>
+                        )}
+                    </div>
+                    <ul className="notification-list">
+                        {notifications.length > 0 ? (
+                            notifications.map((notification) => (
+                                <li key={notification.id}>
+                                    <br />
+                                    <div>{notification.content}</div>
+                                </li>
+                            ))
+                        ) : (
+                            <li>¡Estás al día! 😄</li>
+                        )}
+                    </ul>
+                </div>
             )}
         </div>
     );

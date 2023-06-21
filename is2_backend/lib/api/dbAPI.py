@@ -87,6 +87,7 @@ def login():
     return response
 
 @app.route("/@me", methods=['GET'])
+@cross_origin(origin='http://localhost:3000', supports_credentials=True)
 def get_current_user():
 
     if request.cookies:
@@ -718,19 +719,22 @@ def create_notification1(rep_id, type):
         'type': type
     })
 
-@app.route('/notification_user/<user_email>', methods=['POST'])
-def create_notification2(user_email):
+@app.route('/notification_user', methods=['POST'])
+@cross_origin(origin='http://localhost:3000', supports_credentials=True)
+def create_notification2():
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
-    user = User.query.filter_by(email=user_email).first()
-    user_id = user.id
-    user_name = user.name
+    
+    email = request.json['email']
     software = request.json['software']
     type = request.json['type']
+    user = User.query.filter_by(email=email).first()
+    user_id = user.id
+    user_name = user.name
     content = '' 
     if type == 'Posted':
-        content = f'Posted: Has publicado un reporte en {software} Muchas gracias!'
-
+       content = f'Posted: Has publicado un reporte en {software} ¡Muchas gracias!'
+    
     new_notification = Notification(
         content=content,
         user_id=user_id,
@@ -771,9 +775,16 @@ def get_user_notifications(user_email):
     else:
         return jsonify({'message': 'Este usuario no existe'})
     
-@app.route('/notification/<user_email>', methods=['DELETE'])
+@app.route('/notification/<user_email>', methods=['PATCH'])
 def delete_user_notifications(user_email):
     user = User.query.filter_by(email=user_email).first()
+    if user:
+        Notification.query.filter_by(user=user).delete()
+        db.session.commit()
+        return 'Notificaciones eliminadas exitosamente', 200
+    else:
+        return 'Usuario no encontrado', 404
+
     
 ###########################################REASSIGNATION##################################################
 

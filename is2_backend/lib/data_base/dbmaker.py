@@ -21,24 +21,24 @@ db = SQLAlchemy(app)
 
 @dataclass
 class User(db.Model):
-    __tablename__ = ('user')
-    id = db.Column(db.String(32), primary_key=True, default= get_uuid)
+    __tablename__ = 'user'
+    id = db.Column(db.String(32), primary_key=True, default=get_uuid)
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
-    reports = db.relationship('Report', backref = 'user')
+    reports = db.relationship('Report', backref='user')
     notifications = db.relationship('Notification', backref='user', primaryjoin='User.id == Notification.user_id')
-    notification_counter = db.Column(db.Integer, default=0)
-    type_of_user = db.Column ('type',db.String(20), default=lambda: User.__table__.name)
-    __mapper_args__ = {
-        'polymorphic_on':type_of_user,
-        'polymorphic_identity': 'user'
-    } 
-
-    def __init__ (self, name, email, password):
+    type_of_user = db.Column('type', db.String(20), default=lambda: User.__table__.name)
+    
+    def __init__(self, name, email, password):
         self.name = name
         self.email = email
         self.password = password
+    
+    @property
+    def notification_counter(self):
+        return len(self.notifications)
+
 
 software_dev = db.Table('software_dev',
                     db.Column('software_id', db.String(32), db.ForeignKey('software.id')),

@@ -52,7 +52,17 @@ export default class APIService{
         }
 
         return axios.patch(apiUrl)
-    }    
+    }   
+    patchById(url, id) {
+        let apiUrl = `${this.domain}/${url}`;
+        if (id) {
+            apiUrl = `${apiUrl}/${id}`;
+        }
+
+        return axios.patch(apiUrl)
+            .then(response => response.data)
+            .catch(error => console.log(error));
+    }
     
     put(url, id, data) {
         let apiUrl = `${this.domain}/${url}`;
