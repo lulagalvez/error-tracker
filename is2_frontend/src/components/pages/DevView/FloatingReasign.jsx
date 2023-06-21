@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import "./FloatingReasign.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import APIService from "../../services/APIService";
 
 const FloatingReasign = ({ title, onSubmit, onClose }) => {
   const [issueText, setIssueText] = useState("");
-
+  const apiservice = new APIService();
   const handleSubmit = () => {
     onSubmit(issueText);
     setIssueText("");

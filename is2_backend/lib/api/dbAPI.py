@@ -24,7 +24,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.secret_key = "FLASKQLOSIONOLOKO@"
-
+CORS(app,origins='localhost:3000')
 
 def _build_cors_preflight_response():
     response = make_response()
@@ -678,27 +678,76 @@ def count_notclosed_bug_reports():
 
 
 #####################################NOTIFICATIONS#####################################
-@app.route('/notification/<rep_id>/<type>', methods=['POST'])
-def create_notification(rep_id, type):
-    report = Report.query.filter_by(id = rep_id).first()
+@app.route('/notification_report/<rep_id>/<type>', methods=['POST'])
+def create_notification1(rep_id, type):
+    report = Report.query.filter_by(id=rep_id).first()
     user_id = report.user_id
     user_name = report.user_name
     developer_id = report.dev_id
     developer_name = report.dev_name
     software = report.software_name
-    content = str(type) +' '+str(software) + ' ' + str(user_name) + ' ' +str(developer_name)
-    new_notification = Notification(content = content, 
-                                    user_id = user_id, 
-                                    user_name = user_name,
-                                    developer_id=developer_id,
-                                    type = type,
-                                    software = software)
+    
+    content = ''
+    if type == 'Reassign':
+        content = f'Reasignación solicitada en {software}, Desarrollador: {developer_name}!'
+    elif type == 'Solved':
+        content = f'Solucionado: Tu reporte de {software} ha sido solucionado por {developer_name}!' 
+    elif type == 'Rejected':
+        content = f'Rechazado: Tu reasignación solicitada en {software} fue rechazada :"( '
+    elif type == 'Posted':
+        content = f'Posted: Has publicado un reporte en {software} Muchas gracias!'
+    elif type == 'Accepted':
+        content = f'Accepted: Tu solicitud de reasignación en {software} fue aceptada!'
+
+    new_notification = Notification(
+        content=content,
+        user_id=user_id,
+        user_name=user_name,
+        developer_id=developer_id,
+        type=type,
+        software=software
+    )
+
     db.session.add(new_notification)
     db.session.commit()
-    return jsonify ({'content':content, 
-                    'user_name':user_name, 
-                    'developer_name':developer_name,
-                    'type':type})
+
+    return jsonify({
+        'content': content,
+        'user_name': user_name,
+        'developer_name': developer_name,
+        'type': type
+    })
+
+@app.route('/notification_user/<user_email>', methods=['POST'])
+def create_notification2(user_email):
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    user = User.query.filter_by(email=user_email).first()
+    user_id = user.id
+    user_name = user.name
+    software = request.json['software']
+    type = request.json['type']
+    content = '' 
+    if type == 'Posted':
+        content = f'Posted: Has publicado un reporte en {software} Muchas gracias!'
+
+    new_notification = Notification(
+        content=content,
+        user_id=user_id,
+        user_name=user_name,
+        type=type,
+        software=software
+    )
+
+    db.session.add(new_notification)
+    db.session.commit()
+
+    return jsonify({
+        'content': content,
+        'user_name': user_name,
+        'type': type
+    })
+
 
 @app.route('/notification/<user_email>', methods=['GET'])
 def get_user_notifications(user_email):
@@ -722,6 +771,9 @@ def get_user_notifications(user_email):
     else:
         return jsonify({'message': 'Este usuario no existe'})
     
+@app.route('/notification/<user_email>', methods=['DELETE'])
+def delete_user_notifications(user_email):
+    user = User.query.filter_by(email=user_email).first()
     
 ###########################################REASSIGNATION##################################################
 
@@ -776,6 +828,19 @@ def delete_reassignation(id):
     db.session.commit()
     return jsonify({'message': 'Reasignación eliminada'})
 
+    if user:
+        notifications = Notification.query.filter_by(user_id=user.id).all()
+
+        for notification in notifications:
+            db.session.delete(notification)
+
+        db.session.commit()
+
+        return jsonify({'message': 'Notificaciones eliminadas exitosamente'})
+    else:
+        return jsonify({'message': 'Usuario no encontrado'})
+
+    
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
 

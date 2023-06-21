@@ -12,6 +12,7 @@ export default (props) =>{
     const userid = Cookies.get('id');
     const username = Cookies.get('name');
     const useremail = Cookies.get('email');   
+    const posted = 'Posted';
     /*
     ESTADOS POSIBLES
     ToDo
@@ -36,33 +37,39 @@ export default (props) =>{
       );
 
     const apiservice=new APIService();
-    const reportBug = () =>{
+    const reportBug = () => {
         const formData = new FormData();
-        formData.append('file',selectedFile)
-        apiservice.post('reports',{title: inputValues.title, 
-            description: inputValues.description, 
-            user_id:userid, user_name:username, 
-            user_email: useremail, 
-            dev_id:null,dev_name:null ,dev_email:null, 
-            software: inputValues.software, 
-            software_name: software_name.current ?? '', 
-            status:"ToDo",
-            urgency:1,
-            attachement:selectedFile})
-            
-        .then(response =>{
-            console.log(response);
-            if(response?.message === 'Reporte creado'){
-                setShowSuccessAlert(true);
+        formData.append('file', selectedFile);
+
+        apiservice
+            .post('reports', {
+                title: inputValues.title,
+                description: inputValues.description,
+                user_id: userid,
+                user_name: username,
+                user_email: useremail,
+                dev_id: null,
+                dev_name: null,
+                dev_email: null,
+                software: inputValues.software,
+                software_name: software_name.current ?? '',
+                status: 'ToDo',
+                urgency: 1,
+                attachement: selectedFile
+            })
+            .then((response) => {
+                console.log(response);
+                if (response?.message === 'Reporte creado') {
+                    setShowSuccessAlert(true);
+                    // Crear la notificación después de reportar el bug
                 
-            }
-            else{
-                setShowErrorAlert(true);
-            }
-        })
-        .catch(error => console.log('error',error))
-        
-    }
+                       
+                } else {
+                    setShowErrorAlert(true);
+                }
+            })
+            .catch((error) => console.log('error', error));
+    };
     useEffect(() => {
         async function fetchData() {
           const response = await apiservice.get('software');

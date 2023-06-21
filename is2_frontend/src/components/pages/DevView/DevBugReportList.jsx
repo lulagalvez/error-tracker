@@ -85,7 +85,6 @@ const DevBugReportList = ({
       selectedSoftware={selectedSoftware}
       selectedUrgency={selectedUrgency}
 
-
       statusColors={statusColors}
       handleClick={handleClick}
       handleSearch={handleSearch}
