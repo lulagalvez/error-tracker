@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import "./DevBugReportListContent.css";
 import FloatingReasign from "./FloatingReasign";
+import APIService from '../../services/APIService';
+import Cookies from 'js-cookie';
 
 const DevBugReportListContent = ({
   searchTerm,
@@ -24,9 +26,17 @@ const DevBugReportListContent = ({
   accessLevel,
   selectedBugId,
 }) => {
+  const[showErrorAlert,setShowErrorAlert] = useState(false);
+  const[showSuccessAlert,setShowSuccessAlert] = useState(false);
   const [showFloatingReasign, setShowFloatingReasign] = useState(false);
   const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
   const [selectedTicketId, setSelectedTicketId] = useState(null);
+
+  const userid = Cookies.get('id');
+  const username = Cookies.get('name');
+  const useremail = Cookies.get('email');
+
+  const api_service = new APIService();
 
   const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
     setSelectedTicketId(ticketId);
@@ -40,6 +50,19 @@ const DevBugReportListContent = ({
 
   const handleSubmitIssue = (issueText) => {
     // Handle submitting the issue text
+    console.log(selectedTicketId);
+    api_service.post('reassignations',{content: issueText, report_id:selectedTicketId, dev_id:userid, dev_name: username, dev_email:useremail})
+        .then(response =>{
+            if(response?.message === 'Reasignación creada'){
+                setShowSuccessAlert(true);
+            }else{
+                setShowErrorAlert(true);
+            }
+        })
+        .catch(error => console.log('error',error))
+      
+    api_service.patch()
+
     console.log("Submitted issue:", issueText);
     handleCloseFloatingReasign();
   };

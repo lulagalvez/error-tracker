@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from config import ApplicationConfig
 from flask_cors import CORS,  cross_origin
 from flask import Flask, jsonify, request, make_response, abort, session
-from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification
+from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification, Reassignation
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
 
@@ -774,6 +774,59 @@ def get_user_notifications(user_email):
 @app.route('/notification/<user_email>', methods=['DELETE'])
 def delete_user_notifications(user_email):
     user = User.query.filter_by(email=user_email).first()
+    
+###########################################REASSIGNATION##################################################
+
+@app.route('/reassignations', methods=['GET'])
+def get_reassignations():
+    reassignations = Reassignation.query.all()
+    temp = []
+    for reassignation in reassignations:
+        reassignation_data = {}
+        reassignation_data['id'] = reassignation.id
+        reassignation_data['report_id'] = reassignation.report_id
+        reassignation_data['content'] = reassignation.content
+        reassignation_data['dev_id'] = reassignation.dev_id
+        reassignation_data['dev_name'] = reassignation.dev_name
+        reassignation_data['dev_email'] = reassignation.dev_email
+        reassignation_data['date'] = reassignation.date
+        
+        temp.append(reassignation_data)
+
+    return jsonify(temp)
+
+@app.route('/reassignations', methods=['POST'])
+def create_reassignation():
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method =="POST":
+        # Obtener los datos del reporte desde el cuerpo de la solicitud
+        report_id = request.json['report_id']
+        content = request.json['content']
+        dev_id = request.json['dev_id']
+        dev_name = request.json['dev_name']
+        dev_email = request.json['dev_email']
+
+        new_reassignation = Reassignation(
+                report_id = report_id,
+                content = content,
+                dev_id = dev_id,
+                dev_name = dev_name,
+                dev_email = dev_email,
+            )
+        db.session.add(new_reassignation)
+        db.session.commit()
+        return jsonify({'message':'Reasignación creada'})
+    else:
+        raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+
+@app.route('/reassignation/<id>', methods=['DELETE'])
+def delete_reassignation(id):
+    reassignation = Reassignation.query.get_or_404(id)
+    db.session.delete(reassignation)
+    db.session.commit()
+    return jsonify({'message': 'Reasignación eliminada'})
 
     if user:
         notifications = Notification.query.filter_by(user_id=user.id).all()
