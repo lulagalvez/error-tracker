@@ -25,7 +25,7 @@ const TicketRow = ({ ticket, handleClick, deleteReport, selectedTicket }) => {
         <td style={{ textAlign: "center" }}>{ticket.user_name}</td>
         <td style={{ textAlign: "center" }}>{ticket.software_name}</td>
         <td style={{ textAlign: "center" }}>{formatoFecha(ticket.date)}</td>
-        <td style={{ textAlign: "center" }}>{formatoFecha(ticket.urgency)}</td>
+        <td style={{ textAlign: "center" }}>{formatoUrg(ticket.urgency)}</td>
         <td style={{ textAlign: "center" }}>{ticket.dev_name}</td>
         <td>
           <Status nombre={ticket.status} />
