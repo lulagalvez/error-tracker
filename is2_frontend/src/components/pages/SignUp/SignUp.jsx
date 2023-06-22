@@ -31,7 +31,6 @@ export default (props) => {
         setName('');
         setEmail('');
         setPassword('');
-        navigate("/login");
     };
 
     const SignUp = async () => {
@@ -86,7 +85,7 @@ export default (props) => {
                         />
                     </div>
                     <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
                             Enviar
                         </button>
                     </div>

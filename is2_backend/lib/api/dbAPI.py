@@ -418,6 +418,7 @@ def update_reportprio(id,priority):
     return jsonify({'message': 'Prioridad del reporte actualizado'})
     
 @app.route('/reports/<id>/update_status/<status>', methods=['PATCH'])
+@cross_origin(origin='http://localhost:3000', supports_credentials=True)
 def update_reportstatus(id,status):
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
@@ -711,7 +712,9 @@ def create_notification1(rep_id, type):
     if type == 'Reassign':
         content = f'Reasignación solicitada en {software}, Desarrollador: {developer_name}!'
     elif type == 'Solved':
-        content = f'Solucionado: Tu reporte de {software} ha sido solucionado por {developer_name}!' 
+        content = f'Solucionado: Tu reporte de {software} ha sido solucionado por {developer_name}!'
+    elif type == 'Assigned':
+        content = f'Asignado: Se te ha asignado {report.name}' 
     elif type == 'Rejected':
         content = f'Rechazado: Tu reasignación solicitada en {software} fue rechazada :"( '
     elif type == 'Posted':

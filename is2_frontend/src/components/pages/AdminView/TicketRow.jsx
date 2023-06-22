@@ -12,10 +12,10 @@ const TicketRow = ({ ticket, handleClick, deleteReport, selectedTicket }) => {
   }
   const formatoUrg=(strUrg)=>{
     const numUrg=Number(strUrg);
-    if(numUrg==1) return "Urgente";
-    if(numUrg>=2 && numUrg<=4) return "Alta";
-    if(numUrg>=5 && numUrg<=7) return "Media";
-    return "Baja";
+    if(numUrg==1) return "Baja";
+    if(numUrg==2) return "Media";
+    if(numUrg==3) return "Alta";
+    return "Urgente";
   }
   return (
     <>

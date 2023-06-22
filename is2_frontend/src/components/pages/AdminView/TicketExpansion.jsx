@@ -6,7 +6,7 @@ import "./TicketExpansion.css";
 
 const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) => {
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState(ticket.priority);
+  const [selectedPriority, setSelectedPriority] = useState(ticket.urgency);
   const [selectedStatus, setSelectedStatus] = useState(ticket.status);
   const [searchValue, setSearchValue] = useState("");
 
@@ -29,7 +29,7 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
         ...updatedTicket,
         dev_id: selectedDeveloper.id,
         dev_email: selectedDeveloper.email,
-        dev_name: selectedDeveloper.name
+        dev_name: selectedDeveloper.name  
       };
       /* setTimeout(() => {
         window.location.reload();
@@ -39,9 +39,17 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
       updatedTicket = {
         ...updatedTicket,
         status: selectedStatus
+        
       };
+      
     }
-    
+    if(selectedPriority){
+      console.log("selected",selectedPriority);
+        updatedTicket = {
+          ...updatedTicket,
+          urgency: selectedPriority
+        }; 
+    }
   
     console.log("devfilter",filteredDevelopers);
     handleSubmit(updatedTicket);
@@ -80,10 +88,10 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
               onChange={handlePriorityChange}
               className="form-control"
             >
-              <option value="Baja">Baja</option>
-              <option value="Media">Media</option>
-              <option value="Alta">Alta</option>
-              <option value="Urgente">Urgente</option>
+              <option value="1">Baja</option>
+              <option value="2">Media</option>
+              <option value="3">Alta</option>
+              <option value="4">Urgente</option>
             </select>
           </div>
           <div className="col-md-2">
@@ -109,6 +117,7 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
               <option value="ToDo">Abierto</option>
               <option value="Pending">En progreso</option>
               <option value="Closed">Cerrado</option>
+              <option value="Testing">En testeo</option>
             </select>
             <div className="top-padding d-flex justify-content-end">
             <button onClick={handleAssign} className="custom-button">

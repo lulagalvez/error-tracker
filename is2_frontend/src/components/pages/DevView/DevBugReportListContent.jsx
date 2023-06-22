@@ -9,16 +9,15 @@ import Cookies from "js-cookie";
 
 const DevBugReportListContent = ({
   searchTerm,
-  selectedStatus,
   selectedSoftware,
   selectedUrgency,
 
   statusColors,
   handleClick,
   handleSearch,
-  handleStatusChange,
   handleSoftwareChange,
   handleUrgencyChange,
+  handleStatusSearch,
 
   filteredBugReports,
   statusOptions,
@@ -32,13 +31,19 @@ const DevBugReportListContent = ({
   const [showFloatingReasign, setShowFloatingReasign] = useState(false);
   const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
   const [selectedTicketId, setSelectedTicketId] = useState(null);
-  const [selectedTicketStatus, setSelectedTicketStatus] = useState("");
-
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedBugStatus, setSelectedBugStatus] = useState("");
   const userid = Cookies.get("id");
   const username = Cookies.get("name");
   const useremail = Cookies.get("email");
 
   const api_service = new APIService();
+  
+  const handleStatusChange = (event) => {
+    setSelectedBugStatus(event.target.value);
+    console.log('SelectedStatus:',selectedBugStatus);
+    api_service.patch('reports',selectedBugId,selectedBugStatus,'status').then((response)=>console.log(response));
+  };
 
   const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
     setSelectedTicketId(ticketId);
@@ -79,11 +84,12 @@ const DevBugReportListContent = ({
   }
   const formatoUrg=(strUrg)=>{
     const numUrg=Number(strUrg);
-    if(numUrg==1) return "Urgente";
-    if(numUrg>=2 && numUrg<=4) return "Alta";
-    if(numUrg>=5 && numUrg<=7) return "Media";
-    return "Baja";
-  }
+    if(numUrg===1) return "Baja";
+    if(numUrg===2 ) return "Media";
+    if(numUrg===3) return "Alta";
+    return "Urgente"
+  };
+  
   return (
     <div className="container">
       <div className="d-flex mb-2">
@@ -140,7 +146,7 @@ const DevBugReportListContent = ({
         <select
           className="form-control mr-1"
           value={selectedStatus}
-          onChange={handleStatusChange}
+          onChange={handleStatusSearch}
         >
           <option value="">All Status</option>
           {statusOptions.map((status) => (
@@ -218,15 +224,14 @@ const DevBugReportListContent = ({
                           className={`text-secondary ${borderColor} rounded`}
                         >
                           <select
+                            onChange={handleStatusChange}
                             value={bugReport.status}
-                            onChange={() =>
-                              handleStatusChange(bugReport.id, bugReport.status)
-                            }
                             className="form-control"
                           >
                             <option value="ToDo">Abierto</option>
                             <option value="Pending">En progreso</option>
                             <option value="Closed">Cerrado</option>
+                            <option value="Testing">En testeo</option>
                           </select>
                           <FontAwesomeIcon
                             icon={faChevronDown}

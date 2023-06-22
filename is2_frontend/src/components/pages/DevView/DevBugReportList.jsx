@@ -45,8 +45,6 @@ const DevBugReportList = ({
     setSelectedUrgency(event.target.value);
   };
 
-
-
   const filteredBugReports = bugReports.filter((bugReport) => {
     const title = bugReport.title.toString().toLowerCase();
     const status = bugReport.status.toString().toLowerCase();
@@ -88,7 +86,7 @@ const DevBugReportList = ({
       statusColors={statusColors}
       handleClick={handleClick}
       handleSearch={handleSearch}
-      handleStatusChange={handleStatusChange}
+      handleStatusSearch={handleStatusChange}
       handleSoftwareChange={handleSoftwareChange}
       handleUrgencyChange={handleUrgencyChange}
 

@@ -15,46 +15,39 @@ export const SideBarAdmin = () => {
         Cookies.remove('id');
     };
     return (
-        <div className="sidebar">
+      <div className="sidebar">
+        <Link to="/adminview">
+          <div className="logo-container-admin">
+            <span>DebuGGer</span>
+          </div>
+        </Link>
 
-            <Link to="/adminview">
-                <div className="logo-container-admin">
-                    <span>DebuGGer</span>
-                </div>
-            </Link>
-            <WelcomeIcon/>
-            <Link to="/adminview">
-                <div className="icon-container assign-bug">
-                    <i className="bi bi-file-person-fill"></i>
-                    <h1>Asignar Bug</h1>
-                    <span className="oval"></span>
-                </div>
-            </Link>
+        <WelcomeIcon />
+        
+        <Link to="/adminview">
+          <div className="icon-container assign-bug">
+            <i className="bi bi-file-person-fill"></i>
+            <h1>Asignar Bug</h1>
+            <span className="oval"></span>
+          </div>
+        </Link>
 
-            <Link>
-                <div className="icon-container">
-                    <i className="bi bi-clipboard-data-fill"></i>
-                    <h1>Estadísticas</h1>
-                    <span className="oval"></span>
-                </div>
-            </Link>
-            <Link>
-                <div className="icon-container">
-                    <i className="bi bi-clipboard2-check-fill"></i>
-                    <h1>Mis Reportes</h1>
-                    <span className="oval"></span>
-                </div>
-            </Link>
+        <Link to="/reassign_requests">
+          <div className="icon-container">
+            <i className="bi bi-hand-thumbs-up-fill"></i>
+            <h1>Reasignar</h1>
+            <span className="oval"></span>
+          </div>
+        </Link>
 
-            <Link to="/login">
-                <div className="icon-container log-outadmin" onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-left"></i>
-                    <h1>Cerrar Sesión</h1>
-                    <span className="oval"></span>
-                </div>
-            </Link>
-
-        </div>
+        <Link to="/login">
+          <div className="icon-container log-outadmin" onClick={handleLogout}>
+            <i className="bi bi-box-arrow-left"></i>
+            <h1>Cerrar Sesión</h1>
+            <span className="oval"></span>
+          </div>
+        </Link>
+      </div>
     );
 
 };
