@@ -47,11 +47,11 @@ const DevBugReportListContent = ({
     Closed: 'Cerrado',
     // Add more translations as needed
   };
-  const handleStatusChange = (event,bugReportID) => {
+  const handleStatusChange = (event,bugReport) => {
     const newStatus=event.target.value;
     setSelectedBugStatus(newStatus);
     console.log('SelectedStatus:',selectedBugStatus);
-    api_service.patch('reports',bugReportID,newStatus,'status').then((response)=>console.log(response));
+    api_service.patch('reports',bugReport.id,newStatus,'status').then((response)=>console.log(response));
   };
 
   const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
@@ -233,7 +233,7 @@ const DevBugReportListContent = ({
                           className={`text-secondary ${borderColor} rounded`}
                         >
                           <select
-                            onChange={(event)=> handleStatusChange(event, bugReport.id)}
+                            onChange={(event)=> handleStatusChange(event, bugReport)}
                             value={bugReport.status}
                             className="form-control"
                           >
