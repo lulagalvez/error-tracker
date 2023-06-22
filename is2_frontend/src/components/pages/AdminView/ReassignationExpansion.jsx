@@ -3,7 +3,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "./TicketExpansion.css";
 
-const ReassignationExpansion = ({ reassignation, handleSubmit, developers }) => {
+const ReassignationExpansion = ({ reassignation, handleSubmit, developers, handleRemove }) => {
     const [selectedDeveloper, setSelectedDeveloper] = useState(null);
 
     const handleDeveloperChange = (selected) => {
@@ -11,37 +11,11 @@ const ReassignationExpansion = ({ reassignation, handleSubmit, developers }) => 
     };
 
     const handleAssign = () => {
-        console.log("assigned");
-        /* var updatedTicket = ticket;
-        if (selectedDeveloper) {
-          updatedTicket = {
-            ...updatedTicket,
-            dev_id: selectedDeveloper.id,
-            dev_email: selectedDeveloper.email,
-            dev_name: selectedDeveloper.name
-          };
-          
-        }
-        
-      
-        console.log("devfilter",filteredDevelopers);
-        handleSubmit(updatedTicket); */
+        handleSubmit(selectedDeveloper);
     };
 
     const handleReject = () => {
-        console.log("rejected");
-        /* var updatedTicket = ticket;
-        if (selectedDeveloper) {
-          updatedTicket = {
-            ...updatedTicket,
-            dev_id: selectedDeveloper.id,
-            dev_email: selectedDeveloper.email,
-            dev_name: selectedDeveloper.name
-          };
-          
-        }
-        console.log("devfilter",filteredDevelopers);
-        handleSubmit(updatedTicket); */
+        handleRemove(reassignation);
     };
 
 

@@ -15,7 +15,16 @@ function ReassignationsView() {
     };
 
     const updateReassignation = (developer) => {
-        
+        api_service.patch('reports',selectedReassignation.report_id, developer.email,'dev');
+        api_service.delete("reassignation", selectedReassignation.id);
+        setReassignations(reassignations?.filter((item) => item !== selectedReassignation));
+    };
+
+    const removeReassignation = (reassignation) => {
+        if (window.confirm("¿Estas seguro de que quieres eliminar la reasignación?")) {
+            api_service.delete("reassignation", reassignation.id);
+            setReassignations(reassignations?.filter((item) => item !== reassignation));
+        }
     };
 
     useEffect(() => {
@@ -56,6 +65,8 @@ function ReassignationsView() {
                                     <ReassignationExpansion
                                         developers={devs}
                                         reassignation={reassignation}
+                                        handleSubmit={updateReassignation}
+                                        handleRemove={removeReassignation}
                                     />
                                 )}
                             </React.Fragment>
