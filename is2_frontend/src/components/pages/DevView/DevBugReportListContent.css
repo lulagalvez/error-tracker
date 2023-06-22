@@ -85,3 +85,12 @@
 .status-closed {
   border: 2px solid green;
 }
+
+.dropdown-arrow {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: black; /* Set the color to black */
+  pointer-events: none;
+}

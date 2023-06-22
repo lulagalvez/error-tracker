@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import "./DevBugReportListContent.css";
 import FloatingReasign from "./FloatingReasign";
-import APIService from '../../services/APIService';
-import Cookies from 'js-cookie';
+import APIService from "../../services/APIService";
+import Cookies from "js-cookie";
 
 const DevBugReportListContent = ({
   searchTerm,
@@ -26,15 +27,16 @@ const DevBugReportListContent = ({
   accessLevel,
   selectedBugId,
 }) => {
-  const[showErrorAlert,setShowErrorAlert] = useState(false);
-  const[showSuccessAlert,setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFloatingReasign, setShowFloatingReasign] = useState(false);
   const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
   const [selectedTicketId, setSelectedTicketId] = useState(null);
+  const [selectedTicketStatus, setSelectedTicketStatus] = useState("");
 
-  const userid = Cookies.get('id');
-  const username = Cookies.get('name');
-  const useremail = Cookies.get('email');
+  const userid = Cookies.get("id");
+  const username = Cookies.get("name");
+  const useremail = Cookies.get("email");
 
   const api_service = new APIService();
 
@@ -51,17 +53,22 @@ const DevBugReportListContent = ({
   const handleSubmitIssue = (issueText) => {
     // Handle submitting the issue text
     console.log(selectedTicketId);
-    api_service.post('reassignations',{content: issueText, report_id:selectedTicketId, dev_id:userid, dev_name: username, dev_email:useremail})
-        .then(response =>{
-            if(response?.message === 'Reasignación creada'){
-                setShowSuccessAlert(true);
-            }else{
-                setShowErrorAlert(true);
-            }
-        })
-        .catch(error => console.log('error',error))
-      
-    api_service.patch()
+    api_service
+      .post("reassignations", {
+        content: issueText,
+        report_id: selectedTicketId,
+        dev_id: userid,
+        dev_name: username,
+        dev_email: useremail,
+      })
+      .then((response) => {
+        if (response?.message === "Reasignación creada") {
+          setShowSuccessAlert(true);
+        } else {
+          setShowErrorAlert(true);
+        }
+      })
+      .catch((error) => console.log("error", error));
 
     console.log("Submitted issue:", issueText);
     handleCloseFloatingReasign();
@@ -152,7 +159,6 @@ const DevBugReportListContent = ({
             {/*BUG REPORT FILTER*/}
             {filteredBugReports.map((bugReport) => {
               const borderColor = statusColors[bugReport.status] || "gray"; // da valor por defecto
-              console.log("b", borderColor);
               return (
                 /*ON CLICK HANDLER*/
                 <div
@@ -199,9 +205,23 @@ const DevBugReportListContent = ({
                       <div>
                         {/*ESTADO, EL MARCO CAMBIA DE COLOR */}
                         <div
-                          className={`p-1 text-secondary m-0 ${borderColor} rounded`}
+                          className={`text-secondary ${borderColor} rounded`}
                         >
-                          {bugReport.status}
+                          <select
+                            value={bugReport.status}
+                            onChange={() =>
+                              handleStatusChange(bugReport.id, bugReport.status)
+                            }
+                            className="form-control"
+                          >
+                            <option value="ToDo">Abierto</option>
+                            <option value="Pending">En progreso</option>
+                            <option value="Closed">Cerrado</option>
+                          </select>
+                          <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className="dropdown-arrow"
+                          />
                         </div>
                       </div>
                     </div>
