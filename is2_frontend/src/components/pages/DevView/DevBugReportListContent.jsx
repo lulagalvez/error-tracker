@@ -66,7 +66,17 @@ const DevBugReportListContent = ({
     console.log("Submitted issue:", issueText);
     handleCloseFloatingReasign();
   };
-
+  const formatoFecha=(strFecha)=>{
+    const ret = new Date(strFecha);
+    return ret.toLocaleDateString();
+  }
+  const formatoUrg=(strUrg)=>{
+    const numUrg=Number(strUrg);
+    if(numUrg==1) return "Urgente";
+    if(numUrg>=2 && numUrg<=4) return "Alta";
+    if(numUrg>=5 && numUrg<=7) return "Media";
+    return "Baja";
+  }
   return (
     <div className="container">
       <div className="d-flex mb-2">
@@ -168,14 +178,14 @@ const DevBugReportListContent = ({
                       <div>
                         {/*TITULO*/}
                         <h5 className="title">{bugReport.title}</h5>
-                        <p className="text-secondary m-0">{bugReport.date}</p>
+                        <p className="text-secondary m-0">{formatoFecha(bugReport.date)}</p>
                       </div>
                       {/*SOFTWARE*/}
                       <h6 className="text-secondary m-2">
                         Software: {bugReport.software_name}
                       </h6>
                       <h6 className="text-secondary m-2">
-                        Urgency: {bugReport.urgency}
+                        Urgency: {formatoUrg(bugReport.urgency)}
                       </h6>
                       {/* REASIGN BUTTON */}
                       {/* Modificar posteriormente para que sirva para la reasignacion  */}
