@@ -11,6 +11,7 @@ const DevBugReportListContent = ({
   searchTerm,
   selectedSoftware,
   selectedUrgency,
+  selectedStatus,
 
   statusColors,
   handleClick,
@@ -31,7 +32,7 @@ const DevBugReportListContent = ({
   const [showFloatingReasign, setShowFloatingReasign] = useState(false);
   const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
   const [selectedTicketId, setSelectedTicketId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("");
+  //const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedBugStatus, setSelectedBugStatus] = useState("");
   const userid = Cookies.get("id");
   const username = Cookies.get("name");
@@ -39,10 +40,18 @@ const DevBugReportListContent = ({
 
   const api_service = new APIService();
   
-  const handleStatusChange = (event) => {
-    setSelectedBugStatus(event.target.value);
+  const statusTranslations = {
+    Pending: 'Pendiente',
+    ToDo: 'En progreso',
+    Testing: 'En testeo',
+    Closed: 'Cerrado',
+    // Add more translations as needed
+  };
+  const handleStatusChange = (event,bugReportID) => {
+    const newStatus=event.target.value;
+    setSelectedBugStatus(newStatus);
     console.log('SelectedStatus:',selectedBugStatus);
-    api_service.patch('reports',selectedBugId,selectedBugStatus,'status').then((response)=>console.log(response));
+    api_service.patch('reports',bugReportID,newStatus,'status').then((response)=>console.log(response));
   };
 
   const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
@@ -142,7 +151,7 @@ const DevBugReportListContent = ({
         {/* SPACER */}
         <div className="mx-1"></div>
 
-        {/* STATUS DROPDOWN MENU */}
+        {/* STATUS DROPDOWN MENU FILTRO*/}
         <select
           className="form-control mr-1"
           value={selectedStatus}
@@ -151,7 +160,7 @@ const DevBugReportListContent = ({
           <option value="">All Status</option>
           {statusOptions.map((status) => (
             <option key={status} value={status}>
-              {status}
+              {statusTranslations[status] || status}
             </option>
           ))}
         </select>
@@ -224,7 +233,7 @@ const DevBugReportListContent = ({
                           className={`text-secondary ${borderColor} rounded`}
                         >
                           <select
-                            onChange={handleStatusChange}
+                            onChange={(event)=> handleStatusChange(event, bugReport.id)}
                             value={bugReport.status}
                             className="form-control"
                           >

@@ -108,7 +108,7 @@ function AdminView() {
       console.log("devs", devsResponse);
       setDevs(devsResponse || []); // Ensure devsResponse is not undefined
 
-    const sortedDevs = devsResponse.sort((a, b) => {
+      const sortedDevs = devsResponse.sort((a, b) => {
       const countA = devsCountResponse[a.id] || 0;
       const countB = devsCountResponse[b.id] || 0;
       return countA - countB;

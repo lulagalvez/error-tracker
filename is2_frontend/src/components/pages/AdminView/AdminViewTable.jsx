@@ -22,9 +22,6 @@ const AdminViewTable = ({reports,setReports, api_service, devs}) =>{
       }
     };
   
-  
-  
-  
     const deleteReport = (report) => {
       if (window.confirm("Estas seguro de que quieres eliminar el reporte?")) {
         api_service.delete("reports", report.id);

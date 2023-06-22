@@ -6,10 +6,12 @@ import TicketExpansion from "./TicketExpansion";
 const TicketRow = ({ ticket, handleClick, deleteReport, selectedTicket }) => {
   const isTicketSelected = selectedTicket === ticket;
   const rowClassName = isTicketSelected ? "active" : "";
+  
   const formatoFecha=(strFecha)=>{
     const ret = new Date(strFecha);
     return ret.toLocaleDateString();
   }
+  
   const formatoUrg=(strUrg)=>{
     const numUrg=Number(strUrg);
     if(numUrg==1) return "Baja";
@@ -17,6 +19,7 @@ const TicketRow = ({ ticket, handleClick, deleteReport, selectedTicket }) => {
     if(numUrg==3) return "Alta";
     return "Urgente";
   }
+  
   return (
     <>
       <tr onClick={() => handleClick(ticket)} className={rowClassName}>

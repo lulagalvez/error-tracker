@@ -3,9 +3,11 @@ import { useState } from 'react'
 import ProgressBarSoftware from './ProgressBarSoftware'
 import { Button } from 'bootstrap'
 
-const pageSize = 2  // number of items per page
+// NUMBER OF ITEMS PER PAGE
+const pageSize = 5
 
 function SoftwareCompletition({ softwareData }) {
+  
   var pages = []
   if (softwareData) {
     const totalPages = Math.ceil(softwareData.length / pageSize)

@@ -61,7 +61,7 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
 
   const filteredDevelopers = developers.filter((developer) => {
     const isMatchingName = developer.name.toLowerCase().includes(searchValue.toLowerCase());
-    const isMatchingSoftware = dictSoftwareDev.software_dev.some((softwareDev) => {
+    const isMatchingSoftware = dictSoftwareDev.software_dev?.some((softwareDev) => {
       const softwareId = Number(softwareDev.software_id); // Parse software_id as a number
       return softwareDev.dev_id === developer.id && softwareId === ticket.software;
     });

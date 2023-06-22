@@ -8,6 +8,7 @@
 
 .table {
     table-layout: fixed;
+    text-align:center;
   }
   
   .active {
@@ -17,3 +18,4 @@
   .expanded-row {
     background-color: #17888b86; /* Customize the background color as needed */
   }
+ 
