@@ -54,7 +54,10 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
   const softwareOptions = [
     ...new Set(bugReports.map((bugReport) => bugReport.software_name)),
   ];
-
+  const formatoFecha=(strFecha)=>{
+    const ret = new Date(strFecha);
+    return ret.toLocaleDateString();
+  }
   return (
     <div className="container">
       <div className="d-flex mb-2">
@@ -129,7 +132,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
                       <div>
                         {/*TITULO*/}
                         <h5 className="title">{bugReport.title}</h5>
-                        <p className="text-secondary m-0">{bugReport.date}</p>
+                        <p className="text-secondary m-0">{formatoFecha(bugReport.date)}</p>
                       </div>
                       {/*SOFTWARE*/}
                       <h6 className="text-secondary m-0">
