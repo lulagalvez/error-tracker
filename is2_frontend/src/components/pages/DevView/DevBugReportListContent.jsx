@@ -51,7 +51,8 @@ const DevBugReportListContent = ({
     const newStatus=event.target.value;
     setSelectedBugStatus(newStatus);
     console.log('SelectedStatus:',selectedBugStatus);
-    api_service.patch('reports',bugReport.id,newStatus,'status').then((response)=>console.log(response));
+    bugReport.status=selectedBugStatus;
+    api_service.put("reports", bugReport.id, bugReport);
   };
 
   const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
