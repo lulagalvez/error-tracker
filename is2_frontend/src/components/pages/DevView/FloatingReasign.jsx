@@ -8,19 +8,21 @@ const FloatingReasign = ({ title, onSubmit, onClose }) => {
   const [issueText, setIssueText] = useState("");
   const apiservice = new APIService();
   const handleSubmit = () => {
-    onSubmit(issueText);
-    setIssueText("");
+    if (issueText.trim() !== "") {
+      onSubmit(issueText);
+      setIssueText("");
+    }
   };
 
   return (
     <div className="floating-card">
       <div className="header">
-        <h3 >Razon de reasignacion</h3>
+        <h3>Razon de reasignacion</h3>
         <button className="close-button" onClick={onClose}>
           <FontAwesomeIcon icon={faTimes} />
         </button>
       </div>
-      <h4 >{title}</h4>
+      <h4>{title}</h4>
       <textarea
         className="text-box"
         value={issueText}
