@@ -18,7 +18,20 @@ import React from 'react'
     urgencyOptions,
     devOptions
     }) =>{
-    
+          const formatoUrg = (strUrg) => {
+            const numUrg = Number(strUrg);
+            if (numUrg == 1) return "Baja";
+            if (numUrg == 2) return "Media";
+            if (numUrg == 3) return "Alta";
+            return "Urgente";
+          };
+          const sortedUrgencyOptions = urgencyOptions.sort((a, b) => a - b);
+          const translatedStatusOptions = {
+            Pending: 'En progreso',
+            ToDo: 'Abierto',
+            Testing: 'En testeo',
+            Closed: 'Cerrado',
+          };
           return (
             <div className="container">
               <div className="d-flex mb-2">
@@ -60,11 +73,10 @@ import React from 'react'
                 onChange={handleUrgencyChange}
                 >
                 <option value="">Prioridades</option>
-                {urgencyOptions &&
-                    urgencyOptions.map((urgency) => (
-                    <option key={urgency} value={urgency}>
-                        {urgency}
-                    </option>
+                {sortedUrgencyOptions.map((urgency) => (
+                  <option key={urgency} value={urgency}>
+                    {formatoUrg(urgency)}
+                  </option>
                     ))}
                 </select>
 
@@ -96,7 +108,7 @@ import React from 'react'
                   <option value="">Estados</option>
                   {statusOptions.map((status) => (
                     <option key={status} value={status}>
-                      {status}
+                      {translatedStatusOptions[status]}
                     </option>
                   ))}
                 </select>            
