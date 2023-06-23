@@ -31,9 +31,9 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
         dev_email: selectedDeveloper.email,
         dev_name: selectedDeveloper.name  
       };
-      /* setTimeout(() => {
+      setTimeout(() => {
         window.location.reload();
-      }, 350);  */
+      }, 500);  
     }
     if (selectedStatus) {
       updatedTicket = {
@@ -50,8 +50,6 @@ const TicketExpansion = ({ developers, ticket, handleSubmit, dictSoftwareDev }) 
           urgency: selectedPriority
         }; 
     }
-  
-    console.log("devfilter",filteredDevelopers);
     handleSubmit(updatedTicket);
   };
 

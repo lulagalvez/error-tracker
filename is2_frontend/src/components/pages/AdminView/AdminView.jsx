@@ -1,8 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 import APIService from "../../services/APIService";
-import PriorityForm from "./PriorityForm";
-import StatusForm from "./StatusForm";
 import Filter from "./Filter";
 import TicketRow from "./TicketRow";
 import TicketExpansion from "./TicketExpansion";
@@ -49,14 +47,14 @@ function AdminView() {
       count: count || 0
     }));
     const sortedDevs= devs.sort((a,b) => {
-      const countA = developersWithCount.find(dev => dev.id === a.id).count;
-      const countB = developersWithCount.find(dev => dev.id === b.id).count;
+      const countA = developersWithCount.find(dev => dev.id === a.id)?.count;
+      const countB = developersWithCount.find(dev => dev.id === b.id)?.count;
       return countA - countB;
     })
     console.log("devCount",devsCount);
     setDevs(sortedDevs);
   };
-  const filteredBugReports = reports.filter((reports) => {
+  let filteredBugReports = reports.filter((reports) => {
     const title = reports.title.toString().toLowerCase();
     const status = reports.status.toString().toLowerCase();
     const software = reports.software_name?.toString().toLowerCase();
@@ -106,34 +104,24 @@ function AdminView() {
 
       const devsResponse = await api_service.get("devs");
       console.log("devs", devsResponse);
-      setDevs(devsResponse || []); // Ensure devsResponse is not undefined
+     
 
       const sortedDevs = devsResponse.sort((a, b) => {
-      const countA = devsCountResponse[a.id] || 0;
-      const countB = devsCountResponse[b.id] || 0;
-      return countA - countB;
-    });
-    setDevs(sortedDevs);
-    const devSoftwareResponse = await api_service.get("software_dev");
-    console.log("software_dev", devSoftwareResponse);
-    setDictSoftwareDev(devSoftwareResponse);
-
+        const countA = devsCountResponse[a.id] || 0;
+        const countB = devsCountResponse[b.id] || 0;
+        return countA - countB;
+      });
+      setDevs(sortedDevs);
+      const devSoftwareResponse = await api_service.get("software_dev");
+      console.log("software_dev", devSoftwareResponse);
+      setDictSoftwareDev(devSoftwareResponse);
 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  /* const handleAssignDeveloper = (ticket, selectedDeveloper) => {
-    if (selectedDeveloper) {
-      const updatedTicket = {
-        ...ticket,
-        assignedDeveloper: selectedDeveloper.id,
-      };
-      updateTicket(updatedTicket);
-      // Handle the logic for assigning the selected developer to the ticket
-    }
-  }; */
+
 
 
   const deleteReport = (report) => {
@@ -151,6 +139,9 @@ function AdminView() {
           reports.map((report) =>
             report.id === updatedTicket.id ? updatedTicket : report
           )
+        );
+        filteredBugReports = filteredBugReports.map((report) =>
+        report.id === updatedTicket.id ? updatedTicket : report
         );
         console.log("Ticket updated successfully:", updatedTicket);
       } catch (error) {
@@ -179,12 +170,6 @@ function AdminView() {
     <div className="container mt-4">
       <h1>Vista de lista de bugs</h1>
       <hr />
-      {/* <SearchBar search={search} handleSearch={handleSearch} />
-      <br />
-      <PriorityForm api_service={api_service} />
-      <br />
-      <StatusForm api_service={api_service} />
-      <br /> */}
         <Filter searchTerm={searchTerm}
         selectedStatus={selectedStatus}
         selectedSoftware={selectedSoftware}
