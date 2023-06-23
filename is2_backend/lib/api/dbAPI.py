@@ -188,7 +188,7 @@ def create_dev():
     email = request.json['email']
     password = request.json['password']
     hashed_password = bcrypt.generate_password_hash(password)
-    new_dev = Developer(name=name, email=email,password=hashed_password)
+    new_dev = Developer(name=name, email=email,password=hashed_password, type_of_user = 'developer')
     db.session.add(new_dev)
     db.session.commit()
     return jsonify({'message': 'Developer creado'})
@@ -249,7 +249,7 @@ def create_admin():
     email = request.json['email']
     password = request.json['password']
     hashed_password = bcrypt.generate_password_hash(password)
-    new_admin = Admin(name=name, email=email,password=hashed_password)
+    new_admin = Admin(name=name, email=email,password=hashed_password,type_of_user = 'admin')
     db.session.add(new_admin)
     db.session.commit()
     return jsonify({'message': 'admin creado'})

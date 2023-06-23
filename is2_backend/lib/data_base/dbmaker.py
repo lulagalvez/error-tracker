@@ -30,10 +30,11 @@ class User(db.Model):
     notifications = db.relationship('Notification', backref='user', primaryjoin='User.id == Notification.user_id')
     type_of_user = db.Column('type', db.String(20), default=lambda: User.__table__.name)
     
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password, type_of_user):
         self.name = name
         self.email = email
         self.password = password
+        self.type_of_user = type_of_user
     
     @property
     def notification_counter(self):
@@ -58,8 +59,8 @@ class Developer(User):
     __mapper_args__ = { 
         'polymorphic_identity': 'developer'
     }
-    def __init__ (self, name, email, password):
-        super().__init__(name=name,email=email,password=password)
+    def __init__ (self, name, email, password, type_of_user):
+        super().__init__(name=name,email=email,password=password,type_of_user=type_of_user)
     
 class Admin(User):
     __tablename__ = ('admin')
@@ -68,8 +69,8 @@ class Admin(User):
     __mapper_args__ = { 
         'polymorphic_identity': 'admin'
     }
-    def __init__ (self, name, email, password):
-        super().__init__(name=name,email=email,password=password)
+    def __init__ (self, name, email, password, type_of_user):
+        super().__init__(name=name,email=email,password=password, type_of_user=type_of_user)
 
 class Report (db.Model):
     __tablename__ = ('report')
