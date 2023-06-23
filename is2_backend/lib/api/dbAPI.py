@@ -876,9 +876,28 @@ def count_reports_by_dev(email):
 
     return jsonify(counter)
 
+@app.route('/count_reports_by_software/<email>', methods=['GET'])
+def count_reports_by_software(email):
+    reports = Report.query.filter_by(dev_email = email)
+
+    software_objects = []
+
+    for report in reports:
+        software_name = report.software_name
+
+        software_obj = next((obj for obj in software_objects if obj["name"] == software_name), None)
+
+        if software_obj is None:
+            software_obj = {"name": software_name, "jobsDone": 0, "totalJobs": 0}
+            software_objects.append(software_obj)
+
+        if report.status == "Closed":
+            software_obj["jobsDone"] += 1
+        
+        software_obj["totalJobs"] += 1
 
 
-
+    return jsonify(software_objects)
 
     
 def _corsify_actual_response(response):
