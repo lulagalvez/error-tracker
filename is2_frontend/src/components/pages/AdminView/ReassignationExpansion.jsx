@@ -11,7 +11,9 @@ const ReassignationExpansion = ({ reassignation, handleSubmit, developers, handl
     };
 
     const handleAssign = () => {
-        handleSubmit(selectedDeveloper);
+        if (selectedDeveloper) {
+            handleSubmit(selectedDeveloper);
+        }
     };
 
     const handleReject = () => {
