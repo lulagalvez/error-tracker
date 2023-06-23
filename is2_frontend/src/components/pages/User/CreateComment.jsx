@@ -7,7 +7,7 @@ class CreateComment extends Component {
 
     return (
       <div className="mt-4">
-        <h5>Create Comment</h5>
+        <h5>Crear Comentario</h5>
         <form onSubmit={onCommentSubmit}>
           <div className="mb-3">
             <textarea
@@ -17,7 +17,7 @@ class CreateComment extends Component {
               onChange={onCommentChange}
             ></textarea>
           </div>
-          <button type="submit" className="btn btn-primary custom-button">Submit</button>
+          <button type="submit" className="btn btn-primary custom-button">Publicar</button>
         </form>
       </div>
     );

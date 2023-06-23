@@ -5,6 +5,7 @@ import CrearBug from './components/pages/BugForm/bugForm';
 import AdminView from './components/pages/AdminView/AdminView';
 /* import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain'; */
 import DevView from './components/pages/DevView/DevView';
+import SoftwareToDevView from './components/pages/AdminView/SoftwareToDevView'
 import ReassignationsView from './components/pages/AdminView/ReassignationsView';
 import UserReportView from  './components/pages/User/UserReportView'; 
 import SideBarUser  from './components/pages/Sidebars/SidebarUser';
@@ -87,10 +88,25 @@ class App extends Component {
             />
 
             <Route
-              path="/reassign_requests" element={
+              path="/assign_to_project"
+              element={
                 <ProtectedRoute
                   redirectPath="/login"
                   isAllowed={logged && type_of_user === "admin"}>
+                  <BellIcon />
+                  <SideBarAdmin />
+                  <SoftwareToDevView/>
+                </ProtectedRoute>
+              }
+            /> 
+
+            <Route
+              path="/reassign_requests"
+              element={
+                <ProtectedRoute
+                  redirectPath="/login"
+                  isAllowed={logged && type_of_user === "admin"}
+                >
                   <BellIcon />
                   <SideBarAdmin />
                   <ReassignationsView />

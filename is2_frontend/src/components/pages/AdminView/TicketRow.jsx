@@ -19,6 +19,13 @@ const TicketRow = ({ ticket, handleClick, deleteReport, selectedTicket }) => {
     if(numUrg==3) return "Alta";
     return "Urgente";
   }
+
+  const toStatus = (st) =>{
+    if(st=="ToDo")return "Abierto";
+    if(st=="Pending")return "En progreso";
+    if(st=="Closed")return "Cerrado";
+    return "En testeo"
+  }
   
   return (
     <>
@@ -31,7 +38,7 @@ const TicketRow = ({ ticket, handleClick, deleteReport, selectedTicket }) => {
         <td style={{ textAlign: "center" }}>{formatoUrg(ticket.urgency)}</td>
         <td style={{ textAlign: "center" }}>{ticket.dev_name}</td>
         <td>
-          <Status nombre={ticket.status} />
+          <Status nombre={toStatus(ticket.status)} />
         </td>
         <td>
           <BotonBorrar report={ticket} deleteReport={deleteReport} />

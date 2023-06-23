@@ -5,7 +5,7 @@ function Dona({ charData }) {
     return (
         <>
             <Doughnut data={charData} />
-            <p>Dona</p>
+            {/* <p>Dona</p> */}
         </>
 
     )

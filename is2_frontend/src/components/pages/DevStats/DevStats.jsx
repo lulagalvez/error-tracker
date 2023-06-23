@@ -10,17 +10,34 @@ import Cookies from 'js-cookie';
 
 function DevStats() {
     const devId = Cookies.get('id');
+    const dev_email = Cookies.get('email');
     const [datosDevReport, setDatosDevReport] = useState([]);
     const api_service = new APIService();
     let dataStatus = useRef([]);
     let completeness = useRef(0);
+
+    const showData = async () => {
+        try {
+            const devReportsResponse = await api_service.get('dev_reports', dev_email);
+            console.log("showData", devReportsResponse)
+            setDatosDevReport(devReportsResponse);
+            console.log("showData2", datosDevReport)
+            getStatus()
+        } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+    }
+
     async function getStatus() {
         let toDoCount = 0;
         let pendingCount = 0;
         let testingCount = 0;
         let closedCount = 0;
         let datos = [toDoCount, pendingCount, testingCount, closedCount];
+        console.log("jajitas")
+        console.log("getStatus", datosDevReport)
         for (var report in datosDevReport) {
+            console.log("status", report)
             if (report.status) {
                 switch (report.status) {
                     case 'ToDo':
@@ -40,25 +57,34 @@ function DevStats() {
         }
         return datos;
     }
+
     async function getCompleteness() {
         if (dataStatus) {
             completeness.current = dataStatus[3] / (dataStatus[0] + dataStatus[1] + dataStatus[2] + dataStatus[3])
             completeness.current = completeness.current * 100;
         }
     }
-    useEffect(() => {
-        async function fetchData() {
-            const response = await api_service.get('dev_reports', devId);
-            setDatosDevReport(response);
-            // console.log(response);
-        };
-        fetchData();
-        dataStatus.current = getStatus();
-        getCompleteness();
-        // console.log(datosDevReport);
-    }, []);
+
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const response = await api_service.get('dev_reports', devId);
+    //         setDatosDevReport(response);
+    //         // console.log(response);
+    //     };
+    //     fetchData();
+    //     dataStatus.current = getStatus();
+    //     getCompleteness();
+    //     // console.log(datosDevReport);
+    // }, []);
+
+    
 
     // console.log(datosDevReport)
+
+    useEffect(() => {
+        showData();
+        // getStatus();
+      }, []);
 
     const [datosDona, setDatosDona] = useState({
         labels: ["closed", "testing", "pending", "to-do"],

@@ -68,13 +68,25 @@ const DevBugReportList = ({
     );
   });
 
+const formatoUrg = (strUrg) => {
+  const numUrg = Number(strUrg);
+  if (numUrg == 1) return "Baja";
+  if (numUrg == 2) return "Media";
+  if (numUrg == 3) return "Alta";
+  return "Urgente";
+};
   const statusOptions = Object.keys(statusColors);
   const softwareOptions = [
-    ...new Set(bugReports.map((bugReport) => bugReport.software)),
+    ...new Map(
+      bugReports.map((bugReport) => ({
+        id: bugReport.software,
+        name: bugReport.software_name,
+      })).map((item) => [item.id, item])
+    ).values(),
   ];
   const urgencyOptions = [
     ...new Set(bugReports.map((bugReport) => bugReport.urgency)),
-  ];
+  ];  
 
   return (
     <DevBugReportListContent

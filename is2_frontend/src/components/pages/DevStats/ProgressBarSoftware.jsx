@@ -9,8 +9,8 @@ function ProgressBarSoftware({ name, jobsDone, totalJobs }) {
                     <div className="d-flex flex-column">
                         <span className='fw-bold' style={{
                             'width': 150,
-                            'white-space': 'nowrap',
-                            'text-overflow': 'ellipsis',
+                            'whiteSpace': 'nowrap',
+                            'textOverflow': 'ellipsis',
                             'overflow': 'hidden',
                         }}>{name}</span>
                         <span className='text-secondary'>{jobsDone}/{totalJobs} jobs</span>

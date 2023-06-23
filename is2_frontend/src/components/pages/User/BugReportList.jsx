@@ -22,6 +22,14 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
     Closed: "status-closed",
   };
 
+  const statusTranslations = {
+    Pending: 'Pendiente',
+    ToDo: 'En progreso',
+    Testing: 'En testeo',
+    Closed: 'Cerrado',
+    // Add more translations as needed
+  };
+
   /*HANDLER DE BUSQUEDA */
 
   const handleSearch = (event) => {
@@ -65,7 +73,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
         <input
           type="text"
           className="form-control mr-1"
-          placeholder="Search..."
+          placeholder="Buscar..."
           value={searchTerm}
           onChange={handleSearch}
         />
@@ -82,7 +90,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
           value={selectedStatus}
           onChange={handleStatusChange}
         >
-          <option value="">All Status</option>
+          <option value="">Estado</option>
           {statusOptions.map((status) => (
             <option key={status} value={status}>
               {status}
@@ -99,7 +107,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
           value={selectedSoftware}
           onChange={handleSoftwareChange}
         >
-          <option value="">All Software</option>
+          <option value="">Software</option>
           {softwareOptions.map((software) => (
             <option key={software} value={software}>
               {software}
@@ -143,7 +151,7 @@ const BugReportList = ({ bugReports, onClick, accessLevel, selectedBugId }) => {
                         <div
                           className={`p-1 text-secondary m-0 ${borderColor} rounded`}
                         >
-                          {bugReport.status}
+                          {statusTranslations[bugReport.status]}
                         </div>
                       </div>
                     </div>

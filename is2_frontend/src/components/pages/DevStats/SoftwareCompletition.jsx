@@ -53,7 +53,7 @@ function SoftwareCompletition({ softwareData }) {
             {pages[selectedIndex].map((sw) => sw)}
           </div>
 
-          <nav aria-label="Page navigation example d-flex align-items-end">
+          <nav aria-label="Page navigation example">
             <ul class="pagination ">
               <li class="page-item">
                 <a class="page-link" href='#' aria-label="Previous" onClick={previous}>

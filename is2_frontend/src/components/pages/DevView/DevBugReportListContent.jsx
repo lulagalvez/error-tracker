@@ -32,8 +32,7 @@ const DevBugReportListContent = ({
   const [showFloatingReasign, setShowFloatingReasign] = useState(false);
   const [selectedTicketTitle, setSelectedTicketTitle] = useState("");
   const [selectedTicketId, setSelectedTicketId] = useState(null);
-  //const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedBugStatus, setSelectedBugStatus] = useState("");
+  const [sS,sSS] = useState("");
   const userid = Cookies.get("id");
   const username = Cookies.get("name");
   const useremail = Cookies.get("email");
@@ -49,10 +48,8 @@ const DevBugReportListContent = ({
   };
   const handleStatusChange = (event,bugReport) => {
     const newStatus=event.target.value;
-    setSelectedBugStatus(newStatus);
-    console.log('SelectedStatus:',selectedBugStatus);
-    bugReport.status=selectedBugStatus;
-    api_service.put("reports", bugReport.id, bugReport);
+    bugReport.status=newStatus;
+    api_service.put("reports", bugReport.id, bugReport).then(response=>console.log(response)).catch((error)=>console.error(error));
   };
 
   const handleOpenFloatingReasign = (ticketId, ticketTitle) => {
@@ -107,7 +104,7 @@ const DevBugReportListContent = ({
         <input
           type="text"
           className="form-control mr-1"
-          placeholder="Search..."
+          placeholder="Buscar..."
           value={searchTerm}
           onChange={handleSearch}
         />
@@ -123,11 +120,11 @@ const DevBugReportListContent = ({
           value={selectedSoftware}
           onChange={handleSoftwareChange}
         >
-          <option value="">All Software</option>
+          <option value="">Software</option>
           {softwareOptions &&
             softwareOptions.map((software) => (
-              <option key={software} value={software}>
-                {software}
+              <option key={software.id} value={software.id}>
+                {software.name}
               </option>
             ))}
         </select>
@@ -141,11 +138,11 @@ const DevBugReportListContent = ({
           value={selectedUrgency}
           onChange={handleUrgencyChange}
         >
-          <option value="">All Urgency</option>
+          <option value="">Urgencia</option>
           {urgencyOptions &&
             urgencyOptions.map((urgency) => (
               <option key={urgency} value={urgency}>
-                {urgency}
+                {formatoUrg(urgency)}
               </option>
             ))}
         </select>
@@ -158,7 +155,7 @@ const DevBugReportListContent = ({
           value={selectedStatus}
           onChange={handleStatusSearch}
         >
-          <option value="">All Status</option>
+          <option value="">Estado</option>
           {statusOptions.map((status) => (
             <option key={status} value={status}>
               {statusTranslations[status] || status}
@@ -207,7 +204,7 @@ const DevBugReportListContent = ({
                         Software: {bugReport.software_name}
                       </h6>
                       <h6 className="text-secondary m-2">
-                        Urgency: {formatoUrg(bugReport.urgency)}
+                        Prioridad: {formatoUrg(bugReport.urgency)}
                       </h6>
                       {/* REASIGN BUTTON */}
                       {/* Modificar posteriormente para que sirva para la reasignacion  */}

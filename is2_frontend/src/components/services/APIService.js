@@ -23,7 +23,7 @@ export default class APIService{
             .then(response => response.data)
             .catch(error => console.log(error));
     }
-  
+    
     get(url, id) {
         let apiUrl = `${this.domain}/${url}`;
         if (id) {
@@ -45,6 +45,7 @@ export default class APIService{
             .then(response => response.data)
             .catch(error => console.log(error));
     }
+    
     patch(url,id,data,type){
         let apiUrl = `${this.domain}/${url}`;
         if (id) {
@@ -74,4 +75,5 @@ export default class APIService{
             .then(response => response.data)
             .catch(error => console.log(error));
     }   
+   
 }

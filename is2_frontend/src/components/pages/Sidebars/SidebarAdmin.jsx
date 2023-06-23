@@ -23,7 +23,7 @@ export const SideBarAdmin = () => {
         </Link>
 
         <WelcomeIcon />
-        
+
         <Link to="/adminview">
           <div className="icon-container assign-bug">
             <i className="bi bi-file-person-fill"></i>
@@ -36,6 +36,14 @@ export const SideBarAdmin = () => {
           <div className="icon-container">
             <i className="bi bi-hand-thumbs-up-fill"></i>
             <h1>Reasignar</h1>
+            <span className="oval"></span>
+          </div>
+        </Link>
+
+        <Link to="/assign_to_project">
+          <div className="icon-container">
+            <i className="bi bi-person-plus-fill"></i>
+            <h1>Asignar a proyecto</h1>
             <span className="oval"></span>
           </div>
         </Link>
