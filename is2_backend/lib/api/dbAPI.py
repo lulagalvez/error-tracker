@@ -859,6 +859,26 @@ def delete_reassignation(id):
         return jsonify({'message': 'Notificaciones eliminadas exitosamente'})
     else:
         return jsonify({'message': 'Usuario no encontrado'})
+    
+
+###########################################STATS##################################################
+
+@app.route('/count_reports/<email>', methods=['GET'])
+def count_reports_by_dev(email):
+    reports = Report.query.filter_by(dev_email = email)
+
+    counter = {"Closed": 0, "Pending": 0, "toDo": 0, "Testing": 0}
+    
+    for report in reports:
+        report_status = report.status
+        if report_status in counter:
+            counter[report_status] += 1
+
+    return jsonify(counter)
+
+
+
+
 
     
 def _corsify_actual_response(response):
