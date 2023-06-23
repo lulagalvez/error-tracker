@@ -89,7 +89,6 @@ def login():
     return response
 
 @app.route("/@me", methods=['GET'])
-@cross_origin(origin='http://localhost:3000', supports_credentials=True)
 def get_current_user():
 
     if request.cookies:
@@ -197,15 +196,18 @@ def create_dev():
 @app.route('/devs/promote/<email>', methods=['PUT'])
 def promote_to_dev(email):
     user_to_promote = User.query.filter_by(email=email).first()
-    old_name=user_to_promote.name
-    old_email=user_to_promote.email
-    old_password=user_to_promote.password
-    db.session.delete (user_to_promote)
+    old_name = user_to_promote.name
+    old_email = user_to_promote.email
+    old_password = user_to_promote.password
+    db.session.delete(user_to_promote)
     db.session.commit()
-    new_dev = Developer(name=old_name,email=old_email,
-                        password=old_password)
+
+    new_dev = Developer(name=old_name, email=old_email, password=old_password)
+    new_dev.type_of_user = 'developer'  # Set the type_of_user to 'developer'
+    
     db.session.add(new_dev)
     db.session.commit()
+    
     return jsonify({'message': 'Usuario ascendido a developer'})
 
 @app.route('/devs/<id>', methods=['PUT'])
@@ -262,6 +264,7 @@ def promote_to_admin(email):
     db.session.commit()
     new_admin = Admin(name=old_name,email=old_email,
                         password=old_password)
+    new_admin.type_of_user='admin'
     db.session.add(new_admin)
     db.session.commit()
     return jsonify({'message': 'Usuario ascendido a admin'})
@@ -418,7 +421,6 @@ def update_reportprio(id,priority):
     return jsonify({'message': 'Prioridad del reporte actualizado'})
     
 @app.route('/reports/<id>/update_status/<status>', methods=['PATCH'])
-@cross_origin(origin='http://localhost:3000', supports_credentials=True)
 def update_reportstatus(id,status):
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
@@ -627,9 +629,6 @@ def associate_software_dev():
     data = request.get_json()
     developer_id = data.get('developer_id')
     software_id = data.get('software_id')
-    print("dev_id type:", type(developer_id))
-    print("software_id type:", type(software_id))
-
     try:
         developer = Developer.query.filter_by(id=developer_id).one()
         software = Software.query.filter_by(id=software_id).one()
@@ -712,9 +711,7 @@ def create_notification1(rep_id, type):
     if type == 'Reassign':
         content = f'Reasignación solicitada en {software}, Desarrollador: {developer_name}!'
     elif type == 'Solved':
-        content = f'Solucionado: Tu reporte de {software} ha sido solucionado por {developer_name}!'
-    elif type == 'Assigned':
-        content = f'Asignado: Se te ha asignado {report.name}' 
+        content = f'Solucionado: Tu reporte de {software} ha sido solucionado por {developer_name}!' 
     elif type == 'Rejected':
         content = f'Rechazado: Tu reasignación solicitada en {software} fue rechazada :"( '
     elif type == 'Posted':
@@ -741,22 +738,19 @@ def create_notification1(rep_id, type):
         'type': type
     })
 
-@app.route('/notification_user', methods=['POST'])
-@cross_origin(origin='http://localhost:3000', supports_credentials=True)
-def create_notification2():
+@app.route('/notification_user/<user_email>', methods=['POST'])
+def create_notification2(user_email):
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
-    
-    email = request.json['email']
-    software = request.json['software']
-    type = request.json['type']
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=user_email).first()
     user_id = user.id
     user_name = user.name
+    software = request.json['software']
+    type = request.json['type']
     content = '' 
     if type == 'Posted':
-       content = f'Posted: Has publicado un reporte en {software} ¡Muchas gracias!'
-    
+        content = f'Posted: Has publicado un reporte en {software} Muchas gracias!'
+
     new_notification = Notification(
         content=content,
         user_id=user_id,
@@ -773,30 +767,6 @@ def create_notification2():
         'user_name': user_name,
         'type': type
     })
-
-
-@app.route('/notification_report_reassign', methods=['POST'])
-def create_notification_reassign():
-    dev_email = ['dev_email']
-    type = request.json['type']
-    developer = Developer.query.filter_by(email = dev_email)
-
-    if type == 'Rejected':
-        content = f'Rechazado: Tu reasignación solicitada fue rechazada :"( '
-    
-    elif type == 'Accepted':
-        content = f'Accepted: Tu solicitud de reasignación en fue aceptada!'
-    
-    new_notification = Notification(
-        content=content,
-        user_id=developer.id,
-        user_name=developer.name,
-        type=type
-    )
-
-    db.session.add(new_notification)
-    db.session.commit()
-    return "Notificacion de reasignación creada"
 
 
 @app.route('/notification/<user_email>', methods=['GET'])
@@ -821,16 +791,9 @@ def get_user_notifications(user_email):
     else:
         return jsonify({'message': 'Este usuario no existe'})
     
-@app.route('/notification/<user_email>', methods=['PATCH'])
+@app.route('/notification/<user_email>', methods=['DELETE'])
 def delete_user_notifications(user_email):
     user = User.query.filter_by(email=user_email).first()
-    if user:
-        Notification.query.filter_by(user=user).delete()
-        db.session.commit()
-        return 'Notificaciones eliminadas exitosamente', 200
-    else:
-        return 'Usuario no encontrado', 404
-
     
 ###########################################REASSIGNATION##################################################
 
