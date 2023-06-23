@@ -775,6 +775,30 @@ def create_notification2():
     })
 
 
+@app.route('/notification_report_reassign', methods=['POST'])
+def create_notification_reassign():
+    dev_email = ['dev_email']
+    type = request.json['type']
+    developer = Developer.query.filter_by(email = dev_email)
+
+    if type == 'Rejected':
+        content = f'Rechazado: Tu reasignación solicitada fue rechazada :"( '
+    
+    elif type == 'Accepted':
+        content = f'Accepted: Tu solicitud de reasignación en fue aceptada!'
+    
+    new_notification = Notification(
+        content=content,
+        user_id=developer.id,
+        user_name=developer.name,
+        type=type
+    )
+
+    db.session.add(new_notification)
+    db.session.commit()
+    return "Notificacion de reasignación creada"
+
+
 @app.route('/notification/<user_email>', methods=['GET'])
 def get_user_notifications(user_email):
     notifications = []
