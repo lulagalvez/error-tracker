@@ -11,7 +11,7 @@ const CreateComment = ({handleSubmit, submitLabel}) => {
   }
   return (
     <div className="mt-4">
-      <h5>Create Comment</h5>
+      <h5>Crear Comentario</h5>
       <form onSubmit={onSubmit}>
         <div className="mb-3">
           <textarea

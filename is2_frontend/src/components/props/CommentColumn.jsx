@@ -43,17 +43,17 @@ const CommentColumn = ({ bugReport }) => {
     <div className="col-lg-10">
       <div className="card mb-4 border-0 shadow-sm">
         <div className="card-body">
-          <h5 className="card-title">Bug Report Details</h5>
+          <h5 className="card-title">Detalles del error</h5>
           <h6 className="card-subtitle mb-2 text-muted">
             Title: {bugReport.title}
           </h6>
-          <p className="card-text">Description: {bugReport.description}</p>
+          <p className="card-text">Descripción: {bugReport.description}</p>
         </div>
       </div>
 
       <div className="card border-0 shadow-sm comment-container">
         <div className="card-body comment-list">
-          <h5 className="card-title">Comments</h5>
+          <h5 className="card-title">Comentarios</h5>
           {comments.map((comment) => (
             <div key={comment.id} className="d-flex align-items-start mb-3">
               <FaUser className="me-3 mt-1" size={24} />
