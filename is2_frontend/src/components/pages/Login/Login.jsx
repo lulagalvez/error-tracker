@@ -22,7 +22,9 @@ const LogIn = () => {
     };
 
     const doLogin = async () => {
-        await apiservice.post('login', { email: email, password: password });
+        await apiservice.post('login', { email: email, password: password })
+        .then((response)=>console.log("response",response))
+        
     };
 
     const handleLogin = async (e) => {

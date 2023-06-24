@@ -53,16 +53,16 @@ def register_user():
 
     user_exists = User.query.filter_by(email=email).first() is not None
     if user_exists:
-        abort(409)
+        return jsonify({'error': "ya existe usuario xd"},409) 
     hashed_password = bcrypt.generate_password_hash(password)
-    new_user = User(name=name, email = email, password = hashed_password)
+    new_user = User(name=name, email = email, password = hashed_password, type_of_user = 'user')
     db.session.add(new_user)
     db.session.commit()
     return jsonify ({
         "name":new_user.name,
         "id":new_user.id,
         "email":new_user.email,
-    })
+    },200)
 
 @app.route ('/login', methods = ['POST'])
 def login():
@@ -72,13 +72,15 @@ def login():
     print("**INICIA LOGIN**\n")
     if user is None:
         response = make_response  (jsonify({"error":"Correo o contraseña incorrectas"}), 401)
+        return response
     if not bcrypt.check_password_hash(user.password, password):
         response = make_response(jsonify({"error": "Contraseña incorrecta"}), 401)
+        return response
 
     response = make_response(jsonify({
         "name": user.name,
         "id": user.id,
-        "email": user.email
+        "email": user.email,
     }))
     response.set_cookie('name',user.name)
     response.set_cookie('email', user.email)
