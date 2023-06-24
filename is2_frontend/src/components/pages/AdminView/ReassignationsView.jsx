@@ -48,7 +48,7 @@ function ReassignationsView() {
                         <th scope="col">Tracking ID</th>
                         <th scope="col">ID de reporte</th>
                         <th scope="col">Desarrollador</th>
-                        <th scope="col">Fecha</th>
+                        <th scope="col">Tiempo</th>
                     </tr>
                 </thead>
                 <tbody>

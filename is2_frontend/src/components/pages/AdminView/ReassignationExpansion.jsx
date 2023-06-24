@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "./TicketExpansion.css";
+
 
 const ReassignationExpansion = ({ reassignation, handleSubmit, developers, handleRemove }) => {
     const [selectedDeveloper, setSelectedDeveloper] = useState(null);
@@ -20,13 +21,12 @@ const ReassignationExpansion = ({ reassignation, handleSubmit, developers, handl
         handleRemove(reassignation);
     };
 
-
     return (
         <tr>
             <td colSpan="4">
                 <div className="row">
                     <div className="col-md-6">
-                        <h6 className="description-title">Razón de reasignación</h6>
+                        <h5 className="description-title">Razón de reasignación</h5>
                         <div className="description-box">
                             <div className="description-container">
                                 <p className="description">{reassignation.content}</p>
@@ -64,6 +64,7 @@ const ReassignationExpansion = ({ reassignation, handleSubmit, developers, handl
                         </div>
                     </div>
                 </div>
+
             </td>
         </tr>
     );
