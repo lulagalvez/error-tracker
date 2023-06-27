@@ -130,11 +130,40 @@ def create_user():
     name = request.json['name']
     email = request.json['email']
     password = request.json['password']
+    type_of_user = "user"
     hashed_password = bcrypt.generate_password_hash(password)
-    new_user = User(name=name, email=email, password = hashed_password)
+    new_user = User(name=name, email=email, password = hashed_password, type_of_user=type_of_user)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'Usuario creado'})
+
+@app.route('/users_from_json', methods=['POST'])
+def create_user_from_json():
+    data = request.get_json()
+    
+    if not isinstance(data, list):
+        return jsonify({'message': 'La entrada debe ser una lista de objetos JSON'}), 400
+    
+    for item in data:
+        if 'name' not in item or 'email' not in item or 'password' not in item:
+            return jsonify({'message': 'Faltan campos obligatorios en uno o más objetos JSON'}), 400
+        
+        name = item['name']
+        email = item['email']
+        password = item['password']
+        type_of_user = "user"
+        hashed_password = bcrypt.generate_password_hash(password)
+        
+        # Crear instancia del nuevo usuario
+        new_user = User(name=name, email=email, password=hashed_password, type_of_user=type_of_user)
+        
+        # Guardar el nuevo usuario en la base de datos
+        db.session.add(new_user)
+        db.session.commit()
+    
+    return jsonify({'message': 'Usuarios creados exitosamente'}), 201
+
+
 
 @app.route('/users/<id>', methods=['PUT'])
 def update_user(id):
@@ -194,6 +223,32 @@ def create_dev():
     db.session.add(new_dev)
     db.session.commit()
     return jsonify({'message': 'Developer creado'})
+
+@app.route('/devs_from_json', methods=['POST'])
+def create_devs_from_json():
+    data = request.get_json()
+    
+    if not isinstance(data, list):
+        return jsonify({'message': 'La entrada debe ser una lista de objetos JSON'}), 400
+    
+    for item in data:
+        if 'name' not in item or 'email' not in item or 'password' not in item:
+            return jsonify({'message': 'Faltan campos obligatorios en uno o más objetos JSON'}), 400
+        
+        name = item['name']
+        email = item['email']
+        password = item['password']
+        hashed_password = bcrypt.generate_password_hash(password)
+        type_of_user = 'developer'
+        
+        # Crear instancia del nuevo desarrollador
+        new_dev = Developer(name=name, email=email, password=hashed_password, type_of_user=type_of_user)
+        
+        # Guardar el nuevo desarrollador en la base de datos
+        db.session.add(new_dev)
+        db.session.commit()
+    
+    return jsonify({'message': 'Desarrolladores creados exitosamente'}), 201
 
 @app.route('/devs/promote/<email>', methods=['PUT'])
 def promote_to_dev(email):
@@ -624,6 +679,24 @@ def get_software_dev():
         software_dev_list.append(software_dev_dict)
 
     return jsonify({'software_dev': software_dev_list})
+
+@app.route('/software_dev_names', methods=['GET'])
+def get_software_dev_names():
+    software_dev_entries = db.session.query(software_dev).all()
+
+    software_dev_list = []
+    for entry in software_dev_entries:
+        software = Software.query.get(entry.software_id)
+        developer = Developer.query.get(entry.dev_id)
+        
+        software_dev_dict = {
+            'software_name': software.name,
+            'developer_name': developer.name
+        }
+        software_dev_list.append(software_dev_dict)
+
+    return jsonify({'software_dev': software_dev_list})
+
 
 
 @app.route('/software_dev/associate',methods=['POST'])
