@@ -1,30 +1,33 @@
-import React, {Component, useEffect} from 'react';
-import './components/css/App.css';/* 
+import React, { Component, useEffect } from "react";
+import "./components/css/App.css"; /* 
 import Home from './components/pages/Home/Home'; */
-import CrearBug from './components/pages/BugForm/bugForm';
-import AdminView from './components/pages/AdminView/AdminView';
+import CrearBug from "./components/pages/BugForm/bugForm";
+import AdminView from "./components/pages/AdminView/AdminView";
 /* import AdminViewMain from './components/pages/VistaAdmin/AdminViewMain'; */
-import DevView from './components/pages/DevView/DevView';
-import SoftwareToDevView from './components/pages/AdminView/SoftwareToDevView'
-import ReassignationsView from './components/pages/AdminView/ReassignationsView';
-import UserReportView from  './components/pages/User/UserReportView'; 
-import SideBarUser  from './components/pages/Sidebars/SidebarUser';
-import SideBarAdmin from './components/pages/Sidebars/SidebarAdmin';
-import SideBarDeveloper from './components/pages/Sidebars/SidebarDeveloper';
-import SignUp from './components/pages/SignUp/SignUp';
-import LogIn from './components/pages/Login/Login';
-import DevStats from './components/pages/DevStats/DevStats'
-import WelcomeIcon from './components/welcome';
-import BellIcon from './components/bell';
-import {  BrowserRouter as Router,  Routes,  Route, Navigate, Outlet} from "react-router-dom";
-import Cookies from 'js-cookie';
+import DevView from "./components/pages/DevView/DevView";
+import SoftwareToDevView from "./components/pages/AdminView/SoftwareToDevView";
+import ReassignationsView from "./components/pages/AdminView/ReassignationsView";
+import UserReportView from "./components/pages/User/UserReportView";
+import SideBarUser from "./components/pages/Sidebars/SidebarUser";
+import SideBarAdmin from "./components/pages/Sidebars/SidebarAdmin";
+import SideBarDeveloper from "./components/pages/Sidebars/SidebarDeveloper";
+import SignUp from "./components/pages/SignUp/SignUp";
+import LogIn from "./components/pages/Login/Login";
+import DevStats from "./components/pages/DevStats/DevStats";
+import WelcomeIcon from "./components/welcome";
+import BellIcon from "./components/bell";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import Cookies from "js-cookie";
 
-const ProtectedRoute = ({
-  redirectPath = '/login',
-  children,
-}) => {
-  const logged = Cookies.get('authenticated');
-  const type_of_user = Cookies.get('type_of_user');
+const ProtectedRoute = ({ redirectPath = "/login", children }) => {
+  const logged = Cookies.get("authenticated");
+  const type_of_user = Cookies.get("type_of_user");
 
   if (!logged || !type_of_user) {
     return <Navigate to={redirectPath} replace />;
@@ -37,15 +40,14 @@ const ProtectedRoute = ({
   return <Outlet />;
 };
 
-const logged = Cookies.get('authenticated');
-const type_of_user = Cookies.get('type_of_user');
+const logged = Cookies.get("authenticated");
+const type_of_user = Cookies.get("type_of_user");
 
 class App extends Component {
-  
-  constructor(props){
-    super(props);   
+  constructor(props) {
+    super(props);
   }
-  render(){
+  render() {
     return (
       <>
         <Router>
@@ -92,13 +94,14 @@ class App extends Component {
               element={
                 <ProtectedRoute
                   redirectPath="/login"
-                  isAllowed={logged && type_of_user === "admin"}>
+                  isAllowed={logged && type_of_user === "admin"}
+                >
                   <BellIcon />
                   <SideBarAdmin />
-                  <SoftwareToDevView/>
+                  <SoftwareToDevView />
                 </ProtectedRoute>
               }
-            /> 
+            />
 
             <Route
               path="/reassign_requests"
