@@ -1,15 +1,12 @@
 import sys
 import os
 from datetime import timedelta
-from dotenv import load_dotenv
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../data_base')))
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
-from config import ApplicationConfig
-from flask_cors import CORS,  cross_origin
-from flask import Flask, jsonify, request, make_response, abort, session
+from flask_cors import CORS
+from flask import jsonify, request, make_response
 from dbmaker import db, User, Developer, Report, Software, Comment, app, Admin, software_dev, Notification, Reassignation
-from sqlalchemy import text
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm.exc import NoResultFound
 
