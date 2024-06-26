@@ -4,8 +4,15 @@ export function generateBugReports(numBugReports) {
   const bugReports = [];
   const statuses = ['Pending', 'Testing', 'ToDo', 'Closed'];
 
-  for (let i = 1; i <= numBugReports; i++) {
-    const numComments = Math.floor(Math.random() * 10) + 1;
+  function getSecureRandomInt(min, max) {
+    const randomBuffer = new Uint32Array(1);
+    window.crypto.getRandomValues(randomBuffer);
+    const randomNumber = randomBuffer[0] / (0xffffffff + 1);
+    return Math.floor(randomNumber * (max - min + 1)) + min;
+}
+
+for (let i = 1; i <= numBugReports; i++) {
+    const numComments = getSecureRandomInt(1, 10);
     const comments = [];
 
     for (let j = 1; j <= numComments; j++) {
@@ -19,7 +26,7 @@ export function generateBugReports(numBugReports) {
       comments.push(comment);
     }
 
-    const randomStatusIndex = Math.floor(Math.random() * statuses.length);
+    const randomStatusIndex = getSecureRandomInt(1,statuses.length-1);
     const status = statuses[randomStatusIndex];
 
     const bugReport = {
@@ -39,7 +46,7 @@ export function generateBugReports(numBugReports) {
 }
 
 function generateRandomTimestamp() {
-  const minutesAgo = Math.floor(Math.random() * 60);
+  const minutesAgo = getSecureRandomInt(0,59);
   const timestamp = moment().subtract(minutesAgo, 'minutes');
   return timestamp.format('YYYY-MM-DD HH:mm:ss');
 }
