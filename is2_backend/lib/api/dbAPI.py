@@ -919,18 +919,6 @@ def delete_reassignation(id):
     db.session.delete(reassignation)
     db.session.commit()
     return jsonify({'message': 'Reasignación eliminada'})
-
-    if user:
-        notifications = Notification.query.filter_by(user_id=user.id).all()
-
-        for notification in notifications:
-            db.session.delete(notification)
-
-        db.session.commit()
-
-        return jsonify({'message': 'Notificaciones eliminadas exitosamente'})
-    else:
-        return jsonify({'message': 'Usuario no encontrado'})
     
 
 ###########################################STATS##################################################
