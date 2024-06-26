@@ -6,8 +6,10 @@
 /instances/example.db
 
 # Python virtual environment
+.venv/
 venv/
 
+.scannerwork/
 # Flask related files
 __pycache__/
 *.pyc
