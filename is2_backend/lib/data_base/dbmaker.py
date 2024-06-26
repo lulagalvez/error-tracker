@@ -3,6 +3,7 @@ import sys
 from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
 from dataclasses import dataclass
 from config import ApplicationConfig
 from uuid import uuid4
@@ -15,6 +16,7 @@ sys.path.append(os.path.abspath(
 
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.config.from_object(ApplicationConfig)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
 db = SQLAlchemy(app)
