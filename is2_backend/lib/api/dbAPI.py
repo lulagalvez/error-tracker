@@ -79,11 +79,11 @@ def login():
         "id": user.id,
         "email": user.email,
     }))
-    response.set_cookie('name',user.name)
-    response.set_cookie('email', user.email)
-    response.set_cookie('authenticated', 'true')
-    response.set_cookie('type_of_user',user.type_of_user)
-    response.set_cookie('id',user.id)
+    response.set_cookie('name',user.name, secure=True)
+    response.set_cookie('email', user.email, secure=True)
+    response.set_cookie('authenticated', 'true', secure=True)
+    response.set_cookie('type_of_user',user.type_of_user, secure=True)
+    response.set_cookie('id',user.id, secure=True)
 
     return response
 
@@ -959,12 +959,6 @@ def count_reports_by_software(email):
 
     return jsonify(software_objects)
 
-    
-def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-
-
-    return response
 
 if __name__ == '__main__':
     with app.app_context():
