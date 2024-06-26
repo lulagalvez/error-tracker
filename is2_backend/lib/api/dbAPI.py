@@ -503,17 +503,17 @@ def delete_report(id):
     return jsonify({'message': 'Reporte eliminado'})
 
 @app.route('/reports/reassign', methods=['PATCH'])
-def reassign(id):
-    id = request.json('id')
-    report=Report.query.get(id)
+def reassign():
+    new_id = request.json('id')
+    report=Report.query.get(new_id)
     report.reassign = True
     db.session.commit()
     return jsonify ({'message':'Reasignacion activada'})
 
 @app.route('/reports/deassign', methods=['PATCH'])
-def deassign(id):
-    id = request.json('id')
-    report=Report.query.get(id)
+def deassign():
+    new_id = request.json('id')
+    report=Report.query.get(new_id)
     report.reassign = False
     db.session.commit()
     return jsonify ({'message':'Reasignacion desactivada'})
